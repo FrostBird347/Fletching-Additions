@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "fletching-additions",
+	"version": "${version}",
+	"name": "fletching-additions",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"FrostBird347"
+	],
+	"contact": {
+		"homepage": "https://github.com/FrostBird347/Fletching-Additions",
+		"sources": "https://github.com/FrostBird347/Fletching-Additions"
+	},
+	"license": "MIT",
+	"icon": "assets/fletching-additions/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"frostbird347.fletchingadditions.MainMod"
+		],
+		"client": [
+			"frostbird347.fletchingadditions.MainModClient"
+		]
+	},
+	"mixins": [
+		"fletching-additions.mixins.json",
+		{
+			"config": "fletching-additions.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.14.25",
+		"minecraft": "~1.19.2",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}

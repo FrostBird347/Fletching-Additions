@@ -221,6 +221,16 @@ public class FletchingTableScreenHandler extends ScreenHandler {
 					//newStack starts off with the correct count, so we don't increment it for the first loop
 					if (i != 0) {
 						newStack.setCount(newStack.getCount() + currentStack.getCount());
+
+					//play a sound on the first loop, if the user if crafting
+					} else {
+						context.run((world, pos) -> {
+							long l = world.getTime();
+							if (FletchingTableScreenHandler.this.lastCraftTime != l) {
+								world.playSound(null, (BlockPos)pos, SoundEvents.BLOCK_PACKED_MUD_HIT, SoundCategory.BLOCKS, 1.0f, 1.0f);
+								FletchingTableScreenHandler.this.lastCraftTime = l;
+							}
+						});
 					}
 				}
 

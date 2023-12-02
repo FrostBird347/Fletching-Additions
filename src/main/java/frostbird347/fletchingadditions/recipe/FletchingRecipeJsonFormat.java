@@ -8,5 +8,6 @@ class FletchingRecipeJsonFormat {
 	JsonObject inputFins;
 	JsonObject inputEffect;
 	String outputItem;
+	String outputNbt;
 	int outputAmount;
 }

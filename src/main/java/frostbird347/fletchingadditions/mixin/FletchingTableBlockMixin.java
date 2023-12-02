@@ -7,8 +7,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
-import net.minecraft.screen.SmithingScreenHandler;
-import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -17,6 +15,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+
+import frostbird347.fletchingadditions.screenHandler.FletchingTableScreenHandler;
+import frostbird347.fletchingadditions.stats.StatsManager;
 
 @Mixin(FletchingTableBlock.class)
 public class FletchingTableBlockMixin extends CraftingTableBlock {
@@ -33,14 +34,14 @@ public class FletchingTableBlockMixin extends CraftingTableBlock {
 			return ActionResult.SUCCESS;
 		} else {
 			player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
-			player.incrementStat(Stats.INTERACT_WITH_SMITHING_TABLE);
+			player.incrementStat(StatsManager.INTERACT_WITH_FLETCHING_TABLE);
 			return ActionResult.CONSUME;
 		}
 	}
 
 	public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
 		return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> {
-			return new SmithingScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos));
-		}, Text.translatable("container.fletching_craft"));
+			return new FletchingTableScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos));
+		}, Text.translatable("block.minecraft.fletching_table"));
 	}
 }

@@ -1,5 +1,7 @@
 package frostbird347.fletchingadditions.screenHandler;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import frostbird347.fletchingadditions.recipe.FletchingRecipe;
@@ -10,6 +12,7 @@ import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
@@ -20,9 +23,13 @@ import net.minecraft.world.World;
 
 public class FletchingTableScreenHandler extends ScreenHandler {
 	public static final int ARROW_TIP_SLOT_INDEX = 0;
+	private ArrayList<Ingredient> arrowTipIngredients = new ArrayList<Ingredient>();
 	public static final int ARROW_STICK_SLOT_INDEX = 1;
+	private ArrayList<Ingredient> arrowStickIngredients = new ArrayList<Ingredient>();
 	public static final int ARROW_FINS_SLOT_INDEX = 2;
+	private ArrayList<Ingredient> arrowFinsIngredients = new ArrayList<Ingredient>();
 	public static final int EFFECT_SLOT_INDEX = 3;
+	private ArrayList<Ingredient> effectIngredients = new ArrayList<Ingredient>();
 	public static final int RESULT_SLOT_INDEX = 4;
 	private long lastCraftTime;
 	private final World world;
@@ -49,12 +56,65 @@ public class FletchingTableScreenHandler extends ScreenHandler {
 		this.context = context;
 		this.world = playerInventory.player.getWorld();
 
-		this.addSlot(new Slot(inputInventory, ARROW_TIP_SLOT_INDEX, 86, 17));
-		this.addSlot(new Slot(inputInventory, ARROW_STICK_SLOT_INDEX, 55, 39));
-		this.addSlot(new Slot(inputInventory, ARROW_FINS_SLOT_INDEX, 86, 60));
-		this.addSlot(new Slot(inputInventory, EFFECT_SLOT_INDEX, 106, 60));
+		//Prevent players from putting invalid ingredients in the wrong slots
+		List<FletchingRecipe> allRecipes = this.world.getRecipeManager().listAllOfType(FletchingRecipe.Type.INSTANCE);
+		for (int i = 0; i < allRecipes.size(); i++) {
+			arrowTipIngredients.add(allRecipes.get(i).getInputTip());
+			arrowStickIngredients.add(allRecipes.get(i).getInputStick());
+			arrowFinsIngredients.add(allRecipes.get(i).getInputFins());
+
+			Ingredient inputEffect = allRecipes.get(i).getInputEffect();
+			if (!inputEffect.isEmpty()) {
+				effectIngredients.add(allRecipes.get(i).getInputEffect());
+			}
+		}
+
+		this.addSlot(new Slot(inputInventory, ARROW_TIP_SLOT_INDEX, 44, 22) {
+			@Override
+			public boolean canInsert(ItemStack stack) {
+				for (int i = 0; i < arrowTipIngredients.size(); i++) {
+					if (arrowTipIngredients.get(i).test(stack)) {
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+		this.addSlot(new Slot(inputInventory, ARROW_STICK_SLOT_INDEX, 44, 40) {
+			@Override
+			public boolean canInsert(ItemStack stack) {
+				for (int i = 0; i < arrowStickIngredients.size(); i++) {
+					if (arrowStickIngredients.get(i).test(stack)) {
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+		this.addSlot(new Slot(inputInventory, ARROW_FINS_SLOT_INDEX, 44, 58) {
+			@Override
+			public boolean canInsert(ItemStack stack) {
+				for (int i = 0; i < arrowFinsIngredients.size(); i++) {
+					if (arrowFinsIngredients.get(i).test(stack)) {
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+		this.addSlot(new Slot(inputInventory, EFFECT_SLOT_INDEX, 80, 40) {
+			@Override
+			public boolean canInsert(ItemStack stack) {
+				for (int i = 0; i < effectIngredients.size(); i++) {
+					if (effectIngredients.get(i).test(stack)) {
+						return true;
+					}
+				}
+				return false;
+			}
+		});
 		
-		this.addSlot(new Slot(this.outputInventory, RESULT_SLOT_INDEX, 145, 39){
+		this.addSlot(new Slot(this.outputInventory, RESULT_SLOT_INDEX, 134, 40) {
 
 			@Override
 			public boolean canInsert(ItemStack stack) {

@@ -3,9 +3,12 @@ package frostbird347.fletchingadditions.recipe;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
@@ -36,6 +39,16 @@ public class FletchingRecipeSerializer implements RecipeSerializer<FletchingReci
 			recipeJson.outputAmount = 1;
 		}
 
+		//get NBT
+		NbtCompound outputNbt = new NbtCompound();
+		if (recipeJson.outputNbt != null) {
+			try {
+				outputNbt = StringNbtReader.parse(recipeJson.outputNbt);
+			} catch(CommandSyntaxException e) {
+				throw new JsonSyntaxException("outputNbt paramater is corrupt: " + e.toString());
+			}
+		}
+
 		Ingredient inputTip = Ingredient.fromJson(recipeJson.inputTip);
 		Ingredient inputStick = Ingredient.fromJson(recipeJson.inputStick);
 		Ingredient inputFins = Ingredient.fromJson(recipeJson.inputFins);
@@ -43,6 +56,7 @@ public class FletchingRecipeSerializer implements RecipeSerializer<FletchingReci
 		
 		Item outputItem = Registry.ITEM.getOrEmpty(new Identifier(recipeJson.outputItem)).orElseThrow(() -> new JsonSyntaxException("No such item " + recipeJson.outputItem + " for the output!"));;
 		ItemStack output = new ItemStack(outputItem, recipeJson.outputAmount);
+		output.setNbt(outputNbt);
 		return new FletchingRecipe(id, output, inputTip, inputStick, inputFins, inputEffect);
 	}
 	

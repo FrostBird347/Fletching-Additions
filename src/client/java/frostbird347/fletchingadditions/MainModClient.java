@@ -1,10 +1,11 @@
 package frostbird347.fletchingadditions;
 
+import frostbird347.fletchingadditions.screen.ScreenManager;
 import net.fabricmc.api.ClientModInitializer;
 
 public class MainModClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
-		// This entrypoint is suitable for setting up client-specific logic, such as rendering.
+		ScreenManager.registerScreens();
 	}
 }

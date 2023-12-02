@@ -3,12 +3,12 @@
 	"id": "fletching-additions",
 	"version": "${version}",
 	"name": "fletching-additions",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Gives the fletching table functionality!",
 	"authors": [
 		"FrostBird347"
 	],
 	"contact": {
-		"homepage": "https://github.com/FrostBird347/Fletching-Additions",
+		"homepage": "https://modrinth.com/mod/fletching-additions",
 		"sources": "https://github.com/FrostBird347/Fletching-Additions"
 	},
 	"license": "MIT",

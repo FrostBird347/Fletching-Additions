@@ -9,5 +9,6 @@
 	"inputFins": {
 		"item": "minecraft:feather"
 	},
-	"outputItem": "minecraft:arrow"
+	"outputItem": "minecraft:arrow",
+	"outputAmount": 6
 }

@@ -12,5 +12,6 @@
 	"inputEffect": {
 		"item": "minecraft:glowstone_dust"
 	},
-	"outputItem": "minecraft:spectral_arrow"
+	"outputItem": "minecraft:spectral_arrow",
+	"outputAmount": 6
 }

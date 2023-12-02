@@ -10,7 +10,7 @@ import frostbird347.fletchingadditions.screenHandler.ScreenHandlerManager;
 import frostbird347.fletchingadditions.stats.StatsManager;
 
 public class MainMod implements ModInitializer {
-    public static final Logger LOGGER = LoggerFactory.getLogger("fletching-additions");
+	public static final Logger LOGGER = LoggerFactory.getLogger("fletching-additions");
 
 	@Override
 	public void onInitialize() {

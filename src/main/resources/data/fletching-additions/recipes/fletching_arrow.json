@@ -1,0 +1,13 @@
+{
+	"type": "fletching-additions:fletching_recipe",
+	"inputTip": {
+		"item": "minecraft:flint"
+	},
+	"inputStick": {
+		"item": "minecraft:stick"
+	},
+	"inputFins": {
+		"item": "minecraft:feather"
+	},
+	"outputItem": "minecraft:arrow"
+}

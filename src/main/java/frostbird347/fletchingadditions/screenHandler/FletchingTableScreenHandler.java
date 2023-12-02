@@ -30,7 +30,7 @@ public class FletchingTableScreenHandler extends ScreenHandler {
 	private ArrayList<Ingredient> arrowFinsIngredients = new ArrayList<Ingredient>();
 	public static final int EFFECT_SLOT_INDEX = 3;
 	private ArrayList<Ingredient> effectIngredients = new ArrayList<Ingredient>();
-	public static final int RESULT_SLOT_INDEX = 4;
+	public static final int RESULT_SLOT_INDEX = 0;
 	private long lastCraftTime;
 	private final World world;
 
@@ -69,7 +69,7 @@ public class FletchingTableScreenHandler extends ScreenHandler {
 			}
 		}
 
-		this.addSlot(new Slot(inputInventory, ARROW_TIP_SLOT_INDEX, 44, 22) {
+		this.addSlot(new Slot(inputInventory, ARROW_TIP_SLOT_INDEX, 44, 17) {
 			@Override
 			public boolean canInsert(ItemStack stack) {
 				for (int i = 0; i < arrowTipIngredients.size(); i++) {
@@ -80,7 +80,7 @@ public class FletchingTableScreenHandler extends ScreenHandler {
 				return false;
 			}
 		});
-		this.addSlot(new Slot(inputInventory, ARROW_STICK_SLOT_INDEX, 44, 40) {
+		this.addSlot(new Slot(inputInventory, ARROW_STICK_SLOT_INDEX, 44, 35) {
 			@Override
 			public boolean canInsert(ItemStack stack) {
 				for (int i = 0; i < arrowStickIngredients.size(); i++) {
@@ -91,7 +91,7 @@ public class FletchingTableScreenHandler extends ScreenHandler {
 				return false;
 			}
 		});
-		this.addSlot(new Slot(inputInventory, ARROW_FINS_SLOT_INDEX, 44, 58) {
+		this.addSlot(new Slot(inputInventory, ARROW_FINS_SLOT_INDEX, 44, 53) {
 			@Override
 			public boolean canInsert(ItemStack stack) {
 				for (int i = 0; i < arrowFinsIngredients.size(); i++) {
@@ -102,7 +102,7 @@ public class FletchingTableScreenHandler extends ScreenHandler {
 				return false;
 			}
 		});
-		this.addSlot(new Slot(inputInventory, EFFECT_SLOT_INDEX, 80, 40) {
+		this.addSlot(new Slot(inputInventory, EFFECT_SLOT_INDEX, 80, 35) {
 			@Override
 			public boolean canInsert(ItemStack stack) {
 				for (int i = 0; i < effectIngredients.size(); i++) {
@@ -114,7 +114,7 @@ public class FletchingTableScreenHandler extends ScreenHandler {
 			}
 		});
 		
-		this.addSlot(new Slot(this.outputInventory, RESULT_SLOT_INDEX, 134, 40) {
+		this.addSlot(new Slot(this.outputInventory, RESULT_SLOT_INDEX, 134, 35) {
 
 			@Override
 			public boolean canInsert(ItemStack stack) {
@@ -131,7 +131,7 @@ public class FletchingTableScreenHandler extends ScreenHandler {
 					effectSlot.takeStack(1);
 				}
 
-				stack.getItem().onCraft(stack, player.world, player);
+				stack.onCraft(world, player, stack.getCount());
 				context.run((world, pos) -> {
 					long l = world.getTime();
 					if (FletchingTableScreenHandler.this.lastCraftTime != l) {
@@ -174,7 +174,7 @@ public class FletchingTableScreenHandler extends ScreenHandler {
 		this.context.run((world, pos) -> {
 			Optional<FletchingRecipe> currentRecipe = this.world.getRecipeManager().getFirstMatch(FletchingRecipe.Type.INSTANCE, this.inputInventory, this.world);
 			if (currentRecipe.isPresent()) {
-				this.outputInventory.setStack(RESULT_SLOT_INDEX, currentRecipe.get().getOutput());
+				this.outputInventory.setStack(RESULT_SLOT_INDEX, currentRecipe.get().craft(this.outputInventory));
 			} else {
 				this.outputInventory.removeStack(RESULT_SLOT_INDEX);
 			}
@@ -219,6 +219,18 @@ public class FletchingTableScreenHandler extends ScreenHandler {
 	private void addPlayerHotbar(PlayerInventory playerInventory) {
 		for (int i = 0; i < 9; i++) {
 			this.addSlot(new Slot(playerInventory, i, i * 18 + 8, 142));
+		}
+	}
+
+	@Override
+	public void close(PlayerEntity player) {
+		super.close(player);
+
+		for (int i = 0; i < inputInventory.size(); i++) {
+			ItemStack currentSlot = inputInventory.getStack(i);
+			if (!currentSlot.isEmpty()) {
+				player.getInventory().offerOrDrop(currentSlot);
+			}
 		}
 	}
 }

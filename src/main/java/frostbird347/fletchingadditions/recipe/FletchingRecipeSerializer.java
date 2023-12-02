@@ -32,7 +32,7 @@ public class FletchingRecipeSerializer implements RecipeSerializer<FletchingReci
 		if (recipeJson.inputTip == null) throw new JsonSyntaxException("inputTip paramater is corrupt or missing!");
 		if (recipeJson.inputStick == null) throw new JsonSyntaxException("inputStick paramater is corrupt or missing!");
 		if (recipeJson.inputFins == null) throw new JsonSyntaxException("inputFins paramater is corrupt or missing!");
-		if (recipeJson.inputEffect == null) throw new JsonSyntaxException("inputEffect paramater is corrupt or missing!");
+		
 		if (recipeJson.outputItem == null) throw new JsonSyntaxException("outputItem paramater is corrupt or missing!");
 		//If no output amount value is set, set it to one
 		if (recipeJson.outputAmount == 0) {
@@ -52,7 +52,10 @@ public class FletchingRecipeSerializer implements RecipeSerializer<FletchingReci
 		Ingredient inputTip = Ingredient.fromJson(recipeJson.inputTip);
 		Ingredient inputStick = Ingredient.fromJson(recipeJson.inputStick);
 		Ingredient inputFins = Ingredient.fromJson(recipeJson.inputFins);
-		Ingredient inputEffect = Ingredient.fromJson(recipeJson.inputEffect);
+		Ingredient inputEffect = Ingredient.EMPTY;
+		if (recipeJson.inputEffect != null) {
+			inputEffect = Ingredient.fromJson(recipeJson.inputEffect);
+		};
 		
 		Item outputItem = Registry.ITEM.getOrEmpty(new Identifier(recipeJson.outputItem)).orElseThrow(() -> new JsonSyntaxException("No such item " + recipeJson.outputItem + " for the output!"));;
 		ItemStack output = new ItemStack(outputItem, recipeJson.outputAmount);

@@ -3,7 +3,6 @@ package frostbird347.fletchingadditions.screenHandler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import frostbird347.fletchingadditions.recipe.FletchingRecipe;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -45,6 +44,15 @@ public class FletchingTableScreenHandler extends ScreenHandler {
 	};
 	private final CraftingResultInventory outputInventory = new CraftingResultInventory(){};
 
+	public static boolean isValidIngredient(ArrayList<Ingredient> ingredients, ItemStack stack) {
+		for (int i = 0; i < ingredients.size(); i++) {
+			if (ingredients.get(i).test(stack)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	//Client
 	public FletchingTableScreenHandler(int syncId, PlayerInventory playerInventory) {
 		this(syncId, playerInventory, ScreenHandlerContext.EMPTY);
@@ -72,45 +80,25 @@ public class FletchingTableScreenHandler extends ScreenHandler {
 		this.addSlot(new Slot(inputInventory, ARROW_TIP_SLOT_INDEX, 44, 17) {
 			@Override
 			public boolean canInsert(ItemStack stack) {
-				for (int i = 0; i < arrowTipIngredients.size(); i++) {
-					if (arrowTipIngredients.get(i).test(stack)) {
-						return true;
-					}
-				}
-				return false;
+				return isValidIngredient(arrowTipIngredients, stack);
 			}
 		});
 		this.addSlot(new Slot(inputInventory, ARROW_STICK_SLOT_INDEX, 44, 35) {
 			@Override
 			public boolean canInsert(ItemStack stack) {
-				for (int i = 0; i < arrowStickIngredients.size(); i++) {
-					if (arrowStickIngredients.get(i).test(stack)) {
-						return true;
-					}
-				}
-				return false;
+				return isValidIngredient(arrowStickIngredients, stack);
 			}
 		});
 		this.addSlot(new Slot(inputInventory, ARROW_FINS_SLOT_INDEX, 44, 53) {
 			@Override
 			public boolean canInsert(ItemStack stack) {
-				for (int i = 0; i < arrowFinsIngredients.size(); i++) {
-					if (arrowFinsIngredients.get(i).test(stack)) {
-						return true;
-					}
-				}
-				return false;
+				return isValidIngredient(arrowFinsIngredients, stack);
 			}
 		});
 		this.addSlot(new Slot(inputInventory, EFFECT_SLOT_INDEX, 80, 35) {
 			@Override
 			public boolean canInsert(ItemStack stack) {
-				for (int i = 0; i < effectIngredients.size(); i++) {
-					if (effectIngredients.get(i).test(stack)) {
-						return true;
-					}
-				}
-				return false;
+				return isValidIngredient(effectIngredients, stack);
 			}
 		});
 		
@@ -182,26 +170,70 @@ public class FletchingTableScreenHandler extends ScreenHandler {
 		});
 	}
 
-	//Shift + Player Inv Slot
+	//Shift clicking
 	@Override
 	public ItemStack transferSlot(PlayerEntity player, int invSlot) {
 		ItemStack newStack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(invSlot);
 		if (slot != null && slot.hasStack()) {
 			ItemStack originalStack = slot.getStack();
+
+			//Relevant if shift clicking output slot
+			int craftCount = 1;
+			ItemStack arrowTipStack = this.slots.get(ARROW_TIP_SLOT_INDEX).getStack();
+			ItemStack arrowStickStack = this.slots.get(ARROW_STICK_SLOT_INDEX).getStack();
+			ItemStack arrowFinsStack = this.slots.get(ARROW_FINS_SLOT_INDEX).getStack();
+			ItemStack effectStack = this.slots.get(EFFECT_SLOT_INDEX).getStack();
+			if (invSlot == 4) {
+				craftCount = Math.min(arrowTipStack.getCount(), arrowStickStack.getCount());
+				craftCount = Math.min(craftCount, arrowFinsStack.getCount());
+				if (!effectStack.isEmpty()) {
+					craftCount = Math.min(craftCount, effectStack.getCount());
+				}
+			}
+
 			newStack = originalStack.copy();
-			if (invSlot < this.inputInventory.size()) {
-				if (!this.insertItem(originalStack, this.inputInventory.size(), this.slots.size(), true)) {
+			ItemStack initialStack = originalStack.copy();
+			for (int i = 0; i < craftCount; i++) {
+
+				//Use the original stack for the first loop, so behaviour is identical to vanilla when not crafting
+				ItemStack currentStack = originalStack;
+				if (i != 0) {
+					currentStack = initialStack.copy();
+				}
+
+				if (invSlot < this.inputInventory.size() + this.outputInventory.size()) {
+					if (!this.insertItem(currentStack, this.inputInventory.size() + this.outputInventory.size(), this.slots.size(), true)) {
+						return ItemStack.EMPTY;
+					}
+				} else if (!this.insertItem(currentStack, 0, this.inputInventory.size() + this.outputInventory.size(), false)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.insertItem(originalStack, 0, this.inputInventory.size(), false)) {
-				return ItemStack.EMPTY;
+
+				if (invSlot == 4) {
+					if (!effectStack.isEmpty()) {
+						effectStack.decrement(1);
+					}
+					arrowTipStack.decrement(1);
+					arrowStickStack.decrement(1);
+					arrowFinsStack.decrement(1);
+
+					//newStack starts off with the correct count, so we don't increment it for the first loop
+					if (i != 0) {
+						newStack.setCount(newStack.getCount() + currentStack.getCount());
+					}
+				}
+
+				if (currentStack.isEmpty()) {
+					slot.setStack(ItemStack.EMPTY);
+				} else {
+					slot.markDirty();
+				}
 			}
-			
-			if (originalStack.isEmpty()) {
-				slot.setStack(ItemStack.EMPTY);
-			} else {
-				slot.markDirty();
+
+			//Refresh crafting output, inventory argument is unfortunately required but unused so it can be anything
+			if (invSlot == 4) {
+				this.onContentChanged(this.inputInventory);
 			}
 		}
  

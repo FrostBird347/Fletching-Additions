@@ -1,10 +1,10 @@
 package frostbird347.fletchingadditions;
 
 import net.fabricmc.api.ModInitializer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import frostbird347.fletchingadditions.entity.EntityManager;
+import frostbird347.fletchingadditions.item.ItemManager;
 import frostbird347.fletchingadditions.recipe.RecipeManager;
 import frostbird347.fletchingadditions.screenHandler.ScreenHandlerManager;
 import frostbird347.fletchingadditions.stats.StatsManager;
@@ -17,5 +17,7 @@ public class MainMod implements ModInitializer {
 		StatsManager.registerStats();
 		RecipeManager.registerRecipieTypes();
 		ScreenHandlerManager.registerScreenHandlers();
+		ItemManager.registerItems();
+		EntityManager.registerEntities();
 	}
 }

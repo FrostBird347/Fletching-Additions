@@ -1,0 +1,17 @@
+{
+	"type": "fletching-additions:fletching_recipe",
+	"inputTip": {
+		"item": "minecraft:flint"
+	},
+	"inputStick": {
+		"item": "minecraft:stick"
+	},
+	"inputFins": {
+		"item": "minecraft:feather"
+	},
+	"inputEffect": {
+		"item": "minecraft:dirt"
+	},
+	"outputItem": "fletching-additions:custom_arrow",
+	"outputAmount": 64
+}

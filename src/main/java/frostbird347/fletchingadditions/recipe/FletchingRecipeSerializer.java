@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -48,6 +47,11 @@ public class FletchingRecipeSerializer implements RecipeSerializer<FletchingReci
 			} catch(CommandSyntaxException e) {
 				throw new JsonSyntaxException("outputNbt paramater is corrupt: " + e.toString());
 			}
+
+			//If parsed nbt is empty, make sure to remove the nbt completely (refer to issue #1)
+			if (outputNbt.isEmpty()) {
+				outputNbt = null;
+			}
 		}
 
 		Ingredient inputTip = Ingredient.fromJson(recipeJson.inputTip);
@@ -56,7 +60,7 @@ public class FletchingRecipeSerializer implements RecipeSerializer<FletchingReci
 		Ingredient inputEffect = Ingredient.EMPTY;
 		if (recipeJson.inputEffect != null) {
 			inputEffect = Ingredient.fromJson(recipeJson.inputEffect);
-		};
+		}
 		
 		Item outputItem = Registry.ITEM.getOrEmpty(new Identifier(recipeJson.outputItem)).orElseThrow(() -> new JsonSyntaxException("No such item " + recipeJson.outputItem + " for the output!"));;
 		ItemStack output = new ItemStack(outputItem, recipeJson.outputAmount);

@@ -15,6 +15,8 @@ public class CustomArrowItem extends ArrowItem {
 
     @Override
     public PersistentProjectileEntity createArrow(World world, ItemStack stack, LivingEntity shooter) {
-        return new CustomArrowEntity(world, shooter);
+        CustomArrowEntity customArrowEntity = new CustomArrowEntity(world, shooter);
+        customArrowEntity.initFromStack(stack);
+        return customArrowEntity;
     }
 }

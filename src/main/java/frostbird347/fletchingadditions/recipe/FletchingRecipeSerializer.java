@@ -40,8 +40,9 @@ public class FletchingRecipeSerializer implements RecipeSerializer<FletchingReci
 		}
 
 		//get NBT
-		NbtCompound outputNbt = new NbtCompound();
+		NbtCompound outputNbt = null;
 		if (recipeJson.outputNbt != null) {
+			outputNbt = new NbtCompound();
 			try {
 				outputNbt = StringNbtReader.parse(recipeJson.outputNbt);
 			} catch(CommandSyntaxException e) {

@@ -1,6 +1,6 @@
 # Automatically build the project and run any configured tests for every release and submitted pull request.
 
-name: build
+name: build ${{ inputs.refToBuild || github.sha }}
 on:
   release:
     types: [published]

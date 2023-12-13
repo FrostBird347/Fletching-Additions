@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "csv-parse": "^5.5.3",
+    "nbt-ts": "^1.3.6"
+  }
+}

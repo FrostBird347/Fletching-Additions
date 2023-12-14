@@ -27,9 +27,12 @@ function parseItem(rawItem) {
 	//Split categories into 2 arrays for quick and easy blacklist checking
 	item.cat = [];
 	item.catBlacklist = [];
+	item.catRequirements = [];
 	for (let i = 0; i < categories.length; i++) {
 		if (categories[i].startsWith("no")) {
 			item.catBlacklist.push(categories[i].replace("no", ""));
+		} else if (categories[i].startsWith("req")) {
+			item.catRequirements.push(categories[i].replace("req", ""));
 		} else {
 			item.cat.push(categories[i]);
 		}
@@ -132,20 +135,46 @@ function parseItem(rawItem) {
 	return item;
 }
 
-function checkCompat(itemA, itemB) {
+function checkCompatMatch(itemA, itemB, term = "catBlacklist") {
 	for (let i = 0; i < itemA.cat.length; i++) {
-		if (itemB.catBlacklist.includes(itemA.cat[i])) return false;
+		if (itemB[term].includes(itemA.cat[i])) return false;
 	}
 	for (let i = 0; i < itemB.cat.length; i++) {
-		if (itemA.catBlacklist.includes(itemB.cat[i])) return false;
+		if (itemA[term].includes(itemB.cat[i])) return false;
 	}
 	return true;
+}
+
+function checkCompat(tip, stick, fin, effect) {
+	//Check blacklist
+	let isCompat = checkCompatMatch(tip, stick);
+	isCompat &&= checkCompatMatch(fin, stick);
+	isCompat &&= checkCompatMatch(effect, stick);
+	isCompat &&= checkCompatMatch(tip, effect);
+	isCompat &&= checkCompatMatch(fin, effect);
+	
+	//Check requirements
+	let reqCount = tip.catRequirements.length + stick.catRequirements.length + fin.catRequirements.length + effect.catRequirements.length;
+	let reqCheck = (reqCount == 0);
+	reqCheck ||=  !checkCompatMatch(tip, stick, "catRequirements");
+	reqCheck ||= !checkCompatMatch(tip, fin, "catRequirements");
+	reqCheck ||= !checkCompatMatch(tip, effect, "catRequirements");
+	reqCheck ||= !checkCompatMatch(stick, fin, "catRequirements");
+	reqCheck ||= !checkCompatMatch(stick, effect, "catRequirements");
+	reqCheck ||= !checkCompatMatch(fin, effect, "catRequirements");
+	
+	//if (reqCount != 0 && reqCheck) {
+	//	debugger;
+	//	execFileSync("/bin/sleep", ["2"]);
+	//}
+	
+	return isCompat && reqCheck;
 }
 
 function genOutput(inputs) {
 	let tipID = 0, stickID = 1, finID = 2, effectID = 3;
 	let output = {};
-	
+	//console.log(inputs);
 }
 
 //----------
@@ -209,7 +238,7 @@ for (let iT = 0; iT < tips.length; iT++) {
 		for (let iF = 0; iF < fins.length; iF++) {
 			for (let iE = 0; iE < effects.length; iE++) {
 				//Make sure parts are compatible
-				if (checkCompat(tips[iT], sticks[iS]) && checkCompat(fins[iF], sticks[iS]) && checkCompat(effects[iE], sticks[iS]) && checkCompat(tips[iT], effects[iE]) && checkCompat(fins[iF], effects[iE])) {
+				if (checkCompat(tips[iT], sticks[iS], fins[iF], effects[iE])) {
 					//Make sure we don't recreate vanilla arrows
 					if (!(tips[iT].id == "minecraft:flint" && sticks[iS].id == "minecraft:stick" && fins[iF].id == "minecraft:feather" && (effects[iE].id == "minecraft:glowstone_dust" || effects[iE].id == "_"))) {
 						genOutput([tips[iT], sticks[iS], fins[iF], effects[iE]]);

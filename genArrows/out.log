@@ -6,9 +6,7 @@ Parsing...
 	fullName missing:	 minecraft:lightning_rod
 	fullName missing:	 minecraft:bamboo
 	fullName missing:	 minecraft:iron_bars
-	fullName missing:	 minecraft:torch
-	fullName missing:	 minecraft:soul_torch
-	fullName missing:	 minecraft:pointed_dripstone
+	partName missing:	 minecraft:pointed_dripstone
 	fullName missing:	 minecraft:tnt
 	fullName missing:	 minecraft:fire_charge
 	fullName missing:	 minecraft:ice
@@ -40,4 +38,4 @@ Parsing...
 	fullName missing:	 minecraft:sugar_cane
 	partName missing:	 minecraft:grindstone
 Combining...
-Total: 1370
+Total: 566

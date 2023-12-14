@@ -14,15 +14,15 @@ function exists(value) {
 function parseItem(rawItem) {
 	let item = {valid: false};
 	
-	if (!exists(rawItem[0])) { console.error("\titem missing: ", rawItem); return item; };
+	if (!exists(rawItem[0])) { console.error("\titem missing:\t", rawItem); return item; };
 	item.id = rawItem[0];
-	if (!exists(rawItem[1])) { console.error("\tfullName missing: ", rawItem); return item; };
+	if (!exists(rawItem[1])) { console.error("\tfullName missing:\t", rawItem[0]); return item; };
 	item.fullName = rawItem[1];
-	if (!exists(rawItem[2])) { console.error("\tpartName missing: ", rawItem); return item; };
+	if (!exists(rawItem[2])) { console.error("\tpartName missing:\t", rawItem[0]); return item; };
 	item.partName = rawItem[2];
-	if (!exists(rawItem[3])) { console.error("\tUnknown type: ", rawItem); return item; };
+	if (!exists(rawItem[3])) { console.error("\tunknown type:\t", rawItem[0]); return item; };
 	
-	if (!exists(rawItem[4])) { console.error("\tcategories missing: ", rawItem); return item; };
+	if (!exists(rawItem[4])) { console.error("\tcategories missing:\t", rawItem[0]); return item; };
 	let categories = rawItem[4].split(" ");
 	//Split categories into 2 arrays for quick and easy blacklist checking
 	item.cat = [];
@@ -35,13 +35,15 @@ function parseItem(rawItem) {
 		}
 	}
 	
-	if (!exists(rawItem[6])) { console.error("\trenderMode missing: ", rawItem); return item; };
+	if (!exists(rawItem[6])) { console.error("\trenderMode missing:\t", rawItem[0]); return item; };
 	item.modelType = rawItem[6].split("&")[0];
 	item.modelTexture = rawItem[6].split("&")[1];
 	
-	if (!exists(rawItem[5])) { console.error("\tstats missing: ", rawItem); return item; };
+	if (!exists(rawItem[5])) { console.error("\tstats missing:   \t", rawItem[0]); return item; };
 	//flags that will be processed by the game and not this script
 	item.gameFlags = [];
+	//flags that will be processed by this script
+	item.genFlags = [];
 	//array of stats present, so we can just check via item.statsPresent.includes()
 	item.statsPresent = [];
 	//array of already formatted effects, we will just need to combine the arrays of each ingredient later on
@@ -70,15 +72,16 @@ function parseItem(rawItem) {
 					switch (currentStat[iA]) {
 						case "doNothing":
 						case "destroy":
-							item.blockHitActions.push({action: currentStat[iA]});
-							break;
-						case "drop":
-							item.blockHitActions.push({action: currentStat[iA], item: currentStat[iA + 1]});
+							item.blockHitActions.push({action: currentStat[iA], sound: currentStat[iA + 1]});
 							iA++;
 							break;
+						case "drop":
+							item.blockHitActions.push({action: currentStat[iA], item: currentStat[iA + 1], count: new nbt.Int(currentStat[iA + 2]), sound: currentStat[iA + 3]});
+							iA += 3;
+							break;
 						default:
-							console.error("\tUnknown blockHitAction: ", currentStat[iA]);
-							console.error("\tCan't process other actions!");
+							console.error("\tunknown blockHitAction:\t", currentStat[iA]);
+							console.error("\tcan't process other actions!");
 							iA = currentStat.length;
 					}
 					iA++;
@@ -90,12 +93,19 @@ function parseItem(rawItem) {
 			case "applyEffect":
 				item.effects.push({ id: currentStat[1], duration: new nbt.Int(currentStat[2]) });
 				break;
+			case "replaceTextures":
+			case "partialNameIsFull":
+				item.genFlags.push(currentStat[0]);
+				break;
 			case "breaksWhenWet":
 			case "inheritFireworkStarNBT":
+			case "inheritFireworkNBT":
 			case "silent":
 			case "waterSpeed":
 			case "breaksWhenWet":
 			case "dynamicLightingIfPossible":
+			case "impactSoundIncreasePitchNoAngle":
+			case "farSound":
 				item.gameFlags.push(currentStat[0]);
 				break;
 			case "flySpeed":
@@ -112,7 +122,7 @@ function parseItem(rawItem) {
 			case "skipThisComment":
 				break;
 			default:
-				console.error("\tUnknown stat: ", currentStat[0]);
+				console.error("\tunknown stat:    \t", currentStat[0]);
 				//execFileSync("/bin/sleep", ["2"]);
 		}
 	}
@@ -122,6 +132,21 @@ function parseItem(rawItem) {
 	return item;
 }
 
+function checkCompat(itemA, itemB) {
+	for (let i = 0; i < itemA.cat.length; i++) {
+		if (itemB.catBlacklist.includes(itemA.cat[i])) return false;
+	}
+	for (let i = 0; i < itemB.cat.length; i++) {
+		if (itemA.catBlacklist.includes(itemB.cat[i])) return false;
+	}
+	return true;
+}
+
+function genOutput(inputs) {
+	let tipID = 0, stickID = 1, finID = 2, effectID = 3;
+	let output = {};
+	
+}
 
 //----------
 //Start
@@ -147,7 +172,10 @@ for (let i = 1; i < fullDataset.length; i++) {
 			for (let iC = 0; iC < fullDataset[i].length; iC++) {
 				splitItems[iD][iC] = splitItems[iD][iC].replaceAll("[DYE]", dyes[iD]);
 			}
+			
+			//Make sure to remove spaces for the item id as well as the texture/model id
 			splitItems[iD][0] = splitItems[iD][0].split(" ").join("_").toLowerCase();
+			splitItems[iD][6] = splitItems[iD][6].split(" ").join("_").toLowerCase();
 		}
 	}
 	
@@ -168,18 +196,28 @@ for (let i = 1; i < fullDataset.length; i++) {
 					effects.push(item);
 					break;
 				default:
-					console.error("\tUnknown type: ", splitItems[iL][3]);
+					console.error("\tunknown type:\t", splitItems[iL][3]);
 			}
 		}
 	}
 }
 
+console.log("Combining...");
+let totalCount = 0;
 for (let iT = 0; iT < tips.length; iT++) {
 	for (let iS = 0; iS < sticks.length; iS++) {
 		for (let iF = 0; iF < fins.length; iF++) {
 			for (let iE = 0; iE < effects.length; iE++) {
-				console.log(tips[iT], sticks[iS], fins[iF], effects[iE]);
+				//Make sure parts are compatible
+				if (checkCompat(tips[iT], sticks[iS]) && checkCompat(fins[iF], sticks[iS]) && checkCompat(effects[iE], sticks[iS]) && checkCompat(tips[iT], effects[iE]) && checkCompat(fins[iF], effects[iE])) {
+					//Make sure we don't recreate vanilla arrows
+					if (!(tips[iT].id == "minecraft:flint" && sticks[iS].id == "minecraft:stick" && fins[iF].id == "minecraft:feather" && (effects[iE].id == "minecraft:glowstone_dust" || effects[iE].id == "_"))) {
+						genOutput([tips[iT], sticks[iS], fins[iF], effects[iE]]);
+						totalCount++
+					}
+				}
 			}
 		}
 	}
 }
+console.log("Total: " + totalCount);

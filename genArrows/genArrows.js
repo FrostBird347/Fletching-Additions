@@ -187,7 +187,8 @@ function checkCompat(tip, stick, fin, effect) {
 }
 
 function genOutput(inputs) {
-	let textureOverridden = false;
+	let modelOverride = undefined;
+	let overiddenPartialName = undefined;
 	let tipID = 0, stickID = 1, finID = 2, effectID = 3;
 	let outputJSON = {type: "fletching-additions:fletching_recipe", outputItem: "fletching-additions:custom_arrow", outputAmount: 6};
 	let outputNBT = {};
@@ -220,13 +221,27 @@ function genOutput(inputs) {
 			//Skip over game flags, since those have already been sorted out and will be processed by the game
 			if (!inputs[i].gameFlags.includes(inputs[i].statsPresent[iS])) {
 				switch (inputs[i].statsPresent[iS]) {
+					case "blockHitActions":
+						if (outputNBT.blockHitActions == undefined) {
+							outputNBT.blockHitActions = [];
+							outputNBT.blockHitActionChances = [];
+						}
+						outputNBT.blockHitActions.push(inputs[i].blockHitActions);
+						outputNBT.blockHitActionChances.push(inputs[i].blockHitActionChances);
+						break;
 					case "applyEffect":
 						if (outputNBT.effects == undefined) outputNBT.effects = [];
 						outputNBT.effects.push(...inputs[i].effects);
-						break
+						break;
 					case "fireAspect":
 						if (outputNBT.fireChance == undefined) outputNBT.fireChance = [];
 						outputNBT.fireChance.push(...inputs[i].fireChance);
+						break;
+					case "replaceTextures":
+						modelOverride = {modelType: inputs[i].modelType, modelTexture: inputs[i].modelTexture};
+						break;
+					case "partialNameIsFull":
+						overiddenPartialName = inputs[i].partName;
 						break;
 					case "_":
 					case "skipThisComment":

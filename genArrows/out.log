@@ -16,7 +16,6 @@ Parsing...
 	fullName missing:	 minecraft:gunpowder
 	stats missing:   	 minecraft:slime
 	fullName missing:	 minecraft:magma_cream
-	fullName missing:	 minecraft:firework_star
 	fullName missing:	 minecraft:ghast_tear
 	fullName missing:	 minecraft:echo_shard
 	fullName missing:	 minecraft:quartz
@@ -125,4 +124,8 @@ Combining...
 	unknown stat:    	 particle
 	unknown stat:    	 particle
 	unknown stat:    	 particle
-Total: 566
+	unknown stat:    	 particle
+	unknown stat:    	 particle
+	unknown stat:    	 particle
+	unknown stat:    	 particle
+Total: 722

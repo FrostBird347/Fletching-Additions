@@ -283,9 +283,7 @@ function genOutput(inputs) {
 	} else if (overiddenPartialName != undefined) {
 		outputName = overiddenPartialName;
 	}
-	//I have no idea why it's not being formatted correctly, so im just gonna be lazy and replace text
-	//This does however mean that I can't use double quotes in any names
-	outputNBT.display.Name = nbt.stringify([{QtextQ:outputName, QitalicQ: false}]).replaceAll("Q", '"').replaceAll("{}", 'false');
+	outputNBT.display.Name = JSON.stringify([{text:outputName, italic: false}]);
 	
 	//console.log(outputName);
 	//console.log(inputs);

@@ -2,7 +2,6 @@ const nbt = require("nbt-ts");
 const csv = require("csv-parse/sync");
 const fs = require('fs');
 const execFileSync = require('child_process').execFileSync;
-const sha1 = require('sha1');
 const dyes = ["White", "Light gray", "Gray", "Black", "Brown", "Red", "Orange", "Yellow", "Lime", "Green", "Cyan", "Light blue", "Blue", "Purple", "Magenta", "Pink"];
 
 //----------
@@ -213,7 +212,10 @@ function genOutput(inputs) {
 	//Simple multiplier values
 	let globalMultKeys = ["flySpeed", "gravityMult", "drawSpeed", "damageMult"];
 	for (let i = 0; i < globalMultKeys.length; i++) {
-		outputNBT[globalMultKeys[i]] = new nbt.Float(parseFloat(getOrDefault(inputs[tipID], globalMultKeys[i], 1) * getOrDefault(inputs[stickID], globalMultKeys[i], 1) * getOrDefault(inputs[finID], globalMultKeys[i], 1) * getOrDefault(inputs[effectID], globalMultKeys[i], 1)));
+		let tempValue = new nbt.Float(parseFloat(getOrDefault(inputs[tipID], globalMultKeys[i], 1) * getOrDefault(inputs[stickID], globalMultKeys[i], 1) * getOrDefault(inputs[finID], globalMultKeys[i], 1) * getOrDefault(inputs[effectID], globalMultKeys[i], 1)));
+		if (tempValue != 1) {
+			outputNBT[globalMultKeys[i]] = tempValue;
+		}
 	}
 	
 	outputJSON.outputAmount = Math.round(outputJSON.outputAmount * getOrDefault(inputs[tipID], "outputCountMult", 1) * getOrDefault(inputs[stickID], "outputCountMult", 1) * getOrDefault(inputs[finID], "outputCountMult", 1) * getOrDefault(inputs[effectID], "outputCountMult", 1));
@@ -293,7 +295,14 @@ function genOutput(inputs) {
 	if (inputs[effectID].id != "_") {
 		outputFilePath += `_${inputs[effectID].id.split(":")[1]}`;
 	}
-	outputFilePath += `_${sha1(JSON.stringify(outputJSON))}.json`;
+	//Make sure no duplicates remain, without needing to use sha1
+	let appendCounter = 1;
+	let appendString = "";
+	while (fs.existsSync(outputFilePath + appendString + ".json")) {
+		appendCounter++;
+		appendString = "_" + appendCounter;
+	}
+	outputFilePath += appendString + ".json";
 	
 	fs.writeFileSync(outputFilePath, JSON.stringify(outputJSON));
 }

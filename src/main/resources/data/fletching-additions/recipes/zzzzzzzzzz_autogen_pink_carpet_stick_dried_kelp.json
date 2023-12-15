@@ -1,0 +1,1 @@
+{"type":"fletching-additions:fletching_recipe","outputItem":"fletching-additions:custom_arrow","outputAmount":6,"inputTip":{"item":"minecraft:pink_carpet"},"inputStick":{"item":"minecraft:stick"},"inputFins":{"item":"minecraft:dried_kelp"},"outputNbt":"{display:{Name:'{text:\"Soft Dried Kelp Finned Arrow\",italic:{}}'},flySpeed:0.5625f,damageMult:0f,gameFlags:[\"silent\"]}"}

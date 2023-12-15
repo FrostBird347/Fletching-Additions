@@ -1,0 +1,1 @@
+{"type":"fletching-additions:fletching_recipe","outputItem":"fletching-additions:custom_arrow","outputAmount":6,"inputTip":{"item":"minecraft:torch"},"inputStick":{"item":"minecraft:stick"},"inputFins":{"item":"minecraft:prismarine_shard"},"outputNbt":"{display:{Name:'{text:\"Flaming Prismarine Finned Arrow\",italic:{}}'},gameFlags:[\"waterSpeed\"],fireChance:[0.25f]}"}

@@ -23,6 +23,14 @@ function getOrDefault(item, key, defValue) {
 	return defValue;
 }
 
+function getAddOrEmpty(item, key, defValue, prependValue, appendValue) {
+	let output = getOrDefault(item, key, defValue);
+	if (output != defValue) {
+		return prependValue + output + appendValue;
+	}
+	return "";
+}
+
 function parseItem(rawItem) {
 	let item = {valid: false};
 	
@@ -191,7 +199,7 @@ function genOutput(inputs) {
 	let overiddenPartialName = undefined;
 	let tipID = 0, stickID = 1, finID = 2, effectID = 3;
 	let outputJSON = {type: "fletching-additions:fletching_recipe", outputItem: "fletching-additions:custom_arrow", outputAmount: 6};
-	let outputNBT = {};
+	let outputNBT = {display:{}};
 	let fakeLength = inputs.length;
 	if (!notDefault(inputs[effectID].id)) fakeLength--;
 	
@@ -260,16 +268,34 @@ function genOutput(inputs) {
 		}
 	}
 	
+	
+	let outputName = `${getAddOrEmpty(inputs[tipID], "partName", "_", "", " ")}${getAddOrEmpty(inputs[finID], "partName", "_", "", " ")}${getAddOrEmpty(inputs[effectID], "partName", "_", "", " ")}Arrow${getAddOrEmpty(inputs[stickID], "partName", "_", " with a ", " Core")}`
+	if (inputs[tipID].partName == "_" && inputs[stickID].partName == "_" && inputs[finID].partName == "_") {
+		outputName = inputs[effectID].fullName;
+	} else if (inputs[tipID].partName == "_" && inputs[stickID].partName == "_" && inputs[effectID].partName == "_") {
+		outputName = inputs[finID].fullName;
+	}  else if (inputs[tipID].partName == "_" && inputs[finID].partName == "_" && inputs[effectID].partName == "_") {
+		outputName = inputs[stickID].fullName;
+	}  else if (inputs[effectID].partName == "_" && inputs[stickID].partName == "_" && inputs[finID].partName == "_") {
+		outputName = inputs[tipID].fullName;
+	} else if (overiddenPartialName != undefined) {
+		outputName = overiddenPartialName;
+	}
+	outputNBT.display.Name = nbt.stringify({text:outputName, italic: false});
+	
+	//console.log(outputName);
 	//console.log(inputs);
 	//console.log(outputNBT);
 	outputJSON.outputNbt = nbt.stringify(outputNBT);
 	//console.log(outputJSON);
 	
-	let outputName = `z_autogen_${inputs[tipID].id.split(":")[1]}_${inputs[stickID].id.split(":")[1]}_${inputs[finID].id.split(":")[1]}`;
+	let outputFilePath = `../src/main/resources/data/fletching-additions/recipes/zzzzzzzzzz_autogen_${inputs[tipID].id.split(":")[1]}_${inputs[stickID].id.split(":")[1]}_${inputs[finID].id.split(":")[1]}`;
 	if (inputs[effectID].id != "_") {
-		outputName += `_${inputs[effectID].id.split(":")[1]}`;
+		outputFilePath += `_${inputs[effectID].id.split(":")[1]}`;
 	}
-	outputName += `_${sha1(JSON.stringify(outputJSON))}.json`;
+	outputFilePath += `_${sha1(JSON.stringify(outputJSON))}.json`;
+	
+	fs.writeFileSync(outputFilePath, JSON.stringify(outputJSON));
 }
 
 //----------

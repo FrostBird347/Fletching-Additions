@@ -2,6 +2,7 @@ const nbt = require("nbt-ts");
 const csv = require("csv-parse/sync");
 const fs = require('fs');
 const execFileSync = require('child_process').execFileSync;
+const sha1 = require('sha1');
 const dyes = ["White", "Light gray", "Gray", "Black", "Brown", "Red", "Orange", "Yellow", "Lime", "Green", "Cyan", "Light blue", "Blue", "Purple", "Magenta", "Pink"];
 
 //----------
@@ -11,18 +12,29 @@ function exists(value) {
 	return (value != undefined && value != "");
 }
 
+function notDefault(value) {
+	return exists(value) && value != "_";
+}
+
+function getOrDefault(item, key, defValue) {
+	if (notDefault(item[key])) {
+		return item[key];
+	}
+	return defValue;
+}
+
 function parseItem(rawItem) {
 	let item = {valid: false};
 	
-	if (!exists(rawItem[0])) { console.error("\titem missing:\t", rawItem); return item; };
+	if (!exists(rawItem[0])) { console.log("\titem missing:\t", rawItem); return item; };
 	item.id = rawItem[0];
-	if (!exists(rawItem[1])) { console.error("\tfullName missing:\t", rawItem[0]); return item; };
+	if (!exists(rawItem[1])) { console.log("\tfullName missing:\t", rawItem[0]); return item; };
 	item.fullName = rawItem[1];
-	if (!exists(rawItem[2])) { console.error("\tpartName missing:\t", rawItem[0]); return item; };
+	if (!exists(rawItem[2])) { console.log("\tpartName missing:\t", rawItem[0]); return item; };
 	item.partName = rawItem[2];
-	if (!exists(rawItem[3])) { console.error("\tunknown type:\t", rawItem[0]); return item; };
+	if (!exists(rawItem[3])) { console.log("\tunknown type:\t", rawItem[0]); return item; };
 	
-	if (!exists(rawItem[4])) { console.error("\tcategories missing:\t", rawItem[0]); return item; };
+	if (!exists(rawItem[4])) { console.log("\tcategories missing:\t", rawItem[0]); return item; };
 	let categories = rawItem[4].split(" ");
 	//Split categories into 2 arrays for quick and easy blacklist checking
 	item.cat = [];
@@ -38,11 +50,11 @@ function parseItem(rawItem) {
 		}
 	}
 	
-	if (!exists(rawItem[6])) { console.error("\trenderMode missing:\t", rawItem[0]); return item; };
+	if (!exists(rawItem[6])) { console.log("\trenderMode missing:\t", rawItem[0]); return item; };
 	item.modelType = rawItem[6].split("&")[0];
 	item.modelTexture = rawItem[6].split("&")[1];
 	
-	if (!exists(rawItem[5])) { console.error("\tstats missing:   \t", rawItem[0]); return item; };
+	if (!exists(rawItem[5])) { console.log("\tstats missing:   \t", rawItem[0]); return item; };
 	//flags that will be processed by the game and not this script
 	item.gameFlags = [];
 	//flags that will be processed by this script
@@ -83,8 +95,8 @@ function parseItem(rawItem) {
 							iA += 3;
 							break;
 						default:
-							console.error("\tunknown blockHitAction:\t", currentStat[iA]);
-							console.error("\tcan't process other actions!");
+							console.log("\tunknown blockHitAction:\t", currentStat[iA]);
+							console.log("\tcan't process other actions!");
 							iA = currentStat.length;
 					}
 					iA++;
@@ -111,6 +123,9 @@ function parseItem(rawItem) {
 			case "farSound":
 				item.gameFlags.push(currentStat[0]);
 				break;
+			//Also put this out as a gen flag
+			case "outputCountMult":
+				item.genFlags.push(currentStat[0]);
 			case "flySpeed":
 			case "gravityMult":
 			case "drawSpeed":
@@ -125,7 +140,7 @@ function parseItem(rawItem) {
 			case "skipThisComment":
 				break;
 			default:
-				console.error("\tunknown stat:    \t", currentStat[0]);
+				console.log("\tunknown stat:    \t", currentStat[0]);
 				//execFileSync("/bin/sleep", ["2"]);
 		}
 	}
@@ -172,9 +187,74 @@ function checkCompat(tip, stick, fin, effect) {
 }
 
 function genOutput(inputs) {
+	let textureOverridden = false;
 	let tipID = 0, stickID = 1, finID = 2, effectID = 3;
-	let output = {};
+	let outputJSON = {type: "fletching-additions:fletching_recipe", outputItem: "fletching-additions:custom_arrow", outputAmount: 6};
+	let outputNBT = {};
+	let fakeLength = inputs.length;
+	if (!notDefault(inputs[effectID].id)) fakeLength--;
+	
+	outputJSON.inputTip = {item: inputs[tipID].id};
+	outputJSON.inputStick = {item: inputs[stickID].id};
+	outputJSON.inputFins = {item: inputs[finID].id};
+	if (inputs[effectID].id != "_") {
+		outputJSON.inputEffect = {item: inputs[effectID].id};
+	}
+	
+	//Simple multiplier values
+	let globalMultKeys = ["flySpeed", "gravityMult", "drawSpeed", "damageMult"];
+	for (let i = 0; i < globalMultKeys.length; i++) {
+		outputNBT[globalMultKeys[i]] = new nbt.Float(parseFloat(getOrDefault(inputs[tipID], globalMultKeys[i], 1) * getOrDefault(inputs[stickID], globalMultKeys[i], 1) * getOrDefault(inputs[finID], globalMultKeys[i], 1) * getOrDefault(inputs[effectID], globalMultKeys[i], 1)));
+	}
+	
+	outputJSON.outputAmount = Math.round(outputJSON.outputAmount * getOrDefault(inputs[tipID], "outputCountMult", 1) * getOrDefault(inputs[stickID], "outputCountMult", 1) * getOrDefault(inputs[finID], "outputCountMult", 1) * getOrDefault(inputs[effectID], "outputCountMult", 1));
+	
+	outputNBT.gameFlags = [];
+	
+	for (let i = 0; i < fakeLength; i++) {
+		
+		//Combine all game flags
+		outputNBT.gameFlags.push(...inputs[i].gameFlags);
+		
+		for (let iS = 0; iS < inputs[i].statsPresent.length; iS++) {
+			//Skip over game flags, since those have already been sorted out and will be processed by the game
+			if (!inputs[i].gameFlags.includes(inputs[i].statsPresent[iS])) {
+				switch (inputs[i].statsPresent[iS]) {
+					case "applyEffect":
+						if (outputNBT.effects == undefined) outputNBT.effects = [];
+						outputNBT.effects.push(...inputs[i].effects);
+						break
+					case "fireAspect":
+						if (outputNBT.fireChance == undefined) outputNBT.fireChance = [];
+						outputNBT.fireChance.push(...inputs[i].fireChance);
+						break;
+					case "_":
+					case "skipThisComment":
+					//Already processed stats
+					case "flySpeed":
+					case "gravityMult":
+					case "drawSpeed":
+					case "damageMult":
+					case "outputCountMult":
+						break;
+					default:
+						console.log("\tunknown stat:    \t", inputs[i].statsPresent[iS]);
+						//execFileSync("/bin/sleep", ["2"]);
+				}
+			}
+		}
+	}
+	
 	//console.log(inputs);
+	//console.log(outputNBT);
+	outputJSON.outputNbt = nbt.stringify(outputNBT);
+	//console.log(outputJSON);
+	
+	let outputName = `z_autogen_${inputs[tipID].id.split(":")[1]}_${inputs[stickID].id.split(":")[1]}_${inputs[finID].id.split(":")[1]}`;
+	if (inputs[effectID].id != "_") {
+		outputName += `_${inputs[effectID].id.split(":")[1]}`;
+	}
+	outputName += `_${sha1(JSON.stringify(outputJSON))}.json`;
 }
 
 //----------
@@ -225,7 +305,7 @@ for (let i = 1; i < fullDataset.length; i++) {
 					effects.push(item);
 					break;
 				default:
-					console.error("\tunknown type:\t", splitItems[iL][3]);
+					console.log("\tunknown type:\t", splitItems[iL][3]);
 			}
 		}
 	}

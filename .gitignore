@@ -180,5 +180,5 @@ dist
 # custom stuff
 
 genArrows/DownloadURL.txt
-genArrows/Ingredients.csv
+#genArrows/Ingredients.csv
 !genArrows/out.log

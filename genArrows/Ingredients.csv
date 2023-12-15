@@ -1,0 +1,75 @@
+Ingredient,"Full Name
+
+(if the only custom ingredient)","Partial Name
+
+""[$t ][$f ][$e ]Arrow[ with a $s Core]""
+Dye arrow's ""partial name"" behaves like the full name",,"Categories
+
+
+no___: what it can't go with if one of them is a stick or effect
+req__: what it must go with, the type does not matter","Custom Stats
+
+
+""@"" seperates stats
+""&"" seperates stat options
+
+Excuse the painful to read formatting, a script is used to convert this spreadsheet into a folder of recipies containing every possible valid combination (stats are applied via custom NBT).
+
+Note that tips should generally have the biggest impact on damage + impact effects, sticks impact gravity + integrity + draw speed, fins impact flying speed. However they don't have to stick to this rule.
+Also note that damage calculations will revert the flySpeed multiplier.
+Finally, damage mult only applies to the damage the arrow does directly, things like firework explosion damage are unaffected
+","RenderMode
+
+
+ModelType&TextureID
+Note that ModelType/TextureID are different depending on the item type (e.g ""Blaze"" stick and effect textures are different)"
+minecraft:flint,_,_,t,_,_,_&_
+minecraft:stick,_,_,s,noFire Stick,_,_&_
+minecraft:feather,_,_,f,noFire,_,_&_
+minecraft:glowstone_dust,_,Spectral,e,noWet,applyEffect&minecraft:glowing&10@particle&???,_&Spectral
+minecraft:blaze_rod,Blaze Arrow,Blaze,s,noWet noCold Fire,fireAspect&0.5@damageMult&1.125@drawSpeed&1.25@gravityMult&0.75@breaksWhenWet@blockHitActions&0.5&destroy&fletching-additions:blaze_crush&0.25&drop&minecraft:blaze_powder&1&fletching-additions:blaze_crush&0.25&doNothing&fletching-additions:blaze_impact@dynamicLightingIfPossible,_&Blaze
+minecraft:prismarine_shard,Prismarine Arrow,Prismarine Finned,f,_,waterSpeed,_&Prismarine
+minecraft:bone,Bone Arrow,Bone,s,_,,_&Bone
+minecraft:amethyst_shard,Amethyst Arrow,Amethyst Tipped,t,_,damageMult&1.5@impactSoundIncreasePitchNoAngle@blockHitActions&1&doNothing&fletching-additions:crystal_impact@farSound,_&Amethyst
+minecraft:blaze_powder,Blaze Infused Arrow,Blaze Infused,e,noWet,fireAspect&0.75,_&Blaze
+minecraft:firework_rocket,Rocket Powered Arrow,Rocket Powered,f,_,skipThisComment&gravityMult only applies after the firework duration. otherwise its 0@damageMult&1.25@drawSpeed&0.25@inheritFireworkNBT@gravityMult&1.25@flySpeed&2,_&Rocket
+minecraft:dried_kelp,Dried Kelp Arrow,Dried Kelp Finned,f,noFire,flySpeed&0.75@damageMult&0.75,_&DryKelp
+minecraft:lightning_rod,,,s,SturdyCore,,blockUp&minecraft:lightning_rod
+minecraft:bamboo,,,s,noFire,,
+minecraft:iron_bars,,,s,SturdyCore,,
+minecraft:torch,Flaming Arrow,Flaming,t,_,fireAspect&0.25,_&Flame
+minecraft:soul_torch,Soul Flame Arrow,Soul Flame,t,_,fireAspect&0.5,_&SoulFlame
+minecraft:pointed_dripstone,Dripstone Arrow,,t,,,
+minecraft:tnt,,,t,noFire,,
+minecraft:fire_charge,,,t,Fire noWet noCold,,
+minecraft:ice,,,t,Cold noFire,,
+minecraft:packed_ice,,,t,Cold,,
+minecraft:blue_ice,,,t,Cold,,
+minecraft:end_rod,,,s,SturdyCore,,
+minecraft:gunpowder,,,e,noFire noWet,,
+minecraft:slime,Slimy Arrow,Slimy,e,Sticky,,_&Slime
+minecraft:[DYE]_dye,[DYE] Arrow,[DYE] Arrow?,e,noWet HidesInfo,skipThisComment&dyes can be used to hide what a custom arrow is made of@replaceTextures@partialNameIsFull,_&[DYE]
+minecraft:magma_cream,,,e,,,
+minecraft:firework_star,Firework Arrow,Firework Tipped,t,noFire,inheritFireworkStarNBT@damageMult&0.125,_&FireworkStar
+minecraft:ghast_tear,,,e,Wet,,
+minecraft:echo_shard,,,f,,applyEffect&minecraft:darkness&10,
+minecraft:quartz,,,,,,
+minecraft:emerald,,,,,,
+minecraft:phantom_membrane,,,e,,,
+minecraft:netherite_scrap,,,t,,,
+minecraft:chorus_fruit,,,,,,
+twigs:pebble,,,t,,,
+twigs:roseate_seashell,,,t,,,
+twigs:opaline_seashell/ecologics:seashell,,,f,_,,
+twigs:bamboo_leaves,,,f,noFire,,
+create:shaft,,,s,SturdyCore,outputCountMult&0.5,blockUp&create:shaft
+create:cogwheel,,,s,SturdyCore noHidesInfo,outputCountMult&0.5,blockUp&create:cogwheel
+create:propeller,,,f,noHidesInfo,outputCountMult&0.75,flat&createPropeller
+create:brass_hand,,,t,noHidesInfo,outputCountMult&0.75,_&hand
+create:rose_quartz,,,,,,
+farmersdelight:flint_knife,,,t,,outputCountMult&0.5,
+minecraft:pufferfish,,,t,,,
+minecraft:sugar_cane,,,s,noFire,,
+minecraft:grindstone,Grindstone Arrow,,t,reqSturdyCore noHidesInfo,outputCountMult&0,
+minecraft:[DYE]_carpet,Harmless [DYE] Arrow,Soft,t,noFire reqStick noWet noHidesInfo,"skipThisComment&requires something sticky (or a regular stick) to prevent this from exploding the combination count, also noWet because it would be quite noisy if it was wet@damageMult&0@silent@flySpeed&0.75",_&[DYE]_carpet
+_,_,_,e,_,_,_&_

@@ -9,14 +9,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class CustomArrowItem extends ArrowItem {
-    public CustomArrowItem(Item.Settings settings) {
-        super(settings);
-    }
+	public CustomArrowItem(Item.Settings settings) {
+		super(settings);
+	}
 
-    @Override
-    public PersistentProjectileEntity createArrow(World world, ItemStack stack, LivingEntity shooter) {
-        CustomArrowEntity customArrowEntity = new CustomArrowEntity(world, shooter);
-        customArrowEntity.initFromStack(stack);
-        return customArrowEntity;
-    }
+	@Override
+	public PersistentProjectileEntity createArrow(World world, ItemStack stack, LivingEntity shooter) {
+		CustomArrowEntity customArrowEntity = new CustomArrowEntity(world, shooter);
+		customArrowEntity.initFromStack(stack);
+		return customArrowEntity;
+	}
 }

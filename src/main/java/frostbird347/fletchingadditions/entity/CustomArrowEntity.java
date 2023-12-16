@@ -48,6 +48,13 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		initFromNbt(stack.getNbt());
 	}
 
+	public void swapToRealVel() {
+		if (!isRealVel) {
+				this.setVelocity(this.getVelocity().add(0, 0.05f, 0).multiply(1f / flySpeedMult).subtract(0, 0.05f * gravityMult, 0));
+				isRealVel = true;
+		}
+	}
+
 	public void initFromNbt(NbtCompound nbt) {
 		if (nbt == null || nbt.isEmpty()) return;
 		itemNbt = nbt;
@@ -86,18 +93,16 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		//This will hopefully fix client side velocity desync issues
 		if (!this.isOnGround()) {
 			//Seems to improve client side interpolation issues with slow speeds
-			if (this.world.isClient && !isRealVel) {
-				this.setVelocity(this.getVelocity().add(0, 0.05f, 0).multiply(1f / flySpeedMult).subtract(0, 0.05f * gravityMult, 0));
-				isRealVel = true;
+			if (this.world.isClient) {
+				swapToRealVel();
 			}
 			realVel = this.getVelocity();
 			this.setVelocity(realVel.multiply(flySpeedMult));
 			isRealVel = false;
 			super.tick();
 			//Seems to improve client side interpolation issues with slow speeds
-			if (!this.world.isClient && !isRealVel) {
-				this.setVelocity(this.getVelocity().add(0, 0.05f, 0).multiply(1f / flySpeedMult).subtract(0, 0.05f * gravityMult, 0));
-				isRealVel = true;
+			if (!this.world.isClient) {
+				swapToRealVel();
 			}
 			
 			if (this.world.isClient && !this.inGround) {
@@ -111,10 +116,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 
 	@Override
 	public void onBubbleColumnSurfaceCollision(boolean down) {
-		if (!isRealVel) {
-			this.setVelocity(this.getVelocity().add(0, 0.05f, 0).multiply(1f / flySpeedMult).subtract(0, 0.05f * gravityMult, 0));
-			isRealVel = true;
-		}
+		swapToRealVel();
 
 		Vec3d oldVel = this.getVelocity();
 		double newSpeed = down ? Math.max(-0.9, oldVel.y - 0.03) : Math.min(1.8, oldVel.y + 0.1);
@@ -123,10 +125,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 
 	@Override
 	public void onBubbleColumnCollision(boolean down) {
-		if (!isRealVel) {
-			this.setVelocity(this.getVelocity().add(0, 0.05f, 0).multiply(1f / flySpeedMult).subtract(0, 0.05f * gravityMult, 0));
-			isRealVel = true;
-		}
+		swapToRealVel();
 
 		Vec3d oldVel = this.getVelocity();
 		double newSpeed = down ? Math.max(-0.3 * flySpeedMult, oldVel.y - 0.03) : Math.min(0.7 * flySpeedMult, oldVel.y + 0.06);
@@ -154,10 +153,8 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	
 	@Override
 	protected void onEntityHit(EntityHitResult entityHitResult) {
-		if (!this.world.isClient && !isRealVel) {
-			this.setVelocity(this.getVelocity().add(0, 0.05f, 0).multiply(1f / flySpeedMult).subtract(0, 0.05f * gravityMult, 0));
-			isRealVel = true;
-		}
+		swapToRealVel();
+		
 		super.onEntityHit(entityHitResult);
 	}
 

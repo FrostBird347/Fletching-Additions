@@ -4,8 +4,6 @@ import frostbird347.fletchingadditions.MainMod;
 import frostbird347.fletchingadditions.item.ItemManager;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -13,6 +11,7 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -29,6 +28,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	
 	//Other stuff unrelated to nbt
 	Vec3d realVel = new Vec3d(0, 0, 0);
+	boolean isRealVel = true;
 
 	public CustomArrowEntity(EntityType<? extends CustomArrowEntity> entityType, World world) {
 		super((EntityType<? extends PersistentProjectileEntity>)entityType, world);
@@ -77,15 +77,18 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	@Override
 	public void tick() {
 		//Seems to improve client side interpolation issues with slow speeds
-		if (this.world.isClient) {
-			this.setVelocity(this.getVelocity().multiply(1f / flySpeedMult));
+		if (this.world.isClient && !isRealVel) {
+			this.setVelocity(this.getVelocity().add(0, 0.05f, 0).multiply(1f / flySpeedMult).subtract(0, 0.05f * gravityMult, 0));
+			isRealVel = true;
 		}
 		realVel = this.getVelocity();
 		this.setVelocity(realVel.multiply(flySpeedMult));
+		isRealVel = false;
 		super.tick();
 		//Seems to improve client side interpolation issues with slow speeds
-		if (!this.world.isClient) {
-			this.setVelocity(this.getVelocity().multiply(1f / flySpeedMult));
+		if (!this.world.isClient && !isRealVel) {
+			this.setVelocity(this.getVelocity().add(0, 0.05f, 0).multiply(1f / flySpeedMult).subtract(0, 0.05f * gravityMult, 0));
+			isRealVel = true;
 		}
 		
 		if (this.world.isClient && !this.inGround) {
@@ -100,13 +103,17 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		stack.setNbt(itemNbt);
 		return stack;
 	}
+	
+	@Override
+	protected void onEntityHit(EntityHitResult entityHitResult) {
+		this.setVelocity(this.getVelocity().add(0, 0.05f, 0).multiply(1f / flySpeedMult).subtract(0, 0.05f * gravityMult, 0));
+		isRealVel = true;
+		super.onEntityHit(entityHitResult);
+	}
 
 	@Override
 	protected void onHit(LivingEntity target) {
-		Vec3d prevVel = this.getVelocity();
-		this.setVelocity(realVel);
 		super.onHit(target);
-		this.setVelocity(prevVel);
 	}
 
 	@Override

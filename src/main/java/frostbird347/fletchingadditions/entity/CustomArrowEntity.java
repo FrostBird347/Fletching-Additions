@@ -64,6 +64,11 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		gravityMult = 1;
 		if (itemNbt.contains("flySpeed", NbtElement.FLOAT_TYPE)) {
 			flySpeedMult = itemNbt.getFloat("flySpeed");
+			//Make sure we don't divide by 0, and also negative flySpeed values should not be supported either
+			if (flySpeedMult <= 0) {
+				flySpeedMult = 1f;
+				MainMod.LOGGER.error("flySpeed attribute of loaded arrow was equal or less than 0. flySpeed has been reset to 1!");
+			}
 		}
 		if (itemNbt.contains("gravityMult", NbtElement.FLOAT_TYPE)) {
 			gravityMult = itemNbt.getFloat("gravityMult");

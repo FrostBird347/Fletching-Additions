@@ -108,7 +108,32 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 			super.tick();
 		}
 	}
-//double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch, boolean useDistance
+
+	@Override
+	public void onBubbleColumnSurfaceCollision(boolean down) {
+		if (!isRealVel) {
+			this.setVelocity(this.getVelocity().add(0, 0.05f, 0).multiply(1f / flySpeedMult).subtract(0, 0.05f * gravityMult, 0));
+			isRealVel = true;
+		}
+
+		Vec3d oldVel = this.getVelocity();
+		double newSpeed = down ? Math.max(-0.9, oldVel.y - 0.03) : Math.min(1.8, oldVel.y + 0.1);
+		this.setVelocity(oldVel.x, newSpeed, oldVel.z);
+	}
+
+	@Override
+	public void onBubbleColumnCollision(boolean down) {
+		if (!isRealVel) {
+			this.setVelocity(this.getVelocity().add(0, 0.05f, 0).multiply(1f / flySpeedMult).subtract(0, 0.05f * gravityMult, 0));
+			isRealVel = true;
+		}
+
+		Vec3d oldVel = this.getVelocity();
+		double newSpeed = down ? Math.max(-0.3 * flySpeedMult, oldVel.y - 0.03) : Math.min(0.7 * flySpeedMult, oldVel.y + 0.06);
+		this.setVelocity(oldVel.x, newSpeed, oldVel.z);
+		this.onLanding();
+	}
+
 	@Override
 	public void extinguish() {
 		if (breaksWhenWet) {
@@ -129,8 +154,10 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	
 	@Override
 	protected void onEntityHit(EntityHitResult entityHitResult) {
-		this.setVelocity(this.getVelocity().add(0, 0.05f, 0).multiply(1f / flySpeedMult).subtract(0, 0.05f * gravityMult, 0));
-		isRealVel = true;
+		if (!this.world.isClient && !isRealVel) {
+			this.setVelocity(this.getVelocity().add(0, 0.05f, 0).multiply(1f / flySpeedMult).subtract(0, 0.05f * gravityMult, 0));
+			isRealVel = true;
+		}
 		super.onEntityHit(entityHitResult);
 	}
 

@@ -71,6 +71,11 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		if (gameFlags.indexOf(NbtString.of("breaksWhenWet")) >= 0) breaksWhenWet = true;
 		if (gameFlags.indexOf(NbtString.of("waterSpeed")) >= 0) waterSpeed = true;
 		if (gameFlags.indexOf(NbtString.of("dynamicLightingIfPossible")) >= 0) dynamicLightingIfPossible = true;
+
+		//Modify damage
+		if (itemNbt.contains("damageMult", NbtElement.FLOAT_TYPE)) {
+			this.setDamage(2.0 * itemNbt.getFloat("damageMult"));
+		}
 		
 		MainMod.LOGGER.info(itemNbt.asString());
 	}
@@ -105,7 +110,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	}
 //double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch, boolean useDistance
 	@Override
-    public void extinguish() {
+	public void extinguish() {
 		if (breaksWhenWet) {
 			this.playSound(SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 0.25f, 1.2f / (this.random.nextFloat() * 0.2f + 0.9f));
 			if (!this.world.isClient) {

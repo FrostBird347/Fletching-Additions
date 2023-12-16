@@ -11,6 +11,7 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -76,25 +77,42 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 
 	@Override
 	public void tick() {
-		//Seems to improve client side interpolation issues with slow speeds
-		if (this.world.isClient && !isRealVel) {
-			this.setVelocity(this.getVelocity().add(0, 0.05f, 0).multiply(1f / flySpeedMult).subtract(0, 0.05f * gravityMult, 0));
-			isRealVel = true;
+		//Don't mess with velocity when the arrow is in the ground
+		//This will hopefully fix client side velocity desync issues
+		if (!this.isOnGround()) {
+			//Seems to improve client side interpolation issues with slow speeds
+			if (this.world.isClient && !isRealVel) {
+				this.setVelocity(this.getVelocity().add(0, 0.05f, 0).multiply(1f / flySpeedMult).subtract(0, 0.05f * gravityMult, 0));
+				isRealVel = true;
+			}
+			realVel = this.getVelocity();
+			this.setVelocity(realVel.multiply(flySpeedMult));
+			isRealVel = false;
+			super.tick();
+			//Seems to improve client side interpolation issues with slow speeds
+			if (!this.world.isClient && !isRealVel) {
+				this.setVelocity(this.getVelocity().add(0, 0.05f, 0).multiply(1f / flySpeedMult).subtract(0, 0.05f * gravityMult, 0));
+				isRealVel = true;
+			}
+			
+			if (this.world.isClient && !this.inGround) {
+				this.world.addParticle(ParticleTypes.INSTANT_EFFECT, this.getX(), this.getY(), this.getZ(), 0.0, 0.0, 0.0);
+			}
+		} else {
+			realVel = Vec3d.ZERO;
+			super.tick();
 		}
-		realVel = this.getVelocity();
-		this.setVelocity(realVel.multiply(flySpeedMult));
-		isRealVel = false;
-		super.tick();
-		//Seems to improve client side interpolation issues with slow speeds
-		if (!this.world.isClient && !isRealVel) {
-			this.setVelocity(this.getVelocity().add(0, 0.05f, 0).multiply(1f / flySpeedMult).subtract(0, 0.05f * gravityMult, 0));
-			isRealVel = true;
+	}
+//double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch, boolean useDistance
+	@Override
+    public void extinguish() {
+		if (breaksWhenWet) {
+			this.playSound(SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 0.25f, 1.2f / (this.random.nextFloat() * 0.2f + 0.9f));
+			if (!this.world.isClient) {
+				this.kill();
+			}
 		}
-		
-		if (this.world.isClient && !this.inGround) {
-			this.world.addParticle(ParticleTypes.INSTANT_EFFECT, this.getX(), this.getY(), this.getZ(), 0.0, 0.0, 0.0);
-		}
-		
+		super.extinguish();
 	}
 
 	@Override

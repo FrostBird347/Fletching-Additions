@@ -215,6 +215,19 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 
 				//Update the target entity nbt
 				target.readNbt(targetNbt);
+
+				//Teleport them far away and back to make the server resend all the entity data, including the soul fire
+				Vec3d targetPos = target.getPos().multiply(1.0);
+				float targetYaw = target.getYaw();
+				float targetPitch = target.getPitch();
+				Vec3d targetVel = target.getVelocity().multiply(1.0);
+				target.setPos(targetPos.x, targetPos.y, targetPos.z + 5000);
+				target.refreshPositionAndAngles(targetPos.x, targetPos.y, targetPos.z, targetYaw, targetPitch);
+				//target.setPos(targetPos.x, targetPos.y, targetPos.z);
+				//target.setYaw(targetYaw);
+				//target.setPitch(targetPitch);
+				target.setVelocity(targetVel);
+
 			}
 			MainMod.LOGGER.info(Integer.toString(fireHits) + ":" + Double.toString(burnTime));
 		}

@@ -2,6 +2,7 @@ package frostbird347.fletchingadditions.entity;
 
 import frostbird347.fletchingadditions.MainMod;
 import frostbird347.fletchingadditions.item.ItemManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -17,7 +18,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class CustomArrowEntity extends PersistentProjectileEntity {
-	private NbtCompound itemNbt = null;
+	private NbtCompound itemNbt = new NbtCompound();
 	//These values are not accessed via nbt for peformance reasons (I assume it's a bad idea to access nbt values each tick)
 	private float flySpeedMult = 1;
 	private float gravityMult = 1;
@@ -172,8 +173,51 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	@Override
 	protected void onEntityHit(EntityHitResult entityHitResult) {
 		swapToRealVel();
-		
 		super.onEntityHit(entityHitResult);
+
+		//Process fireChance
+		NbtList fireChances = itemNbt.getList("fireChance", NbtElement.FLOAT_TYPE);
+		int fireHits = 0;
+		for (int i = 0; i < fireChances.size(); i++) {
+			double chance = Math.random();
+			if (chance <= fireChances.getFloat(i)) {
+				fireHits++;
+			}
+		}
+		
+		//Apply the correct amount of fire depending on the number of hits above
+		if (fireHits > 0) {
+			double shiftedFireHits = (float)fireHits + Math.random() - 0.5;
+			//Thanks to https://tools.softinery.com/CurveFitter/ for the 2 burnTime curves below
+			//y=-0.18466x^{4}+2.48169x^{3}-8.9517x^{2}+13.3603x-1.00379
+			double burnTime = -0.18466 * Math.pow(shiftedFireHits, 4) + 2.48169 * Math.pow(shiftedFireHits, 3) - 8.9517 * Math.pow(shiftedFireHits, 2) + 13.3603 * shiftedFireHits + 1.00379;
+			//We have to switch to a difference equation after the one above peaks
+			if (shiftedFireHits > 6.977) {
+				//-12.32896+10.61645*x
+				burnTime = -12.32896 + 10.61645 * shiftedFireHits;
+			}
+
+			//Set the entity on fire
+			Entity target = entityHitResult.getEntity();
+			target.setOnFireFor((int)Math.round(burnTime));
+
+			//Also set the OnSoulFire flag if the arrow is also on fire (from lava/fire or the flame enchant), which will cause the target to be burned with soul flames if https://modrinth.com/mod/on-soul-fire is installed
+			if (this.isOnFire()) {
+				//Extract the nbt nessecary
+				NbtCompound targetNbt = target.writeNbt(new NbtCompound());
+				NbtCompound cardinalComponentsNbt = targetNbt.getCompound("cardinal_components");
+				NbtCompound onSoulFireNbt = cardinalComponentsNbt.getCompound("onsoulfire:on_soul_fire");
+				
+				//Set the values
+				onSoulFireNbt.putByte("OnSoulFire", (byte)1);
+				cardinalComponentsNbt.put("onsoulfire:on_soul_fire", onSoulFireNbt);
+				targetNbt.put("cardinal_components", cardinalComponentsNbt);
+
+				//Update the target entity nbt
+				target.readNbt(targetNbt);
+			}
+			MainMod.LOGGER.info(Integer.toString(fireHits) + ":" + Double.toString(burnTime));
+		}
 	}
 
 	@Override
@@ -192,7 +236,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	@Override
 	public void writeCustomDataToNbt(NbtCompound nbt) {
 		super.writeCustomDataToNbt(nbt);
-		if (this.itemNbt != null) {
+		if (this.itemNbt != null && !this.itemNbt.isEmpty()) {
 			nbt.put("itemNbt", this.itemNbt);
 		}
 	}

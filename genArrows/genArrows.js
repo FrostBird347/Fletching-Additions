@@ -4,6 +4,18 @@ const fs = require('fs');
 const execFileSync = require('child_process').execFileSync;
 const dyes = ["White", "Light gray", "Gray", "Black", "Brown", "Red", "Orange", "Yellow", "Lime", "Green", "Cyan", "Light blue", "Blue", "Purple", "Magenta", "Pink"];
 
+//Stats
+let stats = {
+	totalCount: 0,
+	mostFireChances: 0,
+	longestName: "",
+	flySpeedStats: [100000000000000000, 0],
+	gravityMultStats: [100000000000000000, 0],
+	drawSpeedStats: [100000000000000000, 0],
+	damageMultStats: [100000000000000000, 0],
+	itemOutputStats: [100000000000000000, 0]
+};
+
 //----------
 //Functions
 
@@ -119,7 +131,6 @@ function parseItem(rawItem) {
 			case "partialNameIsFull":
 				item.genFlags.push(currentStat[0]);
 				break;
-			case "breaksWhenWet":
 			case "inheritFireworkStarNBT":
 			case "inheritFireworkNBT":
 			case "silent":
@@ -215,6 +226,10 @@ function genOutput(inputs) {
 		let tempValue = new nbt.Float(parseFloat(getOrDefault(inputs[tipID], globalMultKeys[i], 1) * getOrDefault(inputs[stickID], globalMultKeys[i], 1) * getOrDefault(inputs[finID], globalMultKeys[i], 1) * getOrDefault(inputs[effectID], globalMultKeys[i], 1)));
 		if (tempValue != 1) {
 			outputNBT[globalMultKeys[i]] = tempValue;
+			
+			//Stats (ignore items with zero damage, as those aren't interesting)
+			if (tempValue < stats[globalMultKeys[i] + "Stats"][0] && !(globalMultKeys[i] == "damageMult" && tempValue == 0)) stats[globalMultKeys[i] + "Stats"][0] = tempValue;
+			if (tempValue > stats[globalMultKeys[i] + "Stats"][1]) stats[globalMultKeys[i] + "Stats"][1] = tempValue;
 		}
 	}
 	
@@ -305,6 +320,12 @@ function genOutput(inputs) {
 	outputFilePath += appendString + ".json";
 	
 	fs.writeFileSync(outputFilePath, JSON.stringify(outputJSON));
+	
+	//More stats
+	if (outputNBT.fireChance != undefined && stats.mostFireChances < outputNBT.fireChance.length) stats.mostFireChances = outputNBT.fireChance.length;
+	if (stats.longestName.length < outputName.length) stats.longestName = outputName;
+	if (outputJSON.outputAmount < stats.itemOutputStats[0]) stats.itemOutputStats[0] = outputJSON.outputAmount;
+	if (outputJSON.outputAmount > stats.itemOutputStats[1]) stats.itemOutputStats[1] = outputJSON.outputAmount;
 }
 
 //----------
@@ -362,7 +383,6 @@ for (let i = 1; i < fullDataset.length; i++) {
 }
 
 console.log("Combining...");
-let totalCount = 0;
 for (let iT = 0; iT < tips.length; iT++) {
 	for (let iS = 0; iS < sticks.length; iS++) {
 		for (let iF = 0; iF < fins.length; iF++) {
@@ -372,11 +392,11 @@ for (let iT = 0; iT < tips.length; iT++) {
 					//Make sure we don't recreate vanilla arrows
 					if (!(tips[iT].id == "minecraft:flint" && sticks[iS].id == "minecraft:stick" && fins[iF].id == "minecraft:feather" && (effects[iE].id == "minecraft:glowstone_dust" || effects[iE].id == "_"))) {
 						genOutput([tips[iT], sticks[iS], fins[iF], effects[iE]]);
-						totalCount++
+						stats.totalCount++
 					}
 				}
 			}
 		}
 	}
 }
-console.log("Total: " + totalCount);
+console.log("Stats:", stats);

@@ -48,9 +48,14 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		initFromNbt(stack.getNbt());
 	}
 
+	public boolean reallyOnGround() {
+		return (this.isOnGround() || this.inGround);
+	}
+
 	public void swapToRealVel() {
 		if (!isRealVel) {
-				this.setVelocity(this.getVelocity().add(0, 0.05f, 0).multiply(1f / flySpeedMult).subtract(0, 0.05f * gravityMult, 0));
+				float gravity = this.reallyOnGround() ? 0f : 0.05f;
+				this.setVelocity(this.getVelocity().add(0, gravity, 0).multiply(1f / flySpeedMult).subtract(0, gravity * gravityMult, 0));
 				isRealVel = true;
 		}
 	}
@@ -96,7 +101,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	public void tick() {
 		//Don't mess with velocity when the arrow is in the ground
 		//This will hopefully fix client side velocity desync issues
-		if (!this.isOnGround()) {
+		if (!this.reallyOnGround()) {
 			//Seems to improve client side interpolation issues with slow speeds
 			if (this.world.isClient) {
 				swapToRealVel();

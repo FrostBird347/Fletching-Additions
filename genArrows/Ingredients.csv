@@ -31,7 +31,7 @@ minecraft:blaze_rod,Blaze Arrow,Blaze,s,noWet noCold Fire,fireChance&0.05@fireCh
 minecraft:prismarine_shard,Prismarine Arrow,Prismarine Finned,f,_,waterSpeed,_&Prismarine
 minecraft:bone,Bone Arrow,Bone,s,_,,_&Bone
 minecraft:amethyst_shard,Amethyst Arrow,Amethyst Tipped,t,_,damageMult&1.5@impactSoundIncreasePitchNoAngle@blockHitActions&1&doNothing&fletching-additions:crystal_impact@farSound,_&Amethyst
-minecraft:blaze_powder,Blaze Infused Arrow,Blaze Infused,e,noWet,fireChance&0.05@fireChance&0.25@fireChance&0.75,_&Blaze
+minecraft:blaze_powder,Blaze Infused Arrow,Blaze Infused,e,noWet,fireChance&0.05@fireChance&0.75,_&Blaze
 minecraft:firework_rocket,Rocket Powered Arrow,Rocket Powered,f,_,skipThisComment&gravityMult only applies after the firework duration. otherwise its 0@damageMult&1.25@drawSpeed&0.25@inheritFireworkNBT@gravityMult&1.25@flySpeed&2,_&Rocket
 minecraft:dried_kelp,Dried Kelp Arrow,Dried Kelp Finned,f,noFire,flySpeed&0.75@damageMult&0.75,_&DryKelp
 minecraft:lightning_rod,,,s,SturdyCore,,blockUp&minecraft:lightning_rod

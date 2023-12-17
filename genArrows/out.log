@@ -172,7 +172,7 @@ Combining...
 	unknown stat:    	 particle
 Stats: {
   totalCount: 1596,
-  mostFireChances: 3,
+  mostFireChances: 17,
   longestName: 'Amethyst Tipped Prismarine Finned Blaze Infused Arrow with a Bamboo Core',
   flySpeedStats: [ Float { value: 0.42857142855 }, Float { value: 2.25 } ],
   gravityMultStats: [ Float { value: 0.75 }, Float { value: 2.1875 } ],

@@ -121,7 +121,7 @@ function parseItem(rawItem) {
 					iA++;
 				}
 				break;
-			case "fireAspect":
+			case "fireChance":
 				item.fireChance.push(new nbt.Float(currentStat[1]));
 				break;
 			case "applyEffect":
@@ -258,7 +258,7 @@ function genOutput(inputs) {
 						if (outputNBT.effects == undefined) outputNBT.effects = [];
 						outputNBT.effects.push(...inputs[i].effects);
 						break;
-					case "fireAspect":
+					case "fireChance":
 						if (outputNBT.fireChance == undefined) outputNBT.fireChance = [];
 						outputNBT.fireChance.push(...inputs[i].fireChance);
 						break;

@@ -27,20 +27,20 @@ minecraft:flint,_,_,t,_,_,_&_
 minecraft:stick,_,_,s,noFire Stick,_,_&_
 minecraft:feather,_,_,f,noFire,_,_&_
 minecraft:glowstone_dust,_,Spectral,e,noWet,applyEffect&minecraft:glowing&10@particle&???,_&Spectral
-minecraft:blaze_rod,Blaze Arrow,Blaze,s,noWet noCold Fire,fireAspect&0.5@damageMult&1.125@drawSpeed&1.25@gravityMult&0.75@breaksWhenWet@blockHitActions&0.5&destroy&fletching-additions:blaze_crush&0.25&drop&minecraft:blaze_powder&1&fletching-additions:blaze_crush&0.25&doNothing&fletching-additions:blaze_impact@dynamicLightingIfPossible,_&Blaze
+minecraft:blaze_rod,Blaze Arrow,Blaze,s,noWet noCold Fire,fireChance&0.05@fireChance&0.5@damageMult&1.125@drawSpeed&1.25@gravityMult&0.75@breaksWhenWet@blockHitActions&0.5&destroy&fletching-additions:blaze_crush&0.25&drop&minecraft:blaze_powder&1&fletching-additions:blaze_crush&0.25&doNothing&fletching-additions:blaze_impact@dynamicLightingIfPossible,_&Blaze
 minecraft:prismarine_shard,Prismarine Arrow,Prismarine Finned,f,_,waterSpeed,_&Prismarine
 minecraft:bone,Bone Arrow,Bone,s,_,,_&Bone
 minecraft:amethyst_shard,Amethyst Arrow,Amethyst Tipped,t,_,damageMult&1.5@impactSoundIncreasePitchNoAngle@blockHitActions&1&doNothing&fletching-additions:crystal_impact@farSound,_&Amethyst
-minecraft:blaze_powder,Blaze Infused Arrow,Blaze Infused,e,noWet,fireAspect&0.75,_&Blaze
+minecraft:blaze_powder,Blaze Infused Arrow,Blaze Infused,e,noWet,fireChance&0.05@fireChance&0.25@fireChance&0.75,_&Blaze
 minecraft:firework_rocket,Rocket Powered Arrow,Rocket Powered,f,_,skipThisComment&gravityMult only applies after the firework duration. otherwise its 0@damageMult&1.25@drawSpeed&0.25@inheritFireworkNBT@gravityMult&1.25@flySpeed&2,_&Rocket
 minecraft:dried_kelp,Dried Kelp Arrow,Dried Kelp Finned,f,noFire,flySpeed&0.75@damageMult&0.75,_&DryKelp
 minecraft:lightning_rod,,,s,SturdyCore,,blockUp&minecraft:lightning_rod
 minecraft:bamboo,Bamboo Arrow,Bamboo,s,noFire,gravityMult&0.875@flySpeed&1.125@damageMult&0.875&drawSpeed&1.125,_&Bamboo
 minecraft:iron_bars,Iron Arrow,Iron,s,SturdyCore,gravityMult&1.75@flySpeed&0.5714285714@damageMult&1.75&drawSpeed&0.5714285714,blockUp&minecraft:iron_bars
-minecraft:torch,Flaming Arrow,Flaming,t,_,fireAspect&0.25,_&Flame
-minecraft:soul_torch,Soul Flame Arrow,Soul Flame,t,_,fireAspect&0.5,_&SoulFlame
+minecraft:torch,Flaming Arrow,Flaming,t,_,fireChance&0.25@fireChance&0.05,_&Flame
+minecraft:soul_torch,Soul Flame Arrow,Soul Flame,t,_,fireChance&0.5@fireChance&0.05,_&SoulFlame
 minecraft:pointed_dripstone,Dripstone Arrow,,t,,,
-minecraft:fire_charge,Fire Charged Arrow,Fire Charged,t,Fire noWet noCold,fireAspect&1,_&FireCharge
+minecraft:fire_charge,Fire Charged Arrow,Fire Charged,t,Fire noWet noCold,fireChance&1@fireChance&0.25,_&FireCharge
 minecraft:ice,,,t,Cold noFire,,
 minecraft:packed_ice,,,t,Cold,,
 minecraft:blue_ice,,,t,Cold,,

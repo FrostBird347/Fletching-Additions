@@ -67,7 +67,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 			//Make sure we don't divide by 0, and also negative flySpeed values should not be supported either
 			if (flySpeedMult <= 0) {
 				flySpeedMult = 1f;
-				MainMod.LOGGER.error("flySpeed attribute of loaded arrow was equal or less than 0. flySpeed has been reset to 1!");
+				MainMod.LOGGER.error("flySpeed attribute of an arrow was equal or less than 0. flySpeed has been reset to 1!");
 			}
 		}
 		if (itemNbt.contains("gravityMult", NbtElement.FLOAT_TYPE)) {
@@ -147,6 +147,14 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 			}
 		}
 		super.extinguish();
+	}
+
+	//Make arrows with waterSpeed still be a little slower in water than air
+	//Air has a drag of 0.99
+	@Override
+	protected float getDragInWater() {
+		if (waterSpeed) return 0.9f;
+		return super.getDragInWater();
 	}
 
 	@Override

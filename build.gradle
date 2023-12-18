@@ -16,10 +16,33 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
+	exclusiveContent {
+		forRepository {
+			maven {
+				name = "Modrinth"
+				url = "https://api.modrinth.com/maven"
+			}
+		}
+		filter {
+			includeGroup "maven.modrinth"
+		}
+	}
+
+	exclusiveContent {
+		forRepository {
+			maven {
+				name = "Ladysnake Mods"
+				url = "https://maven.ladysnake.org/releases"
+			}
+		}
+		filter {
+			includeGroup "dev.onyxstudios.cardinal-components-api"
+		}
+	}
 }
 
 loom {
-    splitEnvironmentSourceSets()
+	splitEnvironmentSourceSets()
 
 	mods {
 		"fletching-additions" {
@@ -43,6 +66,20 @@ dependencies {
 	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
 
 	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
+
+	// Mod compat
+	modCompileOnly("maven.modrinth:HfTvoVqY:ZR8woQzp") {
+		exclude group: "net.fabricmc"
+	}
+	modCompileOnly("dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.0.0-beta.1") {
+		exclude group: "net.fabricmc"
+	}
+	modCompileOnly("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:5.0.0-beta.1") {
+		exclude group: "net.fabricmc"
+	}
+	modCompileOnly("maven.modrinth:midnightlib:0.5.2") {
+		exclude group: "net.fabricmc"
+	}
 }
 
 processResources {

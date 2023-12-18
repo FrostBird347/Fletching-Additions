@@ -2,6 +2,7 @@ package frostbird347.fletchingadditions.entity;
 
 import frostbird347.fletchingadditions.MainMod;
 import frostbird347.fletchingadditions.item.ItemManager;
+import frostbird347.fletchingadditions.modCompat.ModCompatManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -200,34 +201,10 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 			//Set the entity on fire
 			Entity target = entityHitResult.getEntity();
 			target.setOnFireFor((int)Math.round(burnTime));
-
-			//Also set the OnSoulFire flag if the arrow is also on fire (from lava/fire or the flame enchant), which will cause the target to be burned with soul flames if https://modrinth.com/mod/on-soul-fire is installed
+			
+			//Use soul flames if the arrow is also on fire (from lava/fire or the flame enchant), if https://modrinth.com/mod/on-soul-fire is installed
 			if (this.isOnFire()) {
-				//Extract the nbt nessecary
-				NbtCompound targetNbt = target.writeNbt(new NbtCompound());
-				NbtCompound cardinalComponentsNbt = targetNbt.getCompound("cardinal_components");
-				NbtCompound onSoulFireNbt = cardinalComponentsNbt.getCompound("onsoulfire:on_soul_fire");
-				
-				//Set the values
-				onSoulFireNbt.putByte("OnSoulFire", (byte)1);
-				cardinalComponentsNbt.put("onsoulfire:on_soul_fire", onSoulFireNbt);
-				targetNbt.put("cardinal_components", cardinalComponentsNbt);
-
-				//Update the target entity nbt
-				target.readNbt(targetNbt);
-
-				//Teleport them far away and back to make the server resend all the entity data, including the soul fire
-				Vec3d targetPos = target.getPos().multiply(1.0);
-				float targetYaw = target.getYaw();
-				float targetPitch = target.getPitch();
-				Vec3d targetVel = target.getVelocity().multiply(1.0);
-				target.setPos(targetPos.x, targetPos.y, targetPos.z + 5000);
-				target.refreshPositionAndAngles(targetPos.x, targetPos.y, targetPos.z, targetYaw, targetPitch);
-				//target.setPos(targetPos.x, targetPos.y, targetPos.z);
-				//target.setYaw(targetYaw);
-				//target.setPitch(targetPitch);
-				target.setVelocity(targetVel);
-
+				ModCompatManager.ON_SOUL_FIRE.executeAction("applySoulFlame", new Object[] { (Object)target });
 			}
 			MainMod.LOGGER.info(Integer.toString(fireHits) + ":" + Double.toString(burnTime));
 		}

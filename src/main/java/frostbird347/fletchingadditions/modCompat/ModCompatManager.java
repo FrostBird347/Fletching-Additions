@@ -4,7 +4,6 @@ import net.fabricmc.loader.api.FabricLoader;
 
 public class ModCompatManager {
 	public static BaseCompat ON_SOUL_FIRE = new BaseCompat();
-	//Runnable osfCompatBuilder = ()-> new BaseCompat();
 
 	public static void setupModCompat() {
 

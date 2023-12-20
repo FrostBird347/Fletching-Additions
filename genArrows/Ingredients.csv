@@ -51,7 +51,7 @@ minecraft:[DYE]_dye,[DYE] Arrow,[DYE] Arrow?,e,noWet HidesInfo,skipThisComment&d
 minecraft:magma_cream,,,e,,,
 minecraft:firework_star,Firework Arrow,Firework Tipped,t,noFire,inheritFireworkStarNBT@damageMult&0.125,_&FireworkStar
 minecraft:ghast_tear,,,e,Wet,,
-minecraft:echo_shard,,,f,,applyEffect&minecraft:darkness&10,
+minecraft:echo_shard,Sculk Arrow,Sculk Finned,f,_,applyEffect&minecraft:darkness&10@particle&???Arrow Echo/Trail???,_&Sculk
 minecraft:quartz,,,,,,
 minecraft:emerald,,,,,,
 minecraft:phantom_membrane,,,e,,,

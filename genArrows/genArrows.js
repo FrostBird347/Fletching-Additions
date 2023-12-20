@@ -139,6 +139,7 @@ function parseItem(rawItem) {
 			case "dynamicLightingIfPossible":
 			case "impactSoundIncreasePitchNoAngle":
 			case "farSound":
+			case "isSoulFire":
 				item.gameFlags.push(currentStat[0]);
 				break;
 			//Also put this out as a gen flag

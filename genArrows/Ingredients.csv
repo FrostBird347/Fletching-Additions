@@ -38,7 +38,7 @@ minecraft:lightning_rod,,,s,SturdyCore,,blockUp&minecraft:lightning_rod
 minecraft:bamboo,Bamboo Arrow,Bamboo,s,noFire,gravityMult&0.875@flySpeed&1.125@damageMult&0.875&drawSpeed&1.125,_&Bamboo
 minecraft:iron_bars,Iron Arrow,Iron,s,SturdyCore,gravityMult&1.75@flySpeed&0.5714285714@damageMult&1.75&drawSpeed&0.5714285714,blockUp&minecraft:iron_bars
 minecraft:torch,Flaming Arrow,Flaming,t,_,fireChance&0.25@fireChance&0.05,_&Flame
-minecraft:soul_torch,Soul Flame Arrow,Soul Flame,t,_,fireChance&0.5@fireChance&0.05,_&SoulFlame
+minecraft:soul_torch,Soul Flame Arrow,Soul Flame,t,_,fireChance&0.20@isSoulFire,_&SoulFlame
 minecraft:pointed_dripstone,Dripstone Arrow,,t,,,
 minecraft:fire_charge,Fire Charged Arrow,Fire Charged,t,Fire noWet noCold,fireChance&1@fireChance&0.25,_&FireCharge
 minecraft:ice,,,t,Cold noFire,,

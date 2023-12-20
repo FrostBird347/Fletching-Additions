@@ -203,7 +203,8 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 			target.setOnFireFor((int)Math.round(burnTime));
 			
 			//Use soul flames if the arrow is also on fire (from lava/fire or the flame enchant), if https://modrinth.com/mod/on-soul-fire is installed
-			if (this.isOnFire()) {
+			//Or if it has the isSoulFire flag
+			if (this.isOnFire() || gameFlags.indexOf(NbtString.of("isSoulFire")) >= 0) {
 				ModCompatManager.ON_SOUL_FIRE.executeAction("applySoulFlame", new Object[] { (Object)target });
 			}
 			MainMod.LOGGER.info(Integer.toString(fireHits) + ":" + Double.toString(burnTime));

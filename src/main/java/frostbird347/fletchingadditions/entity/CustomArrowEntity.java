@@ -1,15 +1,22 @@
 package frostbird347.fletchingadditions.entity;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import frostbird347.fletchingadditions.MainMod;
 import frostbird347.fletchingadditions.item.ItemManager;
 import frostbird347.fletchingadditions.modCompat.ModCompatManager;
+import net.fabricmc.fabric.api.entity.event.v1.EntityElytraEvents.Custom;
 import net.minecraft.client.particle.ShriekParticle;
 import net.minecraft.client.particle.SonicBoomParticle;
+import net.minecraft.datafixer.fix.ItemNameFix;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.TntEntity;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -34,6 +41,12 @@ import net.minecraft.world.event.PositionSource;
 
 public class CustomArrowEntity extends PersistentProjectileEntity {
 	private NbtCompound itemNbt = new NbtCompound();
+	private static final TrackedData<NbtCompound> ITEM_NBT;
+
+   static {
+      ITEM_NBT = DataTracker.registerData(CustomArrowEntity.class, TrackedDataHandlerRegistry.NBT_COMPOUND);
+   }
+
 	//These values are not accessed via nbt for peformance reasons (I assume it's a bad idea to access nbt values each tick)
 	private float flySpeedMult = 1;
 	private float gravityMult = 1;
@@ -149,6 +162,12 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 
 	@Override
 	public void tick() {
+		//Make the client load item nbt
+		//This check is fine because I don't intend to modify this data
+		if (this.world.isClient && itemNbt.isEmpty() && !this.dataTracker.get(ITEM_NBT).isEmpty()) {
+			itemNbt = this.dataTracker.get(ITEM_NBT).copy();
+		}
+
 		//Don't mess with velocity when the arrow is in the ground
 		//This will hopefully fix client side velocity desync issues
 		if (!this.reallyOnGround()) {
@@ -168,6 +187,10 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		} else {
 			realVel = Vec3d.ZERO;
 			super.tick();
+		}
+
+		if (this.world.isClient) {
+			echoLink = echoLink;
 		}
 
 		//echoLink stuff
@@ -205,7 +228,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 					this.setPosition(owner.getPos());
 					this.dropStack(this.asItemStack());
 				//Otherwise spawn in a particle
-				} else if (owner == null) {
+				} else {
 					this.setPosition(sourcePos);
 					this.dropStack(this.asItemStack());
 				}
@@ -313,6 +336,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 
 	@Override
 	public void readCustomDataFromNbt(NbtCompound nbt) {
+		MainMod.LOGGER.info(Boolean.toString(this.world.isClient));
 		super.readCustomDataFromNbt(nbt);
 		if (nbt.contains("itemNbt", NbtElement.COMPOUND_TYPE)) {
 			initFromNbt(nbt.getCompound("itemNbt"));
@@ -325,19 +349,31 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		} else {
 			sourcePos = new Vec3d(this.getX(), this.getY(), this.getZ());
 		}
+
+		this.dataTracker.set(ITEM_NBT, itemNbt.copy());
 	}
 
 	@Override
 	public void writeCustomDataToNbt(NbtCompound nbt) {
+		MainMod.LOGGER.info(Boolean.toString(this.world.isClient));
 		super.writeCustomDataToNbt(nbt);
 		if (this.itemNbt != null && !this.itemNbt.isEmpty()) {
 			nbt.put("itemNbt", this.itemNbt);
 		}
 
 		//Store sourcePos incase the arrow is shot from outside the player's render distance
-		NbtList rawSourcePos = new NbtList();
-		rawSourcePos.add(NbtDouble.of(sourcePos.x));
-		rawSourcePos.add(NbtDouble.of(sourcePos.y));
-		rawSourcePos.add(NbtDouble.of(sourcePos.z));
+		//The chances of it being exactly zero should be pretty much impossible to occur
+		if (!sourcePos.equals(Vec3d.ZERO)) {
+			NbtList rawSourcePos = new NbtList();
+			rawSourcePos.add(NbtDouble.of(sourcePos.x));
+			rawSourcePos.add(NbtDouble.of(sourcePos.y));
+			rawSourcePos.add(NbtDouble.of(sourcePos.z));
+		}
+		
+		this.dataTracker.set(ITEM_NBT, itemNbt.copy());
+	}
+
+	protected void initDataTracker() {
+		this.dataTracker.startTracking(ITEM_NBT, itemNbt.copy());
 	}
 }

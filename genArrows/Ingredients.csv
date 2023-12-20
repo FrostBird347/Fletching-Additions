@@ -26,7 +26,7 @@ Note that ModelType/TextureID are different depending on the item type (e.g ""Bl
 minecraft:flint,_,_,t,_,_,_&_
 minecraft:stick,_,_,s,noFire Stick,_,_&_
 minecraft:feather,_,_,f,noFire,_,_&_
-minecraft:glowstone_dust,_,Spectral,e,noWet,applyEffect&minecraft:glowing&10@particle&???,_&Spectral
+minecraft:glowstone_dust,_,Spectral,e,noWet,applyEffect&minecraft:glowing&10@particle&minecraft:instant_effect,_&Spectral
 minecraft:blaze_rod,Blaze Arrow,Blaze,s,noWet noCold Fire,fireChance&0.05@fireChance&0.5@damageMult&1.125@drawSpeed&1.25@gravityMult&0.75@breaksWhenWet@blockHitActions&0.5&destroy&fletching-additions:blaze_crush&0.25&drop&minecraft:blaze_powder&1&fletching-additions:blaze_crush&0.25&doNothing&fletching-additions:blaze_impact@dynamicLightingIfPossible,_&Blaze
 minecraft:prismarine_shard,Prismarine Arrow,Prismarine Finned,f,_,waterSpeed,_&Prismarine
 minecraft:bone,Bone Arrow,Bone,s,_,,_&Bone
@@ -51,7 +51,7 @@ minecraft:[DYE]_dye,[DYE] Arrow,[DYE] Arrow?,e,noWet HidesInfo,skipThisComment&d
 minecraft:magma_cream,,,e,,,
 minecraft:firework_star,Firework Arrow,Firework Tipped,t,noFire,inheritFireworkStarNBT@damageMult&0.125,_&FireworkStar
 minecraft:ghast_tear,,,e,Wet,,
-minecraft:echo_shard,Sculk Arrow,Sculk Finned,f,_,applyEffect&minecraft:darkness&40@particle&???Arrow Echo/Trail???,_&Sculk
+minecraft:echo_shard,Sculk Arrow,Sculk Finned,f,_,applyEffect&minecraft:darkness&40@particle&minecraft:sculk_charge_pop@echoLink,_&Sculk
 minecraft:quartz,,,,,,
 minecraft:emerald,,,,,,
 minecraft:phantom_membrane,,,e,,,

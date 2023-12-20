@@ -85,6 +85,8 @@ function parseItem(rawItem) {
 	//array of fire chances, the game will run this check for each value in the array
 	//as with effects, it's already formatted for nbt usage
 	item.fireChance = [];
+	//array of particles to spawn in as the arrow is in the air
+	item.particles = [];
 	//all numbers provided should add up to 1
 	item.blockHitActionChances = [];
 	item.blockHitActions = [];
@@ -92,7 +94,10 @@ function parseItem(rawItem) {
 	let stats = rawItem[5].split("@");
 	for (let i = 0; i < stats.length; i++) {
 		let currentStat = stats[i].split("&");
-		item.statsPresent.push(currentStat[0]);
+		//Prevent stats from potentially being processed multiple times later
+		if (!item.statsPresent.includes(currentStat[0])) {
+			item.statsPresent.push(currentStat[0]);
+		}
 		switch (currentStat[0]) {
 			case "blockHitActions":
 				let iA = 1;
@@ -121,6 +126,9 @@ function parseItem(rawItem) {
 					iA++;
 				}
 				break;
+			case "particle":
+				item.particles.push(currentStat[1]);
+				break;
 			case "fireChance":
 				item.fireChance.push(new nbt.Float(currentStat[1]));
 				break;
@@ -140,6 +148,7 @@ function parseItem(rawItem) {
 			case "impactSoundIncreasePitchNoAngle":
 			case "farSound":
 			case "isSoulFire":
+			case "echoLink":
 				item.gameFlags.push(currentStat[0]);
 				break;
 			//Also put this out as a gen flag
@@ -254,6 +263,10 @@ function genOutput(inputs) {
 						}
 						outputNBT.blockHitActions.push(inputs[i].blockHitActions);
 						outputNBT.blockHitActionChances.push(inputs[i].blockHitActionChances);
+						break;
+					case "particle":
+						if (outputNBT.particles == undefined) outputNBT.particles = [];
+						outputNBT.particles.push(...inputs[i].particles);
 						break;
 					case "applyEffect":
 						if (outputNBT.effects == undefined) outputNBT.effects = [];

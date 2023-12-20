@@ -1,19 +1,12 @@
 package frostbird347.fletchingadditions.entity;
 
 import java.util.ArrayList;
-import java.util.UUID;
-
 import frostbird347.fletchingadditions.MainMod;
 import frostbird347.fletchingadditions.item.ItemManager;
 import frostbird347.fletchingadditions.modCompat.ModCompatManager;
-import net.fabricmc.fabric.api.entity.event.v1.EntityElytraEvents.Custom;
-import net.minecraft.client.particle.ShriekParticle;
-import net.minecraft.client.particle.SonicBoomParticle;
-import net.minecraft.datafixer.fix.ItemNameFix;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.TntEntity;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -26,7 +19,6 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.particle.ShriekParticleEffect;
 import net.minecraft.particle.VibrationParticleEffect;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
@@ -187,10 +179,6 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		} else {
 			realVel = Vec3d.ZERO;
 			super.tick();
-		}
-
-		if (this.world.isClient) {
-			echoLink = echoLink;
 		}
 
 		//echoLink stuff

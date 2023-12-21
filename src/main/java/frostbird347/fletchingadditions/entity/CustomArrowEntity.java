@@ -208,8 +208,21 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 			super.tick();
 		}
 
-		//echoLink stuff
-		if (this.inGround && echoLink) {
+		if (echoLink) {
+			processEchoLink(owner);
+		}
+		
+		if (this.world.isClient && !this.inGround && particles.size() > 0) {
+			//Generate a random number in the range of -0.49 to (particles.size - 0.51) and then round
+			//This guarantees that there is zero chance of it going outside the bounds of the list, while also being just as likely to pick the first/last options instead of being half as likely
+			int partIndex = (int)Math.round((Math.random() * ((double)particles.size() - 0.02)) - 0.49);
+			this.world.addParticle(particles.get(partIndex), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+		}
+	}
+
+	//Just pass owner over so we don't have to get it multiple times
+	private void processEchoLink(Entity owner) {
+		if (this.inGround) {
 
 			//Vibration particles to the player
 			if (this.world.isClient) {
@@ -263,13 +276,6 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 				//Finally remove the arroe entity
 				this.discard();
 			}
-		} 
-		
-		if (this.world.isClient && !this.inGround && particles.size() > 0) {
-			//Generate a random number in the range of -0.49 to (particles.size - 0.51) and then round
-			//This guarantees that there is zero chance of it going outside the bounds of the list, while also being just as likely to pick the first/last options instead of being half as likely
-			int partIndex = (int)Math.round((Math.random() * ((double)particles.size() - 0.02)) - 0.49);
-			this.world.addParticle(particles.get(partIndex), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
 		}
 	}
 
@@ -311,10 +317,10 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		return super.getDragInWater();
 	}
 
-	//echoLink arrows don't set off sculk sensors, nor do silent arrows
+	//stop silent arrows from triggering sensors
 	@Override
 	public boolean occludeVibrationSignals() {
-		return echoLink || gameFlags.indexOf(NbtString.of("silent")) >= 0;
+		return gameFlags.indexOf(NbtString.of("silent")) >= 0;
 	 }
 
 	@Override

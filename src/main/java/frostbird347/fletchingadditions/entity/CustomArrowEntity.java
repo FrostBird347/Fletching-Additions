@@ -10,6 +10,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -20,11 +21,13 @@ import net.minecraft.nbt.NbtString;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.particle.VibrationParticleEffect;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.RandomSeed;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.event.BlockPositionSource;
@@ -32,12 +35,14 @@ import net.minecraft.world.event.EntityPositionSource;
 import net.minecraft.world.event.PositionSource;
 
 public class CustomArrowEntity extends PersistentProjectileEntity {
-	private NbtCompound itemNbt = new NbtCompound();
-	private static final TrackedData<NbtCompound> ITEM_NBT;
-
    static {
       ITEM_NBT = DataTracker.registerData(CustomArrowEntity.class, TrackedDataHandlerRegistry.NBT_COMPOUND);
+      CLIENT_SOURCE_POS = DataTracker.registerData(CustomArrowEntity.class, TrackedDataHandlerRegistry.BLOCK_POS);
    }
+
+   	//nbt
+	private NbtCompound itemNbt = new NbtCompound();
+	private static final TrackedData<NbtCompound> ITEM_NBT;
 
 	//These values are not accessed via nbt for peformance reasons (I assume it's a bad idea to access nbt values each tick)
 	private float flySpeedMult = 1;
@@ -53,8 +58,8 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	//Other stuff not directly related to nbt
 	Vec3d realVel = new Vec3d(0, 0, 0);
 	boolean isRealVel = true;
-	Vec3d sourcePos = new Vec3d(0, 0, 0);
-	Vec3d lastGroundedPos = new Vec3d(0, 0, 0);
+	Vec3d serverSourcePos = new Vec3d(0, 0, 0);
+	private static final TrackedData<BlockPos> CLIENT_SOURCE_POS;
 
 	public CustomArrowEntity(EntityType<? extends CustomArrowEntity> entityType, World world) {
 		super((EntityType<? extends PersistentProjectileEntity>)entityType, world);
@@ -155,9 +160,27 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	@Override
 	public void tick() {
 		//Make the client load item nbt
-		//This check is fine because I don't intend to modify this data
+		//This is fine because I don't intend to modify this data
+		//Well, I might modify it to remove certain stats in one specific scenario, but it wouldn't really impact anything client side
 		if (this.world.isClient && itemNbt.isEmpty() && !this.dataTracker.get(ITEM_NBT).isEmpty()) {
-			itemNbt = this.dataTracker.get(ITEM_NBT).copy();
+			initFromNbt(this.dataTracker.get(ITEM_NBT));
+		} else if (!this.world.isClient) {
+			if (this.dataTracker.get(ITEM_NBT).isEmpty() && !itemNbt.isEmpty()) {
+				this.dataTracker.set(ITEM_NBT, itemNbt.copy());
+			}
+
+			//Only tell the client the sender's position after it has touched the ground
+			if (!this.inGround && echoLink) {
+				//Otherwise set the current position because it looks better to have the first particles stay inside the arrow than to have one or a few go flying in the wrong direction
+				this.dataTracker.set(CLIENT_SOURCE_POS, this.getBlockPos());
+			} else if (echoLink) {
+				Entity owner = this.getOwner();
+				if (owner != null && owner.isAlive()) {
+					this.dataTracker.set(CLIENT_SOURCE_POS, owner.getBlockPos());
+				} else {
+					this.dataTracker.set(CLIENT_SOURCE_POS, new BlockPos(serverSourcePos));
+				}
+			}
 		}
 
 		//Don't mess with velocity when the arrow is in the ground
@@ -183,43 +206,55 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 
 		//echoLink stuff
 		if (this.inGround && echoLink) {
-			if (this.inGroundTime == 0) {
-				this.lastGroundedPos = new Vec3d(this.getX(), this.getY(), this.getZ());
-			}
 
 			//80 ticks: 4 seconds
 			if (this.inGroundTime < 80) {
-
-				if (!this.world.isClient) {
+				//Vibration particles to the player
+				if (this.world.isClient) {
 					//Make it follow the player, otherwise go to it's source block
 					PositionSource source = null;
 					Entity owner = this.getOwner();
+					int dist = 1;
 					if (owner != null && owner.isAlive()) {
 						source = new EntityPositionSource(owner, DEFAULT_FRICTION);
+						dist = (int)Math.ceil(this.getPos().distanceTo(owner.getPos()));
 					} else {
-						source = new BlockPositionSource(new BlockPos(sourcePos));
+						BlockPos sourceBlockPos = this.dataTracker.get(CLIENT_SOURCE_POS);
+						source = new BlockPositionSource(sourceBlockPos);
+						dist = Math.max(dist, (int)Math.ceil(this.getPos().distanceTo(new Vec3d(sourceBlockPos.getX(), sourceBlockPos.getY(), sourceBlockPos.getZ()))));
 					}
-					VibrationParticleEffect newParticle = new VibrationParticleEffect(source, (int)Math.ceil(this.lastGroundedPos.distanceTo(this.sourcePos)) / 2);
+					VibrationParticleEffect newParticle = new VibrationParticleEffect(source, dist);
 					this.world.addParticle(newParticle, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
 				}
 			}
 			
 			//Arrow return effect
 			if (!this.world.isClient && this.inGroundTime == 70) {
-				this.world.getServer().getWorld(this.world.getRegistryKey()).spawnParticles(ParticleTypes.SONIC_BOOM, this.getX(), this.getY(), this.getZ(), 1, 0, 0, 0, 0);
+				ServerWorld thisWorld = this.world.getServer().getWorld(this.world.getRegistryKey());
+				thisWorld.spawnParticles(ParticleTypes.SONIC_BOOM, this.getX(), this.getY(), this.getZ(), 1, 0, 0, 0, 0);
+				//TODO: replace with a custom sound
+				thisWorld.playSoundFromEntity(null, this, SoundEvents.ENTITY_WARDEN_SONIC_CHARGE, this.getSoundCategory(), 0.5f, 4f, RandomSeed.getSeed());
 			}
 
+			//Actually give the arrow back, half a second later
 			if (!this.world.isClient && this.inGroundTime == 80) {
-				//But if the owner exists, is alive and isn't in spectator, we give them back the arrow
+				//If the owner exists, is alive and isn't in spectator mode, we give them back the arrow
 				Entity owner = this.getOwner();
 				if (owner != null && owner.isAlive() && !owner.isSpectator()) {
-					this.setPosition(owner.getPos());
-					this.dropStack(this.asItemStack());
-				//Otherwise spawn in a particle
+					if (owner.isPlayer()) {
+						((PlayerEntity)owner).giveItemStack(this.asItemStack());
+					//If they aren't a player than we drop the arrow as an item at their position
+					} else {
+						this.setPosition(owner.getPos());
+						this.dropStack(this.asItemStack());
+					}
+				//Otherwise teleport it back to the source position and drop itself as an item
 				} else {
-					this.setPosition(sourcePos);
+					this.setPosition(serverSourcePos);
 					this.dropStack(this.asItemStack());
 				}
+				//Finally remove the arroe entity
+				this.discard();
 			}
 		} 
 		
@@ -227,8 +262,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 			//Generate a random number in the range of -0.49 to (particles.size - 0.51) and then round
 			//This guarantees that there is zero chance of it going outside the bounds of the list, while also being just as likely to pick the first/last options instead of being half as likely
 			int partIndex = (int)Math.round((Math.random() * ((double)particles.size() - 0.02)) - 0.49);
-			Vec3d particleVel = this.getVelocity().multiply(0.5);
-			this.world.addParticle(particles.get(partIndex), this.getX(), this.getY(), this.getZ(), particleVel.x, particleVel.y, particleVel.z);
+			this.world.addParticle(particles.get(partIndex), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
 		}
 	}
 
@@ -269,6 +303,12 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		if (waterSpeed) return 0.9f;
 		return super.getDragInWater();
 	}
+
+	//echoLink arrows don't set off sculk sensors, nor do silent arrows
+	@Override
+	public boolean occludeVibrationSignals() {
+		return echoLink || gameFlags.indexOf(NbtString.of("silent")) >= 0;
+	 }
 
 	@Override
 	protected ItemStack asItemStack() {
@@ -333,12 +373,16 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		//Store sourcePos incase the arrow is shot from outside the player's render distance
 		NbtList rawSourcePos = itemNbt.getList("sourcePos", NbtElement.DOUBLE_TYPE);
 		if (rawSourcePos != null && rawSourcePos.size() == 3) {
-			sourcePos = new Vec3d(rawSourcePos.getDouble(0), rawSourcePos.getDouble(1), rawSourcePos.getDouble(2));
+			serverSourcePos = new Vec3d(rawSourcePos.getDouble(0), rawSourcePos.getDouble(1), rawSourcePos.getDouble(2));
 		} else {
-			sourcePos = new Vec3d(this.getX(), this.getY(), this.getZ());
+			serverSourcePos = new Vec3d(this.getX(), this.getY(), this.getZ());
 		}
 
-		this.dataTracker.set(ITEM_NBT, itemNbt.copy());
+		if (itemNbt != null) {
+			this.dataTracker.set(ITEM_NBT, itemNbt.copy());
+		} else {
+			this.dataTracker.set(ITEM_NBT, new NbtCompound());
+		}
 	}
 
 	@Override
@@ -351,17 +395,17 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 
 		//Store sourcePos incase the arrow is shot from outside the player's render distance
 		//The chances of it being exactly zero should be pretty much impossible to occur
-		if (!sourcePos.equals(Vec3d.ZERO)) {
+		if (!serverSourcePos.equals(Vec3d.ZERO)) {
 			NbtList rawSourcePos = new NbtList();
-			rawSourcePos.add(NbtDouble.of(sourcePos.x));
-			rawSourcePos.add(NbtDouble.of(sourcePos.y));
-			rawSourcePos.add(NbtDouble.of(sourcePos.z));
+			rawSourcePos.add(NbtDouble.of(serverSourcePos.x));
+			rawSourcePos.add(NbtDouble.of(serverSourcePos.y));
+			rawSourcePos.add(NbtDouble.of(serverSourcePos.z));
 		}
-		
-		this.dataTracker.set(ITEM_NBT, itemNbt.copy());
 	}
 
 	protected void initDataTracker() {
-		this.dataTracker.startTracking(ITEM_NBT, itemNbt.copy());
+		super.initDataTracker();
+		this.dataTracker.startTracking(ITEM_NBT, new NbtCompound());
+		this.dataTracker.startTracking(CLIENT_SOURCE_POS, new BlockPos(0, 0, 0));
 	}
 }

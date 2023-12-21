@@ -60,6 +60,8 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	boolean isRealVel = true;
 	Vec3d serverSourcePos = new Vec3d(0, 0, 0);
 	private static final TrackedData<BlockPos> CLIENT_SOURCE_POS;
+	//echoLink, 
+	boolean[] tempGlobalFlags = new boolean[] {false};
 
 	public CustomArrowEntity(EntityType<? extends CustomArrowEntity> entityType, World world) {
 		super((EntityType<? extends PersistentProjectileEntity>)entityType, world);
@@ -159,6 +161,8 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 
 	@Override
 	public void tick() {
+		Entity owner = this.getOwner();
+
 		//Make the client load item nbt
 		//This is fine because I don't intend to modify this data
 		//Well, I might modify it to remove certain stats in one specific scenario, but it wouldn't really impact anything client side
@@ -174,7 +178,6 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 				//Otherwise set the current position because it looks better to have the first particles stay inside the arrow than to have one or a few go flying in the wrong direction
 				this.dataTracker.set(CLIENT_SOURCE_POS, this.getBlockPos());
 			} else if (echoLink) {
-				Entity owner = this.getOwner();
 				if (owner != null && owner.isAlive()) {
 					this.dataTracker.set(CLIENT_SOURCE_POS, owner.getBlockPos());
 				} else {
@@ -206,30 +209,34 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 
 		//echoLink stuff
 		if (this.inGround && echoLink) {
+			int dist = 1;
 
-			//80 ticks: 4 seconds
-			if (this.inGroundTime < 80) {
-				//Vibration particles to the player
-				if (this.world.isClient) {
-					//Make it follow the player, otherwise go to it's source block
-					PositionSource source = null;
-					Entity owner = this.getOwner();
-					int dist = 1;
-					if (owner != null && owner.isAlive()) {
-						source = new EntityPositionSource(owner, DEFAULT_FRICTION);
-						dist = (int)Math.ceil(this.getPos().distanceTo(owner.getPos()));
-					} else {
-						BlockPos sourceBlockPos = this.dataTracker.get(CLIENT_SOURCE_POS);
-						source = new BlockPositionSource(sourceBlockPos);
-						dist = Math.max(dist, (int)Math.ceil(this.getPos().distanceTo(new Vec3d(sourceBlockPos.getX(), sourceBlockPos.getY(), sourceBlockPos.getZ()))));
-					}
-					VibrationParticleEffect newParticle = new VibrationParticleEffect(source, dist);
-					this.world.addParticle(newParticle, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+			//Vibration particles to the player
+			if (this.world.isClient) {
+				//Make it follow the player, otherwise go to it's source block
+				PositionSource source = null;
+				if (owner != null && owner.isAlive()) {
+					source = new EntityPositionSource(owner, DEFAULT_FRICTION);
+					dist = (int)Math.ceil(this.getPos().distanceTo(owner.getPos()));
+				} else {
+					BlockPos sourceBlockPos = this.dataTracker.get(CLIENT_SOURCE_POS);
+					source = new BlockPositionSource(sourceBlockPos);
+					dist = Math.max(dist, (int)Math.ceil(this.getPos().distanceTo(new Vec3d(sourceBlockPos.getX(), sourceBlockPos.getY(), sourceBlockPos.getZ()))));
+				}
+				VibrationParticleEffect newParticle = new VibrationParticleEffect(source, dist);
+				this.world.addParticle(newParticle, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+			//Otherwise make the server calculate distance
+			} else {
+				if (owner != null && owner.isAlive() && !owner.isSpectator()) {
+					dist = (int)Math.ceil(this.getPos().distanceTo(owner.getPos()));
+				} else {
+					dist = Math.max(dist, (int)Math.ceil(this.getPos().distanceTo(serverSourcePos)));
 				}
 			}
 			
 			//Arrow return effect
-			if (!this.world.isClient && this.inGroundTime == 70) {
+			if (!this.world.isClient && this.inGroundTime >= 30 + dist && !tempGlobalFlags[0]) {
+				tempGlobalFlags[0] = true;
 				ServerWorld thisWorld = this.world.getServer().getWorld(this.world.getRegistryKey());
 				thisWorld.spawnParticles(ParticleTypes.SONIC_BOOM, this.getX(), this.getY(), this.getZ(), 1, 0, 0, 0, 0);
 				//TODO: replace with a custom sound
@@ -237,9 +244,8 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 			}
 
 			//Actually give the arrow back, half a second later
-			if (!this.world.isClient && this.inGroundTime == 80) {
+			if (!this.world.isClient && this.inGroundTime >= 40 + dist) {
 				//If the owner exists, is alive and isn't in spectator mode, we give them back the arrow
-				Entity owner = this.getOwner();
 				if (owner != null && owner.isAlive() && !owner.isSpectator()) {
 					if (owner.isPlayer()) {
 						((PlayerEntity)owner).giveItemStack(this.asItemStack());

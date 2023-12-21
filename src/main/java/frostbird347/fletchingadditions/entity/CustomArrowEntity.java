@@ -60,6 +60,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	boolean isRealVel = true;
 	Vec3d serverSourcePos = new Vec3d(0, 0, 0);
 	private static final TrackedData<BlockPos> CLIENT_SOURCE_POS;
+	int echoDist = 1;
 	//echoLink, 
 	boolean[] tempGlobalFlags = new boolean[] {false};
 
@@ -209,7 +210,6 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 
 		//echoLink stuff
 		if (this.inGround && echoLink) {
-			int dist = 1;
 
 			//Vibration particles to the player
 			if (this.world.isClient) {
@@ -217,25 +217,26 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 				PositionSource source = null;
 				if (owner != null && owner.isAlive()) {
 					source = new EntityPositionSource(owner, DEFAULT_FRICTION);
-					dist = (int)Math.ceil(this.getPos().distanceTo(owner.getPos()));
+					echoDist = (int)Math.ceil(this.getPos().distanceTo(owner.getPos()));
 				} else {
 					BlockPos sourceBlockPos = this.dataTracker.get(CLIENT_SOURCE_POS);
 					source = new BlockPositionSource(sourceBlockPos);
-					dist = Math.max(dist, (int)Math.ceil(this.getPos().distanceTo(new Vec3d(sourceBlockPos.getX(), sourceBlockPos.getY(), sourceBlockPos.getZ()))));
+					echoDist = Math.max(echoDist, (int)Math.ceil(this.getPos().distanceTo(new Vec3d(sourceBlockPos.getX(), sourceBlockPos.getY(), sourceBlockPos.getZ()))));
 				}
-				VibrationParticleEffect newParticle = new VibrationParticleEffect(source, dist);
+				VibrationParticleEffect newParticle = new VibrationParticleEffect(source, echoDist);
 				this.world.addParticle(newParticle, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
 			//Otherwise make the server calculate distance
-			} else {
+			//But only do it once a second
+			} else if (this.inGroundTime % 20 == 0) {
 				if (owner != null && owner.isAlive() && !owner.isSpectator()) {
-					dist = (int)Math.ceil(this.getPos().distanceTo(owner.getPos()));
+					echoDist = (int)Math.ceil(this.getPos().distanceTo(owner.getPos()));
 				} else {
-					dist = Math.max(dist, (int)Math.ceil(this.getPos().distanceTo(serverSourcePos)));
+					echoDist = Math.max(echoDist, (int)Math.ceil(this.getPos().distanceTo(serverSourcePos)));
 				}
 			}
 			
 			//Arrow return effect
-			if (!this.world.isClient && this.inGroundTime >= 30 + dist && !tempGlobalFlags[0]) {
+			if (!this.world.isClient && this.inGroundTime >= 30 + echoDist && !tempGlobalFlags[0]) {
 				tempGlobalFlags[0] = true;
 				ServerWorld thisWorld = this.world.getServer().getWorld(this.world.getRegistryKey());
 				thisWorld.spawnParticles(ParticleTypes.SONIC_BOOM, this.getX(), this.getY(), this.getZ(), 1, 0, 0, 0, 0);
@@ -244,7 +245,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 			}
 
 			//Actually give the arrow back, half a second later
-			if (!this.world.isClient && this.inGroundTime >= 40 + dist) {
+			if (!this.world.isClient && this.inGroundTime >= 40 + echoDist) {
 				//If the owner exists, is alive and isn't in spectator mode, we give them back the arrow
 				if (owner != null && owner.isAlive() && !owner.isSpectator()) {
 					if (owner.isPlayer()) {

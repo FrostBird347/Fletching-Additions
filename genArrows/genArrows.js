@@ -149,6 +149,7 @@ function parseItem(rawItem) {
 			case "farSound":
 			case "isSoulFire":
 			case "echoLink":
+			case "arrowDrift":
 				item.gameFlags.push(currentStat[0]);
 				break;
 			//Also put this out as a gen flag

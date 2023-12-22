@@ -30,9 +30,10 @@ Parsing...
 	fullName missing:	 minecraft:pufferfish
 	fullName missing:	 minecraft:sugar_cane
 	partName missing:	 minecraft:grindstone
+	renderMode missing:	 minecraft:sculk_sensor
 Combining...
 Stats: {
-  totalCount: 2043,
+  totalCount: 2363,
   mostFireChances: 6,
   longestName: 'Amethyst Tipped Prismarine Finned Blaze Infused Arrow with a Bamboo Core',
   flySpeedStats: [ Float { value: 0.42857142855 }, Float { value: 2.25 } ],

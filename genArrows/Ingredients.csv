@@ -51,7 +51,7 @@ minecraft:[DYE]_dye,[DYE] Arrow,[DYE] Arrow?,e,noWet HidesInfo,skipThisComment&d
 minecraft:magma_cream,,,e,,,
 minecraft:firework_star,Firework Arrow,Firework Tipped,t,noFire,inheritFireworkStarNBT@damageMult&0.125,_&FireworkStar
 minecraft:ghast_tear,,,e,Wet,,
-minecraft:echo_shard,Sculk Arrow,Sculk Finned,f,_,applyEffect&minecraft:darkness&40@particle&minecraft:sculk_charge_pop@echoLink,_&Sculk
+minecraft:echo_shard,Recovery Arrow,Echo Finned,f,_,applyEffect&minecraft:darkness&40@particle&minecraft:sculk_charge_pop@echoLink,_&Sculk
 minecraft:quartz,,,,,,
 minecraft:emerald,,,,,,
 minecraft:phantom_membrane,,,e,,,
@@ -72,3 +72,6 @@ minecraft:sugar_cane,,,s,noFire,,
 minecraft:grindstone,Grindstone Arrow,,t,reqSturdyCore noHidesInfo,outputCountMult&0,
 minecraft:[DYE]_carpet,Harmless [DYE] Arrow,Soft,t,noFire reqStick noWet noHidesInfo,"skipThisComment&requires something sticky (or a regular stick) to prevent this from exploding the combination count, also noWet because it would be quite noisy if it was wet@damageMult&0@silent@flySpeed&0.75",_&[DYE]_carpet
 _,_,_,e,_,_,_&_
+minecraft:sculk_sensor,Sculk Arrow,Sculk Finned,f,_,,
+minecraft:carrot,Carrot Tipped Arrow,Carrot Tipped,t,noFire,damageMult&0.25,_&Carrot
+minecraft:kelp,Wet Kelp Arrow,Kelp Finned,f,noFire Wet,flySpeed&0.75@damageMult&0.75@arrowDrift,_&WetKelp

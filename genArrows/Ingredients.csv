@@ -31,13 +31,13 @@ minecraft:blaze_rod,Blaze Arrow,Blaze,s,noWet noCold Fire,fireChance&0.05@fireCh
 minecraft:prismarine_shard,Prismarine Arrow,Prismarine Finned,f,_,waterSpeed,_&Prismarine
 minecraft:bone,Bone Arrow,Bone,s,_,,_&Bone
 minecraft:amethyst_shard,Amethyst Arrow,Amethyst Tipped,t,_,damageMult&1.5@impactSoundIncreasePitchNoAngle@blockHitActions&1&doNothing&fletching-additions:crystal_impact@farSound,_&Amethyst
-minecraft:blaze_powder,Blaze Infused Arrow,Blaze Infused,e,noWet,fireChance&0.05@fireChance&0.75,_&Blaze
-minecraft:firework_rocket,Rocket Powered Arrow,Rocket Powered,f,_,skipThisComment&gravityMult only applies after the firework duration. otherwise its 0@damageMult&1.25@drawSpeed&0.25@inheritFireworkNBT@gravityMult&1.25@flySpeed&2,_&Rocket
+minecraft:blaze_powder,Blaze Infused Arrow,Blaze Infused,e,noWet Fire,fireChance&0.05@fireChance&0.75,_&Blaze
+minecraft:firework_rocket,Rocket Powered Arrow,Rocket Powered,f,noHidesInfo noFire,skipThisComment&gravityMult only applies after the firework duration. otherwise its 0@damageMult&1.25@drawSpeed&0.25@inheritFireworkNBT@gravityMult&1.25@flySpeed&2,_&Rocket
 minecraft:dried_kelp,Dried Kelp Arrow,Dried Kelp Finned,f,noFire,flySpeed&0.75@damageMult&0.75,_&DryKelp
 minecraft:lightning_rod,,,s,SturdyCore,,blockUp&minecraft:lightning_rod
 minecraft:bamboo,Bamboo Arrow,Bamboo,s,noFire,gravityMult&0.875@flySpeed&1.125@damageMult&0.875&drawSpeed&1.125,_&Bamboo
 minecraft:iron_bars,Iron Arrow,Iron,s,SturdyCore,gravityMult&1.75@flySpeed&0.5714285714@damageMult&1.75&drawSpeed&0.5714285714,blockUp&minecraft:iron_bars
-minecraft:torch,Flaming Arrow,Flaming,t,_,fireChance&0.25@fireChance&0.05,_&Flame
+minecraft:torch,Flaming Arrow,Flaming,t,_,fireChance&0.25,_&Flame
 minecraft:soul_torch,Soul Flame Arrow,Soul Flame,t,_,fireChance&0.20@isSoulFire,_&SoulFlame
 minecraft:pointed_dripstone,Dripstone Arrow,,t,,,
 minecraft:fire_charge,Fire Charged Arrow,Fire Charged,t,Fire noWet noCold,fireChance&1@fireChance&0.25,_&FireCharge
@@ -66,7 +66,7 @@ create:cogwheel,,,s,SturdyCore noHidesInfo,outputCountMult&0.5,blockUp&create:co
 create:propeller,,,f,noHidesInfo,outputCountMult&0.75,flat&createPropeller
 create:brass_hand,,,t,noHidesInfo,outputCountMult&0.75,_&hand
 create:rose_quartz,,,,,,
-farmersdelight:flint_knife,,,t,,outputCountMult&0.5,
+farmersdelight:flint_knife,,,t,noHidesInfo noFire,outputCountMult&0.5,
 minecraft:pufferfish,,,t,,,
 minecraft:sugar_cane,,,s,noFire,,
 minecraft:grindstone,Grindstone Arrow,,t,reqSturdyCore noHidesInfo,outputCountMult&0,

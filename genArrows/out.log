@@ -33,9 +33,9 @@ Parsing...
 	renderMode missing:	 minecraft:sculk_sensor
 Combining...
 Stats: {
-  totalCount: 2363,
+  totalCount: 1799,
   mostFireChances: 6,
-  longestName: 'Amethyst Tipped Prismarine Finned Blaze Infused Arrow with a Bamboo Core',
+  longestName: 'Amethyst Tipped Prismarine Finned Blaze Infused Arrow with a Blaze Core',
   flySpeedStats: [ Float { value: 0.42857142855 }, Float { value: 2.25 } ],
   gravityMultStats: [ Float { value: 0.75 }, Float { value: 2.1875 } ],
   drawSpeedStats: [ Float { value: 0.25 }, Float { value: 1.25 } ],

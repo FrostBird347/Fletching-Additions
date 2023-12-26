@@ -2,6 +2,8 @@ const nbt = require("nbt-ts");
 const csv = require("csv-parse/sync");
 const fs = require('fs');
 const execFileSync = require('child_process').execFileSync;
+const JSDOM = require("jsdom").JSDOM;
+let Plot;
 const dyes = ["White", "Light gray", "Gray", "Black", "Brown", "Red", "Orange", "Yellow", "Lime", "Green", "Cyan", "Light blue", "Blue", "Purple", "Magenta", "Pink"];
 
 //Stats
@@ -15,9 +17,25 @@ let stats = {
 	damageMultStats: [100000000000000000, 0],
 	itemOutputStats: [100000000000000000, 0]
 };
+let graphStats = {
+	fireChanceDist: [],
+	detailedFireChanceDist: [],
+	nameLengthDist: [],
+	flySpeedDist: [],
+	gravityMultDist: [],
+	drawSpeedDist: [],
+	damageMultDist: [],
+	itemOutputDist: []
+}
 
 //----------
 //Functions
+
+async function loadPlot() {
+	console.log("Loading plot...");
+	Plot = await import("@observablehq/plot");
+	realStart();
+}
 
 function exists(value) {
 	return (value != undefined && value != "");
@@ -242,6 +260,7 @@ function genOutput(inputs) {
 			if (tempValue < stats[globalMultKeys[i] + "Stats"][0] && !(globalMultKeys[i] == "damageMult" && tempValue == 0)) stats[globalMultKeys[i] + "Stats"][0] = tempValue;
 			if (tempValue > stats[globalMultKeys[i] + "Stats"][1]) stats[globalMultKeys[i] + "Stats"][1] = tempValue;
 		}
+		graphStats[globalMultKeys[i] + "Dist"].push(tempValue);
 	}
 	
 	outputJSON.outputAmount = Math.round(outputJSON.outputAmount * getOrDefault(inputs[tipID], "outputCountMult", 1) * getOrDefault(inputs[stickID], "outputCountMult", 1) * getOrDefault(inputs[finID], "outputCountMult", 1) * getOrDefault(inputs[effectID], "outputCountMult", 1));
@@ -315,6 +334,36 @@ function genOutput(inputs) {
 	}
 	outputNBT.display.Name = JSON.stringify([{text:outputName, italic: false}]);
 	
+	/*outputNBT.display.Lore = ['[{"text":"","italic":false}]'];
+	for (let iI = 0; iI < inputs.length; iI++) {
+		let loreColour = "";
+		let currentName = "";
+		for (let iC = 0; iC < inputs[iI].cat.length; iC++) {
+			loreColour = "dark_aqua";
+			currentName = inputs[iI].cat[iC];
+			if (currentName != "_") {
+				//Newlines seem to break the lore nbt for some reason
+				outputNBT.display.Lore.push(JSON.stringify([{text: "◆" + currentName, italic: false, "color": loreColour}]).replaceAll("\n", ""));
+			}
+		}
+		for (let iCB = 0; iCB < inputs[iI].catBlacklist.length; iCB++) {
+			loreColour = "dark_red";
+			currentName = inputs[iI].catBlacklist[iCB];
+			if (currentName != "_") {
+				//Newlines seem to break the lore nbt for some reason
+				outputNBT.display.Lore.push(JSON.stringify([{text: "-" + currentName, italic: false, "color": loreColour}]).replaceAll("\n", ""));
+			}
+		}
+		for (let iCR = 0; iCR < inputs[iI].catRequirements.length; iCR++) {
+			loreColour = "dark_green";
+			currentName = inputs[iI].catRequirements[iCR];
+			if (currentName != "_") {
+				//Newlines seem to break the lore nbt for some reason
+				outputNBT.display.Lore.push(JSON.stringify([{text: "+" + currentName, italic: false, "color": loreColour}]).replaceAll("\n", ""));
+			}
+		}
+	}*/
+	
 	//console.log(outputName);
 	//console.log(inputs);
 	//console.log(outputNBT);
@@ -341,77 +390,132 @@ function genOutput(inputs) {
 	if (stats.longestName.length < outputName.length) stats.longestName = outputName;
 	if (outputJSON.outputAmount < stats.itemOutputStats[0]) stats.itemOutputStats[0] = outputJSON.outputAmount;
 	if (outputJSON.outputAmount > stats.itemOutputStats[1]) stats.itemOutputStats[1] = outputJSON.outputAmount;
+	if (outputNBT.fireChance != undefined) {
+		graphStats.fireChanceDist.push(outputNBT.fireChance.length);
+		for (let cM = 0; cM < outputNBT.fireChance.length; cM++) {
+			let detailedChance = {"Fire Stack": cM, "% Chance": 1};
+			for (let cI = 0; cI < outputNBT.fireChance.length; cI++) {
+				let tempChance = 1;
+				for (let cIB = 0; cIB < outputNBT.fireChance.length; cIB++) {
+					if (cI == cIB) {
+						tempChance *= outputNBT.fireChance[cIB];
+					} else {
+						tempChance *= 1 - outputNBT.fireChance[cIB];
+					}
+				}
+				detailedChance["% Chance"] += tempChance;
+			}
+			detailedChance["% Chance"] -= 1;
+			detailedChance["% Chance"] *= 100;
+			detailedChance["Fire Stack"] += 1;
+			graphStats.detailedFireChanceDist.push(detailedChance);
+		}
+	}
+	graphStats.nameLengthDist.push(outputName.length);
+	graphStats.itemOutputDist.push(outputJSON.outputAmount);
+}
+
+function genPlot(dataset, name) {
+	let currentPlot = Plot.rectY(dataset, Plot.binX()).plot({x: {label: name}, style: {color: "dodgerblue"}, document: (new JSDOM(`...`)).window.document});
+	savePlot(currentPlot, name);
+}
+
+function savePlot(plot, name) {
+	plot.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+	plot.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+	fs.writeFileSync("./Stats_" + name.replaceAll(" ", "") + ".svg", plot.outerHTML);
 }
 
 //----------
 //Start
 
-console.log("Reading csv...");
-let fullDataset = csv.parse(fs.readFileSync('./Ingredients.csv'));
 let tips = [];
 let sticks = [];
 let fins = [];
 let effects = [];
+loadPlot();
+function realStart() {
+	console.log("Reading csv...");
+	let fullDataset = csv.parse(fs.readFileSync('./Ingredients.csv'));
 
-console.log("Parsing...");
-for (let i = 1; i < fullDataset.length; i++) {
-	let splitItems = [fullDataset[i]];
-	
-	if (fullDataset[i][0].includes("[DYE]")) {
-		splitItems = [];
-		
-		for (let iD = 0; iD < dyes.length; iD++) {
-			//Push a copy, not a reference
-			splitItems.push(JSON.parse(JSON.stringify(fullDataset[i])));
-			
-			for (let iC = 0; iC < fullDataset[i].length; iC++) {
-				splitItems[iD][iC] = splitItems[iD][iC].replaceAll("[DYE]", dyes[iD]);
-			}
-			
-			//Make sure to remove spaces for the item id as well as the texture/model id
-			splitItems[iD][0] = splitItems[iD][0].split(" ").join("_").toLowerCase();
-			splitItems[iD][6] = splitItems[iD][6].split(" ").join("_").toLowerCase();
-		}
-	}
-	
-	for (let iL = 0; iL < splitItems.length; iL++) {
-		let item = parseItem(splitItems[iL]);
-		if (item.valid) {
-			switch(splitItems[iL][3]) {
-				case 't':
-					tips.push(item);
-					break;
-				case 's':
-					sticks.push(item);
-					break;
-				case 'f':
-					fins.push(item);
-					break;
-				case 'e':
-					effects.push(item);
-					break;
-				default:
-					console.log("\tunknown type:\t", splitItems[iL][3]);
+	console.log("Parsing...");
+	for (let i = 1; i < fullDataset.length; i++) {
+		let splitItems = [fullDataset[i]];
+
+		if (fullDataset[i][0].includes("[DYE]")) {
+			splitItems = [];
+
+			for (let iD = 0; iD < dyes.length; iD++) {
+				//Push a copy, not a reference
+				splitItems.push(JSON.parse(JSON.stringify(fullDataset[i])));
+
+				for (let iC = 0; iC < fullDataset[i].length; iC++) {
+					splitItems[iD][iC] = splitItems[iD][iC].replaceAll("[DYE]", dyes[iD]);
+				}
+
+				//Make sure to remove spaces for the item id as well as the texture/model id
+				splitItems[iD][0] = splitItems[iD][0].split(" ").join("_").toLowerCase();
+				splitItems[iD][6] = splitItems[iD][6].split(" ").join("_").toLowerCase();
 			}
 		}
-	}
-}
 
-console.log("Combining...");
-for (let iT = 0; iT < tips.length; iT++) {
-	for (let iS = 0; iS < sticks.length; iS++) {
-		for (let iF = 0; iF < fins.length; iF++) {
-			for (let iE = 0; iE < effects.length; iE++) {
-				//Make sure parts are compatible
-				if (checkCompat(tips[iT], sticks[iS], fins[iF], effects[iE])) {
-					//Make sure we don't recreate vanilla arrows
-					if (!(tips[iT].id == "minecraft:flint" && sticks[iS].id == "minecraft:stick" && fins[iF].id == "minecraft:feather" && (effects[iE].id == "minecraft:glowstone_dust" || effects[iE].id == "_"))) {
-						genOutput([tips[iT], sticks[iS], fins[iF], effects[iE]]);
-						stats.totalCount++
+		for (let iL = 0; iL < splitItems.length; iL++) {
+			let item = parseItem(splitItems[iL]);
+			if (item.valid) {
+				switch(splitItems[iL][3]) {
+					case 't':
+						tips.push(item);
+						break;
+					case 's':
+						sticks.push(item);
+						break;
+					case 'f':
+						fins.push(item);
+						break;
+					case 'e':
+						effects.push(item);
+						break;
+					default:
+						console.log("\tunknown type:\t", splitItems[iL][3]);
+				}
+			}
+		}
+	}
+
+	console.log("Combining...");
+	for (let iT = 0; iT < tips.length; iT++) {
+		for (let iS = 0; iS < sticks.length; iS++) {
+			for (let iF = 0; iF < fins.length; iF++) {
+				for (let iE = 0; iE < effects.length; iE++) {
+					//Make sure parts are compatible
+					if (checkCompat(tips[iT], sticks[iS], fins[iF], effects[iE])) {
+						//Make sure we don't recreate vanilla arrows
+						if (!(tips[iT].id == "minecraft:flint" && sticks[iS].id == "minecraft:stick" && fins[iF].id == "minecraft:feather" && (effects[iE].id == "minecraft:glowstone_dust" || effects[iE].id == "_"))) {
+							genOutput([tips[iT], sticks[iS], fins[iF], effects[iE]]);
+							stats.totalCount++
+						}
 					}
 				}
 			}
 		}
 	}
+	console.log("Stats:", stats);
+	console.log("Saving graphs...");
+	//temporarily disable console.log, because it spams out a bunch of junk info and I don't know how to stop it
+	let tempLog = console.log;
+	console.log = function() {}
+
+	genPlot(graphStats.nameLengthDist, "Name Length");
+	genPlot(graphStats.damageMultDist, "Damage Multiplier");
+	genPlot(graphStats.drawSpeedDist, "Draw Speed Multiplier");
+	genPlot(graphStats.fireChanceDist, "Maximum Fire Stack");
+	genPlot(graphStats.flySpeedDist, "Airspeed Multiplier");
+	genPlot(graphStats.gravityMultDist, "Gravity Multiplier");
+	genPlot(graphStats.itemOutputDist, "Item Output Amount");
+	//non-historgram plot
+	let detailedFireChancePlot = Plot.dot(graphStats.detailedFireChanceDist, {x: "Fire Stack", y: "% Chance", symbol: "triangle2"}).plot({y: {grid: true, domain: [0, 100]}, x: {type: "band", grid:false}, style: {color: "dodgerblue"}, document: (new JSDOM(`...`)).window.document});
+	savePlot(detailedFireChancePlot, "Fire Chance");
+	
+	//re-enable console.log
+	console.log = tempLog;
 }
-console.log("Stats:", stats);

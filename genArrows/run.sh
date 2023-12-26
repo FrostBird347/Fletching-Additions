@@ -5,3 +5,4 @@ find ../src/main/resources/data/fletching-additions/recipes/ -maxdepth 1 -name '
 echo "Downloading..." | tee out.log
 wget -i ./DownloadURL.txt -O ./Ingredients.csv
 node ./genArrows.js 2>&1 | tee -a out.log
+/Applications/ImageOptim.app/Contents/MacOS/ImageOptim ./*.svg >/dev/null 2>&1

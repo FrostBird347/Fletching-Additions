@@ -23,6 +23,7 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.particle.VibrationParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -58,7 +59,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	//Other stuff not directly related to nbt
 	Vec3d realVel = new Vec3d(0, 0, 0);
 	boolean isRealVel = true;
-	Vec3d serverSourcePos = new Vec3d(0, 0, 0);
+	public Vec3d serverSourcePos = new Vec3d(0, 0, 0);
 	private static final TrackedData<BlockPos> CLIENT_SOURCE_POS;
 	int echoDist = 1;
 	//echoLink, 
@@ -155,6 +156,15 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 					MainMod.LOGGER.error("could not parse identifier of particle: ", rawParticles.getString(i));
 				}
 			}
+		}
+
+		//Extract name
+		try {
+			if (itemNbt.contains("display", NbtElement.COMPOUND_TYPE) && itemNbt.getCompound("display").contains("Name", NbtElement.STRING_TYPE)) {
+				this.setCustomName(Text.Serializer.fromJson(itemNbt.getCompound("display").getString("Name")));
+			}
+		} catch(Exception err) {
+			MainMod.LOGGER.error("Failed to parse arrow name: ", err);
 		}
 		
 		MainMod.LOGGER.info(itemNbt.asString());

@@ -2,7 +2,12 @@ package frostbird347.fletchingadditions.recipe;
 
 import frostbird347.fletchingadditions.screenHandler.FletchingTableScreenHandler;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
@@ -53,7 +58,30 @@ public class FletchingRecipe implements Recipe<Inventory> {
 
 	@Override
 	public ItemStack craft(Inventory inv) {
-		return this.getOutput().copy();
+		ItemStack output = this.getOutput().copy();
+
+		//Stuff for the inherit NBT gameflags
+		String[] gameFlags = new String[] {"inheritFireworkStarNBT", "inheritFireworkNBT"};
+		Item[] itemTypes = new Item[] {Items.FIREWORK_STAR, Items.FIREWORK_ROCKET};
+		NbtCompound outputNbt = output.getNbt();
+		for (int i = 0; i < gameFlags.length; i++) {
+			if (this.matches(inv) && output.hasNbt() && outputNbt.contains("gameFlags", NbtElement.LIST_TYPE) && outputNbt.getList("gameFlags", NbtElement.STRING_TYPE).indexOf(NbtString.of(gameFlags[i])) >= 0) {
+				if (inputTip.test(itemTypes[i].getDefaultStack())) {
+					outputNbt.put(gameFlags[i], inv.getStack(FletchingTableScreenHandler.ARROW_TIP_SLOT_INDEX).getNbt());
+				} else if (inputStick.test(itemTypes[i].getDefaultStack())) {
+					outputNbt.put(gameFlags[i], inv.getStack(FletchingTableScreenHandler.ARROW_STICK_SLOT_INDEX).getNbt());
+				} else if (inputFins.test(itemTypes[i].getDefaultStack())) {
+					outputNbt.put(gameFlags[i], inv.getStack(FletchingTableScreenHandler.ARROW_FINS_SLOT_INDEX).getNbt());
+				} else if (inputEffect.test(itemTypes[i].getDefaultStack())) {
+					outputNbt.put(gameFlags[i], inv.getStack(FletchingTableScreenHandler.EFFECT_SLOT_INDEX).getNbt());
+				}
+			}
+		}
+		if (output.hasNbt() && !outputNbt.isEmpty()) {
+			output.setNbt(outputNbt);
+		}
+		
+		return output;
 	}
  
 	@Override
@@ -63,6 +91,10 @@ public class FletchingRecipe implements Recipe<Inventory> {
 	
 	@Override 
 	public boolean matches(Inventory inv, World world) {
+		return matches(inv);
+	}
+
+	private boolean matches(Inventory inv) {
 		if(inv.size() < 4) return false;
 		return inputTip.test(inv.getStack(FletchingTableScreenHandler.ARROW_TIP_SLOT_INDEX))
 		&& inputStick.test(inv.getStack(FletchingTableScreenHandler.ARROW_STICK_SLOT_INDEX))

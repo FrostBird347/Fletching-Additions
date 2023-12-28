@@ -162,7 +162,7 @@ public class FletchingTableScreenHandler extends ScreenHandler {
 		this.context.run((world, pos) -> {
 			Optional<FletchingRecipe> currentRecipe = this.world.getRecipeManager().getFirstMatch(FletchingRecipe.Type.INSTANCE, this.inputInventory, this.world);
 			if (currentRecipe.isPresent()) {
-				this.outputInventory.setStack(RESULT_SLOT_INDEX, currentRecipe.get().craft(this.outputInventory));
+				this.outputInventory.setStack(RESULT_SLOT_INDEX, currentRecipe.get().craft(this.inputInventory));
 			} else {
 				this.outputInventory.removeStack(RESULT_SLOT_INDEX);
 			}

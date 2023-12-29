@@ -174,16 +174,9 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	@Override
 	public void tick() {
 		Entity owner = this.getOwner();
-
-		//Make the client load item nbt
-		//This is fine because I don't intend to modify this data
-		//Well, I might modify it to remove certain stats in one specific scenario, but it wouldn't really impact anything client side
-		if (this.world.isClient && itemNbt.isEmpty() && !this.dataTracker.get(ITEM_NBT).isEmpty()) {
-			initFromNbt(this.dataTracker.get(ITEM_NBT));
-		} else if (!this.world.isClient) {
-			if (this.dataTracker.get(ITEM_NBT).isEmpty() && !itemNbt.isEmpty()) {
-				this.dataTracker.set(ITEM_NBT, itemNbt.copy());
-			}
+		
+		syncItemNbt();
+		if (!this.world.isClient) {
 
 			//Only tell the client the sender's position after it has touched the ground
 			if (!this.inGround && echoLink) {
@@ -364,11 +357,13 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	@Override
 	protected void onBlockHit(BlockHitResult hit) {
 		if (!this.world.isClient && gameFlags.indexOf(NbtString.of("inheritFireworkStarNBT")) >= 0 && this.itemNbt.contains("inheritFireworkStarNBT", NbtElement.COMPOUND_TYPE) && this.itemNbt.getCompound("inheritFireworkStarNBT").contains("Explosion", NbtElement.COMPOUND_TYPE)) {
+			syncItemNbt();
 			this.world.sendEntityStatus(this, (byte)17);
 		}
 
 		if (!this.world.isClient && gameFlags.indexOf(NbtString.of("inheritFireworkNBT")) >= 0 && this.itemNbt.contains("inheritFireworkNBT", NbtElement.COMPOUND_TYPE) && this.itemNbt.getCompound("inheritFireworkNBT").contains("Fireworks", NbtElement.COMPOUND_TYPE)) {
 			if (this.itemNbt.getCompound("inheritFireworkNBT").getCompound("Fireworks").contains("Explosions", NbtElement.LIST_TYPE)) {
+				syncItemNbt();
 				this.world.sendEntityStatus(this, (byte)18);
 			}
 		}
@@ -379,9 +374,11 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	@Override
 	public void handleStatus(byte status) {
 		if (status == 17 && this.world.isClient) {
+			syncItemNbt();
 			explodeFirework(this.itemNbt.getCompound("inheritFireworkStarNBT").getCompound("Explosion"));
 		}
 		if (status == 18 && this.world.isClient) {
+			syncItemNbt();
 			explodeFirework(this.itemNbt.getCompound("inheritFireworkNBT").getCompound("Fireworks").getList("Explosions", NbtElement.COMPOUND_TYPE));
 		}
 
@@ -478,5 +475,16 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		super.initDataTracker();
 		this.dataTracker.startTracking(ITEM_NBT, new NbtCompound());
 		this.dataTracker.startTracking(CLIENT_SOURCE_POS, new BlockPos(0, 0, 0));
+	}
+
+	public void syncItemNbt() {
+		//Make the client load item nbt
+		//This is fine because I don't intend to modify this data
+		//Well, I might modify it to remove certain stats in one specific scenario, but it wouldn't really impact anything client side
+		if (this.world.isClient && itemNbt.isEmpty() && !this.dataTracker.get(ITEM_NBT).isEmpty()) {
+			initFromNbt(this.dataTracker.get(ITEM_NBT));
+		} else if (!this.world.isClient && this.dataTracker.get(ITEM_NBT).isEmpty() && !itemNbt.isEmpty()) {
+			this.dataTracker.set(ITEM_NBT, itemNbt.copy());
+		}
 	}
 }

@@ -336,6 +336,12 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 
 	@Override
 	protected ItemStack asItemStack() {
+		//Activate the noFins flag only when the arrow is picked up
+		int noFinsIndex = gameFlags.indexOf(NbtString.of("_noFins"));
+		if (noFinsIndex >= 0) {
+			gameFlags.set(noFinsIndex, NbtString.of("noFins"));
+		}
+
 		ItemStack stack = new ItemStack(ItemManager.CUSTOM_ARROW);
 		stack.setNbt(itemNbt);
 		return stack;
@@ -409,9 +415,9 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	private void removeFireworkRocket() {
 				//Change the item name but not the entity name, so this will only have an impact when the arrow is picked up or unloaded/reloaded
 				itemNbt.getCompound("display").putString("Name", itemNbt.getCompound("display").getString("Name").replaceFirst("Rocket Powered ", "Unfinned "));
-				//Replace inheritFireworkNBT with the noFins gameflag
+				//Replace inheritFireworkNBT with the noFins gameflag (will only apply once the arrow is picked up)
 				//Also remove the inheritFireworkNBT data, to allow arrows which only had differing fireworks to be stacked together
-				gameFlags.set(gameFlags.indexOf(NbtString.of("inheritFireworkNBT")), NbtString.of("noFins"));
+				gameFlags.set(gameFlags.indexOf(NbtString.of("inheritFireworkNBT")), NbtString.of("_noFins"));
 				itemNbt.remove("inheritFireworkNBT");
 	}
 

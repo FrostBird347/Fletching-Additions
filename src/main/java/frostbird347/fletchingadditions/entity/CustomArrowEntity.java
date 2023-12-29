@@ -61,6 +61,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	private boolean waterSpeed = false;
 	private boolean dynamicLightingIfPossible = false;
 	private boolean echoLink = false;
+	private boolean hasFirework = false;
 	private ArrayList<ParticleEffect> particles = new ArrayList<ParticleEffect>();
 	//This list is more of a pain to extract than I expected, so I am just saving it here
 	NbtList gameFlags = new NbtList();
@@ -70,9 +71,10 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	boolean isRealVel = true;
 	public Vec3d serverSourcePos = new Vec3d(0, 0, 0);
 	private static final TrackedData<BlockPos> CLIENT_SOURCE_POS;
+	private int flightTime = -1;
 	int echoDist = 1;
-	//echoLink, 
-	boolean[] tempGlobalFlags = new boolean[] {false};
+	//echoLink, firework
+	boolean[] tempGlobalFlags = new boolean[] {false, false};
 
 	public CustomArrowEntity(EntityType<? extends CustomArrowEntity> entityType, World world) {
 		super((EntityType<? extends PersistentProjectileEntity>)entityType, world);
@@ -95,9 +97,14 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		return (this.isOnGround() || this.inGround);
 	}
 
+
 	public void swapToRealVel() {
+		swapToRealVel(true);
+	}
+
+	public void swapToRealVel(boolean undoGravity) {
 		if (!isRealVel) {
-				float gravity = this.reallyOnGround() ? 0f : 0.05f;
+				float gravity = this.reallyOnGround() ? 0f : undoGravity ? 0.05f : 0f;
 				this.setVelocity(this.getVelocity().add(0, gravity, 0).multiply(1f / flySpeedMult).subtract(0, gravity * gravityMult, 0));
 				isRealVel = true;
 		}
@@ -110,8 +117,8 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		breaksWhenWet = false;
 		waterSpeed = false;
 		dynamicLightingIfPossible = false;
-		echoLink = this.world.isClient;
 		echoLink = false;
+		hasFirework = false;
 		particles = new ArrayList<ParticleEffect>();
 		gameFlags = new NbtList();
 		
@@ -143,6 +150,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		if (gameFlags.indexOf(NbtString.of("waterSpeed")) >= 0) waterSpeed = true;
 		if (gameFlags.indexOf(NbtString.of("dynamicLightingIfPossible")) >= 0) dynamicLightingIfPossible = true;
 		if (gameFlags.indexOf(NbtString.of("echoLink")) >= 0) echoLink = true;
+		if (gameFlags.indexOf(NbtString.of("inheritFireworkNBT")) >= 0) hasFirework = true;
 
 		//Modify damage
 		if (itemNbt.contains("damageMult", NbtElement.FLOAT_TYPE)) {
@@ -196,6 +204,44 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 					this.dataTracker.set(CLIENT_SOURCE_POS, new BlockPos(serverSourcePos));
 				}
 			}
+
+			//Firework flight
+			//Loading and unloading will cause all this to reset, however this isn't a huge issue considering how long this lasts
+			if (hasFirework) {
+				realVel = this.getVelocity();
+				this.setVelocity(realVel.multiply(flySpeedMult));
+				isRealVel = false;
+
+				//Setup firework
+				if (flightTime == -1) {
+					flightTime = 10 * itemNbt.getCompound("inheritFireworkNBT").getCompound("Fireworks").getByte("Flight") +  + this.random.nextInt(6) + this.random.nextInt(7);
+
+					this.gravityMult = 0;
+					//0.2*(1.02^(20*3)) = final speed multiple before explosion
+					this.setVelocity(this.getVelocity().multiply(0.2));
+					//Don't allow arrows to go too slowly
+					if (this.getVelocity().length() < 0.6) {
+						this.setVelocity(this.getVelocity().normalize().multiply(0.6));
+					}
+
+				//When it's going to explode
+				} else if (flightTime == 0) {
+					NbtList explosions = this.itemNbt.getCompound("inheritFireworkNBT").getCompound("Fireworks").getList("Explosions", NbtElement.COMPOUND_TYPE).copy();
+					this.world.sendEntityStatus(this, (byte)18);
+					explodeFirework(explosions);
+					this.setVelocity(this.getVelocity().normalize().multiply(explosions.size() * 0.3).add(this.getVelocity()));
+					removeFireworkRocket();
+				
+				//While flying
+				} else {
+					flightTime--;
+					this.gravityMult = 0;
+					
+					this.setVelocity(this.getVelocity().multiply(1.02, 1.02, 1.02));
+				}
+
+				swapToRealVel(false);
+			}
 		}
 
 		//Don't mess with velocity when the arrow is in the ground
@@ -228,6 +274,10 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 			//This guarantees that there is zero chance of it going outside the bounds of the list, while also being just as likely to pick the first/last options instead of being half as likely
 			int partIndex = (int)Math.round((Math.random() * ((double)particles.size() - 0.02)) - 0.49);
 			this.world.addParticle(particles.get(partIndex), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+		}
+
+		if (this.world.isClient && hasFirework && this.age % 2 < 2) {
+			this.world.addParticle(ParticleTypes.FIREWORK, this.getX(), this.getY(), this.getZ(), this.random.nextGaussian() * 0.05, -this.getVelocity().y * 0.5, this.random.nextGaussian() * 0.05);
 		}
 	}
 
@@ -357,8 +407,12 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 			return;
 		}
 
-		Vec3d vel = this.getVelocity();
-		this.world.addFireworkParticle(this.getX(), this.getY(), this.getZ(), vel.x, vel.y, vel.z, fireworkExplosion);
+		if (explosions.size() == 0) {
+			this.world.addParticle(ParticleTypes.POOF, this.getX(), this.getY(), this.getZ(), this.random.nextGaussian() * 0.05, 0.005, this.random.nextGaussian() * 0.05);
+		} else {
+			Vec3d vel = this.getVelocity();
+			this.world.addFireworkParticle(this.getX(), this.getY(), this.getZ(), vel.x, vel.y, vel.z, fireworkExplosion);
+		}
 
 		if (fireworkExplosion.asString().equals("{Explosions:[{}]}")) {
 			MainMod.LOGGER.error("Explosion data empty!");
@@ -413,12 +467,23 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 
 	//Called when a rocket powered arrow explodes
 	private void removeFireworkRocket() {
-				//Change the item name but not the entity name, so this will only have an impact when the arrow is picked up or unloaded/reloaded
-				itemNbt.getCompound("display").putString("Name", itemNbt.getCompound("display").getString("Name").replaceFirst("Rocket Powered ", "Unfinned "));
-				//Replace inheritFireworkNBT with the noFins gameflag (will only apply once the arrow is picked up)
-				//Also remove the inheritFireworkNBT data, to allow arrows which only had differing fireworks to be stacked together
-				gameFlags.set(gameFlags.indexOf(NbtString.of("inheritFireworkNBT")), NbtString.of("_noFins"));
-				itemNbt.remove("inheritFireworkNBT");
+		//Change the item name but not the entity name, so this will only have an impact when the arrow is picked up or unloaded/reloaded
+		itemNbt.getCompound("display").putString("Name", itemNbt.getCompound("display").getString("Name").replaceFirst("Rocket Powered ", "Unfinned "));
+		//Replace inheritFireworkNBT with the noFins gameflag (will only apply once the arrow is picked up)
+		//Also remove the inheritFireworkNBT data, to allow arrows which only had differing fireworks to be stacked together
+		int flagIndex = gameFlags.indexOf(NbtString.of("inheritFireworkNBT"));
+		if (flagIndex <= 0) {
+			gameFlags.set(flagIndex, NbtString.of("_noFins"));
+		}
+		itemNbt.remove("inheritFireworkNBT");
+
+		//Refresh gravity
+		gravityMult = 1;
+		if (itemNbt.contains("gravityMult", NbtElement.FLOAT_TYPE)) {
+			gravityMult = itemNbt.getFloat("gravityMult");
+		}
+
+		hasFirework = false;
 	}
 
 	private void afterBlockOrEntityHit() {
@@ -543,11 +608,13 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 			MainMod.LOGGER.info(explosions.asString());
 
 			explodeFirework(explosions);
+			hasFirework = false;
 		}
 		//Firework rocket in air explosion
 		if (status == 18 && this.world.isClient) {
 			syncItemNbt();
 			explodeFirework(this.itemNbt.getCompound("inheritFireworkNBT").getCompound("Fireworks").getList("Explosions", NbtElement.COMPOUND_TYPE).copy());
+			hasFirework = false;
 		}
 
 		//Refresh client itemNbt

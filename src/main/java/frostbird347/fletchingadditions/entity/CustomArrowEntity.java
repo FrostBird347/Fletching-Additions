@@ -25,6 +25,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -338,6 +339,53 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		ItemStack stack = new ItemStack(ItemManager.CUSTOM_ARROW);
 		stack.setNbt(itemNbt);
 		return stack;
+	}
+
+
+	private void explodeFirework(NbtCompound explosion) {
+		NbtList explosionList = new NbtList();
+		explosionList.add(explosion);
+		explodeFirework(explosionList);
+	}
+
+	private void explodeFirework(NbtList explosions) {
+		NbtCompound fireworkExplosion = new NbtCompound();
+		fireworkExplosion.put("Explosions", explosions);
+
+		Vec3d vel = this.getVelocity();
+		this.world.addFireworkParticle(this.getX(), this.getY(), this.getZ(), vel.x, vel.y, vel.z, fireworkExplosion);
+
+		if (fireworkExplosion.asString().equals("{Explosions:[{}]}")) {
+			MainMod.LOGGER.error("Explosion data empty!");
+			MainMod.LOGGER.error("Maybe there wasn't enough time for the server to send the arrow's nbt data?");
+		}
+	}
+
+	@Override
+	protected void onBlockHit(BlockHitResult hit) {
+		if (!this.world.isClient && gameFlags.indexOf(NbtString.of("inheritFireworkStarNBT")) >= 0 && this.itemNbt.contains("inheritFireworkStarNBT", NbtElement.COMPOUND_TYPE) && this.itemNbt.getCompound("inheritFireworkStarNBT").contains("Explosion", NbtElement.COMPOUND_TYPE)) {
+			this.world.sendEntityStatus(this, (byte)17);
+		}
+
+		if (!this.world.isClient && gameFlags.indexOf(NbtString.of("inheritFireworkNBT")) >= 0 && this.itemNbt.contains("inheritFireworkNBT", NbtElement.COMPOUND_TYPE) && this.itemNbt.getCompound("inheritFireworkNBT").contains("Fireworks", NbtElement.COMPOUND_TYPE)) {
+			if (this.itemNbt.getCompound("inheritFireworkNBT").getCompound("Fireworks").contains("Explosions", NbtElement.LIST_TYPE)) {
+				this.world.sendEntityStatus(this, (byte)18);
+			}
+		}
+
+		super.onBlockHit(hit);
+	}
+
+	@Override
+	public void handleStatus(byte status) {
+		if (status == 17 && this.world.isClient) {
+			explodeFirework(this.itemNbt.getCompound("inheritFireworkStarNBT").getCompound("Explosion"));
+		}
+		if (status == 18 && this.world.isClient) {
+			explodeFirework(this.itemNbt.getCompound("inheritFireworkNBT").getCompound("Fireworks").getList("Explosions", NbtElement.COMPOUND_TYPE));
+		}
+
+		super.handleStatus(status);
 	}
 	
 	@Override

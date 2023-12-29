@@ -405,6 +405,16 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		afterBlockOrEntityHit();
 	}
 
+	//Called when a rocket powered arrow explodes
+	private void removeFireworkRocket() {
+				//Change the item name but not the entity name, so this will only have an impact when the arrow is picked up or unloaded/reloaded
+				itemNbt.getCompound("display").putString("Name", itemNbt.getCompound("display").getString("Name").replaceFirst("Rocket Powered ", "Unfinned "));
+				//Replace inheritFireworkNBT with the noFins gameflag
+				//Also remove the inheritFireworkNBT data, to allow arrows which only had differing fireworks to be stacked together
+				gameFlags.set(gameFlags.indexOf(NbtString.of("inheritFireworkNBT")), NbtString.of("noFins"));
+				itemNbt.remove("inheritFireworkNBT");
+	}
+
 	private void afterBlockOrEntityHit() {
 
 		//Firework stuff
@@ -415,13 +425,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 				syncItemNbt();
 				this.world.sendEntityStatus(this, (byte)17);
 				explosions = this.itemNbt.getCompound("inheritFireworkNBT").getCompound("Fireworks").getList("Explosions", NbtElement.COMPOUND_TYPE).copy();
-
-				//Change the item name but not the entity name, so this will only have an impact when the arrow is picked up or unloaded/reloaded
-				itemNbt.getCompound("display").putString("Name", itemNbt.getCompound("display").getString("Name").replaceFirst("Rocket Powered ", "Unfinned "));
-				//Replace inheritFireworkNBT with the noFins gameflag
-				//Also remove the inheritFireworkNBT data, to allow arrows which only had differing fireworks to be stacked together
-				gameFlags.set(gameFlags.indexOf(NbtString.of("inheritFireworkNBT")), NbtString.of("noFins"));
-				itemNbt.remove("inheritFireworkNBT");
+				removeFireworkRocket();
 			}
 		}
 

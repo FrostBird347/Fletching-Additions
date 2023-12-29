@@ -1,12 +1,15 @@
 package frostbird347.fletchingadditions.entity;
 
 import java.util.ArrayList;
+import java.util.List;
 import frostbird347.fletchingadditions.MainMod;
 import frostbird347.fletchingadditions.item.ItemManager;
 import frostbird347.fletchingadditions.modCompat.ModCompatManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.ProjectileDamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -27,10 +30,14 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.RandomSeed;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.RaycastContext;
+import net.minecraft.world.RaycastContext.FluidHandling;
+import net.minecraft.world.RaycastContext.ShapeType;
 import net.minecraft.world.World;
 import net.minecraft.world.event.BlockPositionSource;
 import net.minecraft.world.event.EntityPositionSource;
@@ -45,6 +52,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
    	//nbt
 	private NbtCompound itemNbt = new NbtCompound();
 	private static final TrackedData<NbtCompound> ITEM_NBT;
+	private boolean clientHasNbt = false;
 
 	//These values are not accessed via nbt for peformance reasons (I assume it's a bad idea to access nbt values each tick)
 	private float flySpeedMult = 1;
@@ -80,7 +88,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	}
 
 	public void initFromStack(ItemStack stack) {
-		initFromNbt(stack.getNbt());
+		initFromNbt(stack.getNbt().copy());
 	}
 
 	public boolean reallyOnGround() {
@@ -177,7 +185,6 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		
 		syncItemNbt();
 		if (!this.world.isClient) {
-
 			//Only tell the client the sender's position after it has touched the ground
 			if (!this.inGround && echoLink) {
 				//Otherwise set the current position because it looks better to have the first particles stay inside the arrow than to have one or a few go flying in the wrong direction
@@ -334,16 +341,15 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		return stack;
 	}
 
-
-	private void explodeFirework(NbtCompound explosion) {
-		NbtList explosionList = new NbtList();
-		explosionList.add(explosion);
-		explodeFirework(explosionList);
-	}
-
 	private void explodeFirework(NbtList explosions) {
 		NbtCompound fireworkExplosion = new NbtCompound();
 		fireworkExplosion.put("Explosions", explosions);
+
+		//If it's the server, we just need to deal damage and not bother with effects
+		if (!this.world.isClient) {
+			dealFireworkDamage(fireworkExplosion);
+			return;
+		}
 
 		Vec3d vel = this.getVelocity();
 		this.world.addFireworkParticle(this.getX(), this.getY(), this.getZ(), vel.x, vel.y, vel.z, fireworkExplosion);
@@ -354,35 +360,81 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		}
 	}
 
+	//Just reimplement the firework's damage code
+	private void dealFireworkDamage(NbtCompound fireworkExplosion) {
+		float damage = 0;
+		NbtList explosions = fireworkExplosion.getList("Explosions", NbtElement.COMPOUND_TYPE);
+
+		if (!explosions.isEmpty()) {
+			damage = 5.0F + (float)(explosions.size() * 2);
+			
+			List<LivingEntity> targets = this.world.getNonSpectatingEntities(LivingEntity.class, this.getBoundingBox().expand(5.0));
+			for (int iT = 0; iT < targets.size(); iT++) {
+				LivingEntity target = targets.get(iT);
+
+				boolean wasHit = false;
+				//Check the bottom, middle and top of of their hitbox
+				for(int iH = 0; iH < 2; iH++) {
+					Vec3d checkPos = new Vec3d(target.getX(), target.getBodyY(0.5 * (double)iH), target.getZ());
+					HitResult blocksHit = this.world.raycast(new RaycastContext(this.getPos(), checkPos, ShapeType.COLLIDER, FluidHandling.NONE, this));
+
+					//If it hit, we don't need to check the other spots on their hitbox
+					if (blocksHit.getType() == HitResult.Type.MISS) {
+						wasHit = true;
+						break;
+					}
+				}
+
+				if (wasHit) {
+					float finalDamage = damage * (float)Math.sqrt((5.0 - (double)this.distanceTo(target)) / 5.0);
+					DamageSource damageSource = new ProjectileDamageSource("fireworks", this, this.getOwner()).setExplosive();
+					
+					//If it's right at the edge of the explosion distance, NaN damage will be given
+					//Im not sure how this doesn't occur with fireworks shot from crossbows, since the damage calculation code is the same
+					if (!Float.isNaN(finalDamage)) {
+						target.damage(damageSource, finalDamage);
+					}
+				}
+			}
+		}
+	}
+
 	@Override
 	protected void onBlockHit(BlockHitResult hit) {
-		if (!this.world.isClient && gameFlags.indexOf(NbtString.of("inheritFireworkStarNBT")) >= 0 && this.itemNbt.contains("inheritFireworkStarNBT", NbtElement.COMPOUND_TYPE) && this.itemNbt.getCompound("inheritFireworkStarNBT").contains("Explosion", NbtElement.COMPOUND_TYPE)) {
-			syncItemNbt();
-			this.world.sendEntityStatus(this, (byte)17);
-		}
+		super.onBlockHit(hit);
+		afterBlockOrEntityHit();
+	}
+
+	private void afterBlockOrEntityHit() {
+
+		//Firework stuff
+		NbtList explosions = new NbtList();
 
 		if (!this.world.isClient && gameFlags.indexOf(NbtString.of("inheritFireworkNBT")) >= 0 && this.itemNbt.contains("inheritFireworkNBT", NbtElement.COMPOUND_TYPE) && this.itemNbt.getCompound("inheritFireworkNBT").contains("Fireworks", NbtElement.COMPOUND_TYPE)) {
 			if (this.itemNbt.getCompound("inheritFireworkNBT").getCompound("Fireworks").contains("Explosions", NbtElement.LIST_TYPE)) {
 				syncItemNbt();
-				this.world.sendEntityStatus(this, (byte)18);
+				this.world.sendEntityStatus(this, (byte)17);
+				explosions = this.itemNbt.getCompound("inheritFireworkNBT").getCompound("Fireworks").getList("Explosions", NbtElement.COMPOUND_TYPE).copy();
+
+				//Change the item name but not the entity name, so this will only have an impact when the arrow is picked up or unloaded/reloaded
+				itemNbt.getCompound("display").putString("Name", itemNbt.getCompound("display").getString("Name").replaceFirst("Rocket Powered ", "Unfinned "));
+				//Replace inheritFireworkNBT with the noFins gameflag
+				//Also remove the inheritFireworkNBT data, to allow arrows which only had differing fireworks to be stacked together
+				gameFlags.set(gameFlags.indexOf(NbtString.of("inheritFireworkNBT")), NbtString.of("noFins"));
+				itemNbt.remove("inheritFireworkNBT");
 			}
 		}
 
-		super.onBlockHit(hit);
-	}
-
-	@Override
-	public void handleStatus(byte status) {
-		if (status == 17 && this.world.isClient) {
+		if (!this.world.isClient && gameFlags.indexOf(NbtString.of("inheritFireworkStarNBT")) >= 0 && this.itemNbt.contains("inheritFireworkStarNBT", NbtElement.COMPOUND_TYPE) && this.itemNbt.getCompound("inheritFireworkStarNBT").contains("Explosion", NbtElement.COMPOUND_TYPE)) {
 			syncItemNbt();
-			explodeFirework(this.itemNbt.getCompound("inheritFireworkStarNBT").getCompound("Explosion"));
-		}
-		if (status == 18 && this.world.isClient) {
-			syncItemNbt();
-			explodeFirework(this.itemNbt.getCompound("inheritFireworkNBT").getCompound("Fireworks").getList("Explosions", NbtElement.COMPOUND_TYPE));
+			this.world.sendEntityStatus(this, (byte)17);
+			this.discard();
+			explosions.add(this.itemNbt.getCompound("inheritFireworkStarNBT").getCompound("Explosion"));
 		}
 
-		super.handleStatus(status);
+		if (!explosions.isEmpty()) {
+			explodeFirework(explosions);
+		}
 	}
 	
 	@Override
@@ -428,6 +480,8 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	@Override
 	protected void onHit(LivingEntity target) {
 		super.onHit(target);
+
+		afterBlockOrEntityHit();
 	}
 
 	@Override
@@ -446,11 +500,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 			serverSourcePos = new Vec3d(this.getX(), this.getY(), this.getZ());
 		}
 
-		if (itemNbt != null) {
-			this.dataTracker.set(ITEM_NBT, itemNbt.copy());
-		} else {
-			this.dataTracker.set(ITEM_NBT, new NbtCompound());
-		}
+		this.world.sendEntityStatus(this, (byte)1);
 	}
 
 	@Override
@@ -471,6 +521,42 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		}
 	}
 
+	@Override
+	public void handleStatus(byte status) {
+		//Firework rocket/star impact explosion
+		if (status == 17 && this.world.isClient) {
+			syncItemNbt();
+			//If there is no firework nbt it should return an empty list
+			NbtList explosions = this.itemNbt.getCompound("inheritFireworkNBT").getCompound("Fireworks").getList("Explosions", NbtElement.COMPOUND_TYPE).copy();
+			//Doesn't matter if an empty compound is added: client side visuals won't be affected
+			explosions.add(this.itemNbt.getCompound("inheritFireworkStarNBT").getCompound("Explosion"));
+			MainMod.LOGGER.info(explosions.asString());
+
+			explodeFirework(explosions);
+		}
+		//Firework rocket in air explosion
+		if (status == 18 && this.world.isClient) {
+			syncItemNbt();
+			explodeFirework(this.itemNbt.getCompound("inheritFireworkNBT").getCompound("Fireworks").getList("Explosions", NbtElement.COMPOUND_TYPE).copy());
+		}
+
+		//Refresh client itemNbt
+		if (status == 1) {
+			if (this.world.isClient) {
+				//Nbt will be updated next tick
+				clientHasNbt = false;
+			} else {
+				if (itemNbt != null) {
+					this.dataTracker.set(ITEM_NBT, itemNbt.copy());
+				} else {
+					this.dataTracker.set(ITEM_NBT, new NbtCompound());
+				}
+			}
+		}
+
+		super.handleStatus(status);
+	}
+
 	protected void initDataTracker() {
 		super.initDataTracker();
 		this.dataTracker.startTracking(ITEM_NBT, new NbtCompound());
@@ -481,8 +567,9 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		//Make the client load item nbt
 		//This is fine because I don't intend to modify this data
 		//Well, I might modify it to remove certain stats in one specific scenario, but it wouldn't really impact anything client side
-		if (this.world.isClient && itemNbt.isEmpty() && !this.dataTracker.get(ITEM_NBT).isEmpty()) {
+		if (this.world.isClient && (itemNbt.isEmpty() || !clientHasNbt) && !this.dataTracker.get(ITEM_NBT).isEmpty()) {
 			initFromNbt(this.dataTracker.get(ITEM_NBT));
+			clientHasNbt = true;
 		} else if (!this.world.isClient && this.dataTracker.get(ITEM_NBT).isEmpty() && !itemNbt.isEmpty()) {
 			this.dataTracker.set(ITEM_NBT, itemNbt.copy());
 		}

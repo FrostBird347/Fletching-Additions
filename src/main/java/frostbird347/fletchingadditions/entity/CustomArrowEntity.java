@@ -56,6 +56,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 	static {
 		ITEM_NBT = DataTracker.registerData(CustomArrowEntity.class, TrackedDataHandlerRegistry.NBT_COMPOUND);
 		CLIENT_SOURCE_POS = DataTracker.registerData(CustomArrowEntity.class, TrackedDataHandlerRegistry.BLOCK_POS);
+		SHOW_FIREWORK_SPARKS = DataTracker.registerData(CustomArrowEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 	}
 
 	//nbt
@@ -81,7 +82,9 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 	boolean isRealVel = true;
 	public Vec3d serverSourcePos = new Vec3d(0, 0, 0);
 	private static final TrackedData<BlockPos> CLIENT_SOURCE_POS;
+	private static final TrackedData<Boolean> SHOW_FIREWORK_SPARKS;
 	private int flightTime = -1;
+	private Vec3d flightEndSpeed = new Vec3d(0, 0, 0);
 	int echoDist = 1;
 	private final EntityGameEventHandler<VibrationListener> vibrationListenerEventHandler = new EntityGameEventHandler<VibrationListener>(new VibrationListener(new EntityPositionSource(this, 0f), 128, this, (VibrationListener.Vibration)null, 0f, 0));
 	Vec3i lastBlockHitDir = new Vec3i(0, 0, 0);
@@ -133,7 +136,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 		hasFirework = false;
 		particles = new ArrayList<ParticleEffect>();
 		gameFlags = new NbtList();
-		
+		if (!this.world.isClient) this.dataTracker.set(SHOW_FIREWORK_SPARKS, false);
 
 		//If there is no nbt, stop processing
 		if (nbt == null || nbt.isEmpty()) return;
@@ -164,6 +167,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 		if (gameFlags.indexOf(NbtString.of("echoLink")) >= 0) echoLink = true;
 		if (gameFlags.indexOf(NbtString.of("isSensor")) >= 0) isSensor = true;
 		if (gameFlags.indexOf(NbtString.of("inheritFireworkNBT")) >= 0) hasFirework = true;
+		if (!this.world.isClient) this.dataTracker.set(SHOW_FIREWORK_SPARKS, hasFirework);
 
 		//Modify damage
 		if (itemNbt.contains("damageMult", NbtElement.FLOAT_TYPE)) {
@@ -230,19 +234,21 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 					flightTime = 10 * itemNbt.getCompound("inheritFireworkNBT").getCompound("Fireworks").getByte("Flight") +  + this.random.nextInt(6) + this.random.nextInt(7);
 
 					this.gravityMult = 0;
+					flightEndSpeed = this.getVelocity();
 					//0.2*(1.02^(20*3)) = final speed multiple before explosion
 					this.setVelocity(this.getVelocity().multiply(0.2));
 					//Don't allow arrows to go too slowly
 					if (this.getVelocity().length() < 0.6) {
 						this.setVelocity(this.getVelocity().normalize().multiply(0.6));
 					}
+					this.world.getServer().getWorld(this.world.getRegistryKey()).playSoundFromEntity(null, this, SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, this.getSoundCategory(), 3f, 1f, RandomSeed.getSeed());;
 
 				//When it's going to explode
 				} else if (flightTime == 0) {
 					NbtList explosions = this.itemNbt.getCompound("inheritFireworkNBT").getCompound("Fireworks").getList("Explosions", NbtElement.COMPOUND_TYPE).copy();
 					this.world.sendEntityStatus(this, (byte)18);
 					explodeFirework(explosions);
-					this.setVelocity(this.getVelocity().normalize().multiply(explosions.size() * 0.3).add(this.getVelocity()));
+					this.setVelocity(this.getVelocity().normalize().multiply(explosions.size() * 0.3).add(flightEndSpeed));
 					removeFireworkRocket();
 				
 				//While flying
@@ -292,7 +298,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 			this.world.addParticle(particles.get(partIndex), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
 		}
 
-		if (this.world.isClient && hasFirework && this.age % 2 < 2) {
+		if (this.world.isClient && this.age % 2 < 2 && this.dataTracker.get(SHOW_FIREWORK_SPARKS)) {
 			this.world.addParticle(ParticleTypes.FIREWORK, this.getX(), this.getY(), this.getZ(), this.random.nextGaussian() * 0.05, -this.getVelocity().y * 0.5, this.random.nextGaussian() * 0.05);
 		}
 	}
@@ -363,7 +369,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 			//TODO: replace with custom sound
 			this.playSound(SoundEvents.ENTITY_WARDEN_TENDRIL_CLICKS, 0.75f, 1.5f);
 			Vec3d targetPos = new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-			if (entity != null) {
+			if (entity != null && entity.getBoundingBox() != null) {
 				targetPos = entity.getBoundingBox().getCenter();
 			}
 
@@ -398,7 +404,13 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 		//Pretty much the same checks the warden does for every vibration
 		if (this.isSensor && this.age > 2 && world.getWorldBorder().contains(pos) && !this.isRemoved() && this.world == world) {
 			Entity source = emitter.sourceEntity();
-			return (source == null || (source instanceof LivingEntity && this.world == source.world && EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR.test(source) && (this.getOwner() == null || !this.getOwner().isTeammate(source)) && ((LivingEntity)source).getType() != EntityType.ARMOR_STAND && ((LivingEntity)source).getType() != EntityType.WARDEN && !((LivingEntity)source).isInvulnerable() && !((LivingEntity)source).isDead() && this.world.getWorldBorder().contains(((LivingEntity)source).getBoundingBox())));
+			if (source == null) {
+				return true;
+			} else if (!(source instanceof LivingEntity) && this.world == source.world) {
+				return (!(source instanceof CustomArrowEntity) || !((CustomArrowEntity)source).isSensor);
+			} else if (source instanceof LivingEntity && this.world == source.world && EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR.test(source) && (this.getOwner() == null || !this.getOwner().isTeammate(source)) && ((LivingEntity)source).getType() != EntityType.WARDEN && !((LivingEntity)source).isInvulnerable() && !((LivingEntity)source).isDead() && this.world.getWorldBorder().contains(((LivingEntity)source).getBoundingBox())) {
+				return true;
+			}
 		}
 
 		return false;
@@ -557,6 +569,9 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 		}
 
 		hasFirework = false;
+		this.world.sendEntityStatus(this, (byte)1);
+		//Just to be extra sure, manually set this as well
+		this.dataTracker.set(SHOW_FIREWORK_SPARKS, false);
 	}
 
 	private void afterBlockOrEntityHit() {
@@ -676,8 +691,9 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 			syncItemNbt();
 			//If there is no firework nbt it should return an empty list
 			NbtList explosions = this.itemNbt.getCompound("inheritFireworkNBT").getCompound("Fireworks").getList("Explosions", NbtElement.COMPOUND_TYPE).copy();
-			//Doesn't matter if an empty compound is added: client side visuals won't be affected
-			explosions.add(this.itemNbt.getCompound("inheritFireworkStarNBT").getCompound("Explosion"));
+			if (!this.itemNbt.getCompound("inheritFireworkStarNBT").getCompound("Explosion").isEmpty()) {
+				explosions.add(this.itemNbt.getCompound("inheritFireworkStarNBT").getCompound("Explosion").copy());
+			}
 			MainMod.LOGGER.info(explosions.asString());
 
 			explodeFirework(explosions);
@@ -711,6 +727,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 		super.initDataTracker();
 		this.dataTracker.startTracking(ITEM_NBT, new NbtCompound());
 		this.dataTracker.startTracking(CLIENT_SOURCE_POS, new BlockPos(0, 0, 0));
+		this.dataTracker.startTracking(SHOW_FIREWORK_SPARKS, false);
 	}
 
 	public void syncItemNbt() {

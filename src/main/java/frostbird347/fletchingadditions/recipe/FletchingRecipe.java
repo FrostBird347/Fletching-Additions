@@ -66,13 +66,13 @@ public class FletchingRecipe implements Recipe<Inventory> {
 		NbtCompound outputNbt = output.getNbt();
 		for (int i = 0; i < gameFlags.length; i++) {
 			if (this.matches(inv) && output.hasNbt() && outputNbt.contains("gameFlags", NbtElement.LIST_TYPE) && outputNbt.getList("gameFlags", NbtElement.STRING_TYPE).indexOf(NbtString.of(gameFlags[i])) >= 0) {
-				if (inputTip.test(itemTypes[i].getDefaultStack())) {
+				if (inputTip.test(itemTypes[i].getDefaultStack()) && inv.getStack(FletchingTableScreenHandler.ARROW_TIP_SLOT_INDEX).hasNbt()) {
 					outputNbt.put(gameFlags[i], inv.getStack(FletchingTableScreenHandler.ARROW_TIP_SLOT_INDEX).getNbt());
-				} else if (inputStick.test(itemTypes[i].getDefaultStack())) {
+				} else if (inputStick.test(itemTypes[i].getDefaultStack()) && inv.getStack(FletchingTableScreenHandler.ARROW_STICK_SLOT_INDEX).hasNbt()) {
 					outputNbt.put(gameFlags[i], inv.getStack(FletchingTableScreenHandler.ARROW_STICK_SLOT_INDEX).getNbt());
-				} else if (inputFins.test(itemTypes[i].getDefaultStack())) {
+				} else if (inputFins.test(itemTypes[i].getDefaultStack()) && inv.getStack(FletchingTableScreenHandler.ARROW_FINS_SLOT_INDEX).hasNbt()) {
 					outputNbt.put(gameFlags[i], inv.getStack(FletchingTableScreenHandler.ARROW_FINS_SLOT_INDEX).getNbt());
-				} else if (inputEffect.test(itemTypes[i].getDefaultStack())) {
+				} else if (inputEffect.test(itemTypes[i].getDefaultStack()) && inv.getStack(FletchingTableScreenHandler.EFFECT_SLOT_INDEX).hasNbt()) {
 					outputNbt.put(gameFlags[i], inv.getStack(FletchingTableScreenHandler.EFFECT_SLOT_INDEX).getNbt());
 				}
 			}

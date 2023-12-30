@@ -2,6 +2,8 @@ package frostbird347.fletchingadditions.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
+import org.jetbrains.annotations.Nullable;
 import frostbird347.fletchingadditions.MainMod;
 import frostbird347.fletchingadditions.item.ItemManager;
 import frostbird347.fletchingadditions.modCompat.ModCompatManager;
@@ -24,6 +26,7 @@ import net.minecraft.nbt.NbtString;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.particle.VibrationParticleEffect;
+import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -33,6 +36,7 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.math.random.RandomSeed;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.RaycastContext;
@@ -41,15 +45,20 @@ import net.minecraft.world.RaycastContext.ShapeType;
 import net.minecraft.world.World;
 import net.minecraft.world.event.BlockPositionSource;
 import net.minecraft.world.event.EntityPositionSource;
+import net.minecraft.world.event.GameEvent;
+import net.minecraft.world.event.GameEvent.Emitter;
 import net.minecraft.world.event.PositionSource;
+import net.minecraft.world.event.listener.EntityGameEventHandler;
+import net.minecraft.world.event.listener.GameEventListener;
+import net.minecraft.world.event.listener.VibrationListener;
 
-public class CustomArrowEntity extends PersistentProjectileEntity {
-   static {
-      ITEM_NBT = DataTracker.registerData(CustomArrowEntity.class, TrackedDataHandlerRegistry.NBT_COMPOUND);
-      CLIENT_SOURCE_POS = DataTracker.registerData(CustomArrowEntity.class, TrackedDataHandlerRegistry.BLOCK_POS);
-   }
+public class CustomArrowEntity extends PersistentProjectileEntity implements VibrationListener.Callback {
+	static {
+		ITEM_NBT = DataTracker.registerData(CustomArrowEntity.class, TrackedDataHandlerRegistry.NBT_COMPOUND);
+		CLIENT_SOURCE_POS = DataTracker.registerData(CustomArrowEntity.class, TrackedDataHandlerRegistry.BLOCK_POS);
+	}
 
-   	//nbt
+	//nbt
 	private NbtCompound itemNbt = new NbtCompound();
 	private static final TrackedData<NbtCompound> ITEM_NBT;
 	private boolean clientHasNbt = false;
@@ -61,6 +70,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	private boolean waterSpeed = false;
 	private boolean dynamicLightingIfPossible = false;
 	private boolean echoLink = false;
+	private boolean isSensor = false;
 	private boolean hasFirework = false;
 	private ArrayList<ParticleEffect> particles = new ArrayList<ParticleEffect>();
 	//This list is more of a pain to extract than I expected, so I am just saving it here
@@ -73,8 +83,10 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 	private static final TrackedData<BlockPos> CLIENT_SOURCE_POS;
 	private int flightTime = -1;
 	int echoDist = 1;
-	//echoLink, firework
-	boolean[] tempGlobalFlags = new boolean[] {false, false};
+	private final EntityGameEventHandler<VibrationListener> vibrationListenerEventHandler = new EntityGameEventHandler<VibrationListener>(new VibrationListener(new EntityPositionSource(this, 0f), 128, this, (VibrationListener.Vibration)null, 0f, 0));
+	Vec3i lastBlockHitDir = new Vec3i(0, 0, 0);
+	//echoLink returning/returned
+	boolean[] tempGlobalFlags = new boolean[] {false};
 
 	public CustomArrowEntity(EntityType<? extends CustomArrowEntity> entityType, World world) {
 		super((EntityType<? extends PersistentProjectileEntity>)entityType, world);
@@ -150,6 +162,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 		if (gameFlags.indexOf(NbtString.of("waterSpeed")) >= 0) waterSpeed = true;
 		if (gameFlags.indexOf(NbtString.of("dynamicLightingIfPossible")) >= 0) dynamicLightingIfPossible = true;
 		if (gameFlags.indexOf(NbtString.of("echoLink")) >= 0) echoLink = true;
+		if (gameFlags.indexOf(NbtString.of("isSensor")) >= 0) isSensor = true;
 		if (gameFlags.indexOf(NbtString.of("inheritFireworkNBT")) >= 0) hasFirework = true;
 
 		//Modify damage
@@ -242,6 +255,9 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 
 				swapToRealVel(false);
 			}
+
+			//Tick sensor listener
+			this.vibrationListenerEventHandler.getListener().tick(this.world.getServer().getWorld(this.world.getRegistryKey()));
 		}
 
 		//Don't mess with velocity when the arrow is in the ground
@@ -338,6 +354,62 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 				this.discard();
 			}
 		}
+	}
+
+	//Sculk sensor signal listener stuff
+	@Override
+	public void accept(ServerWorld world, GameEventListener listener, BlockPos pos, GameEvent event, @Nullable Entity entity, @Nullable Entity sourceEntity, float distance) {
+		if (!this.isRemoved()) {
+			//TODO: replace with custom sound
+			this.playSound(SoundEvents.ENTITY_WARDEN_TENDRIL_CLICKS, 0.75f, 1.5f);
+			Vec3d targetPos = new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+			if (entity != null) {
+				targetPos = entity.getBoundingBox().getCenter();
+			}
+
+			Vec3d targetDir = new Vec3d((double)targetPos.getX() - this.getX(), (double)targetPos.getY() - this.getY(), (double)targetPos.getZ() - this.getZ());
+			double targetDist = targetDir.length();
+			targetDir = targetDir.normalize();
+			Vec3d moveMult = new Vec3d(1, 1, 1);
+
+			if (this.reallyOnGround()) {
+				Vec3d boostVel = new Vec3d(lastBlockHitDir.getX(), lastBlockHitDir.getY(), lastBlockHitDir.getZ()).multiply(0.25f);
+				moveMult = new Vec3d(((lastBlockHitDir.getX() == 1 && targetDir.getX() < 0) || (lastBlockHitDir.getX() == -1 && targetDir.getX() > 0)) ? -1 : 1, ((lastBlockHitDir.getY() == 1 && targetDir.getY() < 0) || (lastBlockHitDir.getY() == -1 && targetDir.getY() > 0)) ? -1 : 1, ((lastBlockHitDir.getZ() == 1 && targetDir.getZ() < 0) || (lastBlockHitDir.getZ() == -1 && targetDir.getZ() > 0)) ? -1 : 1);
+				MainMod.LOGGER.info(lastBlockHitDir.toString());
+				this.setVelocity(this.getVelocity().add(boostVel));
+				this.inGround = false;
+
+				this.setVelocity(this.getVelocity().multiply(0.25).add(targetDir.multiply(0.5).multiply(moveMult).multiply(Math.random() * 0.02 + 0.99, Math.random() * 0.02 + 0.99, Math.random() * 0.02 + 0.99)));
+			} else {
+				//Ignore downwards speed so we can't fly up forever
+				double currentSpeed = new Vec3d(this.getVelocity().getX(), Math.max(this.getVelocity().getY(), 0), this.getVelocity().getZ()).length();
+
+				this.setVelocity(targetDir.multiply(currentSpeed));
+			}
+
+			
+		}
+	}
+
+	//Sculk sensor signal listener stuff
+	@Override
+	public boolean accepts(ServerWorld world, GameEventListener listener, BlockPos pos, GameEvent event, Emitter emitter) {
+
+		//Pretty much the same checks the warden does for every vibration
+		if (this.isSensor && this.age > 2 && world.getWorldBorder().contains(pos) && !this.isRemoved() && this.world == world) {
+			Entity source = emitter.sourceEntity();
+			return (source == null || (source instanceof LivingEntity && this.world == source.world && EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR.test(source) && (this.getOwner() == null || !this.getOwner().isTeammate(source)) && ((LivingEntity)source).getType() != EntityType.ARMOR_STAND && ((LivingEntity)source).getType() != EntityType.WARDEN && !((LivingEntity)source).isInvulnerable() && !((LivingEntity)source).isDead() && this.world.getWorldBorder().contains(((LivingEntity)source).getBoundingBox())));
+		}
+
+		return false;
+	}
+
+	//Sculk sensor signal listener stuff
+	public void updateEventHandler(BiConsumer<EntityGameEventHandler<?>, ServerWorld> callback) {
+		if (!this.world.isClient) {
+			callback.accept(this.vibrationListenerEventHandler, this.world.getServer().getWorld(this.world.getRegistryKey()));
+		}
+
 	}
 
 	@Override
@@ -461,6 +533,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity {
 
 	@Override
 	protected void onBlockHit(BlockHitResult hit) {
+		lastBlockHitDir = hit.getSide().getVector();
 		super.onBlockHit(hit);
 		afterBlockOrEntityHit();
 	}

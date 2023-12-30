@@ -6,6 +6,8 @@
 
 ![Draw Speed Multiplier](./Stats_DrawSpeedMultiplier.svg)
 
+![Minimum Draw Multiplier](./Stats_MinimumDrawMultiplier.svg)
+
 ![Gravity Multiplier](./Stats_GravityMultiplier.svg)
 
 ![Fire Stack Chances](./Stats_FireChance.svg)

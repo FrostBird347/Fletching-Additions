@@ -14,6 +14,7 @@ let stats = {
 	flySpeedStats: [100000000000000000, 0],
 	gravityMultStats: [100000000000000000, 0],
 	drawSpeedStats: [100000000000000000, 0],
+	drawMinMultStats: [100000000000000000, 0],
 	damageMultStats: [100000000000000000, 0],
 	itemOutputStats: [100000000000000000, 0]
 };
@@ -24,6 +25,7 @@ let graphStats = {
 	flySpeedDist: [],
 	gravityMultDist: [],
 	drawSpeedDist: [],
+	drawMinMultDist: [],
 	damageMultDist: [],
 	itemOutputDist: []
 }
@@ -167,6 +169,7 @@ function parseItem(rawItem) {
 			case "farSound":
 			case "isSoulFire":
 			case "echoLink":
+			case "isSensor":
 			case "arrowDrift":
 				item.gameFlags.push(currentStat[0]);
 				break;
@@ -176,6 +179,7 @@ function parseItem(rawItem) {
 			case "flySpeed":
 			case "gravityMult":
 			case "drawSpeed":
+			case "drawMinMult":
 			case "damageMult":
 				if (item[currentStat[0]] == undefined) {
 					item[currentStat[0]] = currentStat[1];
@@ -250,7 +254,7 @@ function genOutput(inputs) {
 	}
 	
 	//Simple multiplier values
-	let globalMultKeys = ["flySpeed", "gravityMult", "drawSpeed", "damageMult"];
+	let globalMultKeys = ["flySpeed", "gravityMult", "drawSpeed", "drawMinMult", "damageMult"];
 	for (let i = 0; i < globalMultKeys.length; i++) {
 		let tempValue = new nbt.Float(parseFloat(getOrDefault(inputs[tipID], globalMultKeys[i], 1) * getOrDefault(inputs[stickID], globalMultKeys[i], 1) * getOrDefault(inputs[finID], globalMultKeys[i], 1) * getOrDefault(inputs[effectID], globalMultKeys[i], 1)));
 		if (tempValue != 1) {
@@ -308,6 +312,7 @@ function genOutput(inputs) {
 					case "flySpeed":
 					case "gravityMult":
 					case "drawSpeed":
+					case "drawMinMult":
 					case "damageMult":
 					case "outputCountMult":
 						break;
@@ -508,6 +513,7 @@ function realStart() {
 	genPlot(graphStats.nameLengthDist, "Name Length");
 	genPlot(graphStats.damageMultDist, "Damage Multiplier");
 	genPlot(graphStats.drawSpeedDist, "Draw Speed Multiplier");
+	genPlot(graphStats.drawMinMultDist, "Minimum Draw Multiplier");
 	genPlot(graphStats.fireChanceDist, "Maximum Fire Stack");
 	genPlot(graphStats.flySpeedDist, "Airspeed Multiplier");
 	genPlot(graphStats.gravityMultDist, "Gravity Multiplier");

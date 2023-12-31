@@ -34,12 +34,12 @@ Combining...
 Stats: {
   totalCount: 2289,
   mostFireChances: 6,
-  longestName: 'Grindstone Attached to a  Prismarine Finned Blaze Infused Arrow with a Iron Core',
+  longestName: 'Grindstone Attached to a Prismarine Finned Blaze Infused Arrow with a Iron Core',
   flySpeedStats: [ Float { value: 0.42857142855 }, Float { value: 2.25 } ],
   gravityMultStats: [ Float { value: 0.75 }, Float { value: 2.1875 } ],
   drawSpeedStats: [ Float { value: 0.25 }, Float { value: 1.25 } ],
   drawMinMultStats: [ Float { value: 2 }, Float { value: 2 } ],
   damageMultStats: [ Float { value: 0.08203125 }, Float { value: 2.625 } ],
-  itemOutputStats: [ 0, 6 ]
+  itemOutputStats: [ 1, 6 ]
 }
 Saving graphs...

@@ -69,7 +69,7 @@ create:rose_quartz,,,,,,
 farmersdelight:flint_knife,,,t,noHidesInfo noFire,outputCountMult&0.5,
 minecraft:pufferfish,,,t,,,
 minecraft:sugar_cane,,,s,noFire,,
-minecraft:grindstone,Grindstone Arrow,Grindstone Attached to a ,t,reqSturdyCore noHidesInfo,outputCountMult&0,blockUp&minecraft:grindstone
+minecraft:grindstone,Grindstone Arrow,Grindstone Attached to a,t,reqSturdyCore noHidesInfo,outputCountMult&0,blockUp&minecraft:grindstone
 minecraft:[DYE]_carpet,Harmless [DYE] Arrow,Soft,t,noFire reqStick noWet noHidesInfo,"skipThisComment&requires something sticky (or a regular stick) to prevent this from exploding the combination count, also noWet because it would be quite noisy if it was wet@damageMult&0@silent@flySpeed&0.75",_&[DYE]_carpet
 _,_,_,e,_,_,_&_
 minecraft:sculk_sensor,Sculk Arrow,Sculk Finned,f,_,isSensor,_&SculkSensor

@@ -268,7 +268,7 @@ function genOutput(inputs) {
 		graphStats[globalMultKeys[i] + "Dist"].push(tempValue);
 	}
 	
-	outputJSON.outputAmount = Math.round(outputJSON.outputAmount * getOrDefault(inputs[tipID], "outputCountMult", 1) * getOrDefault(inputs[stickID], "outputCountMult", 1) * getOrDefault(inputs[finID], "outputCountMult", 1) * getOrDefault(inputs[effectID], "outputCountMult", 1));
+	outputJSON.outputAmount = Math.max(Math.round(outputJSON.outputAmount * getOrDefault(inputs[tipID], "outputCountMult", 1) * getOrDefault(inputs[stickID], "outputCountMult", 1) * getOrDefault(inputs[finID], "outputCountMult", 1) * getOrDefault(inputs[effectID], "outputCountMult", 1)), 1);
 	
 	outputNBT.gameFlags = [];
 	

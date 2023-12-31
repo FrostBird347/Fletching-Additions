@@ -532,7 +532,7 @@ function realStart() {
 		y: {grid: true, domain: [0, 100]},
 		x: {grid: false, type: "band"},
 		marks: [
-			Plot.dot(graphStats.detailedFireChanceDist, {x: "Fire Stack", y: "% Chance", symbol: "triangle2", stroke: (d) => d.SyncedCounter.count}),
+			Plot.dot(graphStats.detailedFireChanceDist, {x: "Fire Stack", y: "% Chance", symbol: "triangle2", stroke: (d) => d.SyncedCounter.count, fill: "dodgerblue"}),
 			Plot.text(graphStats.detailedFireChanceDist, {x: "Fire Stack", y: "% Chance", text: (d) => `${d.SyncedCounter.count}`, fill: (d) => d.SyncedCounter.count, dx: 15, lineAnchor: "middle"})
 		],
 		style: {color: "dodgerblue"},

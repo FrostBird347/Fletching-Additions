@@ -417,12 +417,12 @@ function genOutput(inputs) {
 			
 			if (fireStackCounters[detailedChance["% Chance"].toString() + "|" + detailedChance["Fire Stack"].toString()] == undefined) {
 				fireStackCounters[detailedChance["% Chance"].toString() + "|" + detailedChance["Fire Stack"].toString()] = {count: 1};
+				
+				detailedChance["SyncedCounter"] = fireStackCounters[detailedChance["% Chance"].toString() + "|" + detailedChance["Fire Stack"].toString()];
+				graphStats.detailedFireChanceDist.push(detailedChance);
 			} else {
 				fireStackCounters[detailedChance["% Chance"].toString() + "|" + detailedChance["Fire Stack"].toString()].count++;
 			}
-			detailedChance["SyncedCounter"] = fireStackCounters[detailedChance["% Chance"].toString() + "|" + detailedChance["Fire Stack"].toString()];
-			
-			graphStats.detailedFireChanceDist.push(detailedChance);
 		}
 	}
 	graphStats.nameLengthDist.push(outputName.length);
@@ -533,7 +533,7 @@ function realStart() {
 		x: {grid: false, type: "band"},
 		marks: [
 			Plot.dot(graphStats.detailedFireChanceDist, {x: "Fire Stack", y: "% Chance", symbol: "triangle2", stroke: (d) => d.SyncedCounter.count, fill: "dodgerblue"}),
-			Plot.text(graphStats.detailedFireChanceDist, {x: "Fire Stack", y: "% Chance", text: (d) => `${d.SyncedCounter.count}`, fill: (d) => d.SyncedCounter.count, dx: 15, lineAnchor: "middle"})
+			Plot.text(graphStats.detailedFireChanceDist, {x: "Fire Stack", y: "% Chance", text: (d) => `${d.SyncedCounter.count}`, fill: (d) => d.SyncedCounter.count, dx: 15, lineAnchor: "middle", opacity: 0.75})
 		],
 		style: {color: "dodgerblue"},
 		color: {scheme: "Cool"},

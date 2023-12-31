@@ -535,11 +535,47 @@ function realStart() {
 			Plot.dot(graphStats.detailedFireChanceDist, {x: "Fire Stack", y: "% Chance", symbol: "triangle2", stroke: (d) => d.SyncedCounter.count, fill: "dodgerblue"}),
 			Plot.text(graphStats.detailedFireChanceDist, {x: "Fire Stack", y: "% Chance", text: (d) => `${d.SyncedCounter.count}`, fill: (d) => d.SyncedCounter.count, dx: 15, lineAnchor: "middle", opacity: 0.75})
 		],
-		style: {color: "dodgerblue"},
 		color: {scheme: "Cool"},
+		style: {color: "dodgerblue"},
 		document: (new JSDOM(`...`)).window.document,
 	})
 	savePlot(detailedFireChancePlot, "Fire Chance");
+	
+	//Fire Stack output graph (unrelated to the item combinations above)
+	let fireStackFormula = [];
+	for (let i = 0; i <= stats.mostFireChances / 0.005; i++) {
+		let x = 0.5 + (i * 0.005);
+		let newStack = {
+			stackRaw: x,
+			//Thanks to https://tools.softinery.com/CurveFitter/ for the 2 burnTime curves below
+			//y=-0.18466x^{4}+2.48169x^{3}-8.9517x^{2}+13.3603x-1.00379
+			time: -0.18466 * Math.pow(x, 4) + 2.48169 * Math.pow(x, 3) - 8.9517 * Math.pow(x, 2) + 13.3603 * x + 1.00379,
+			stackGroup: Math.round(x),
+			hasMarker: (i) % 200 == 0
+		};
+		if (x > 6.977) {
+			//-12.32896+10.61645*x
+			newStack.time = -12.32896 + 10.61645 * x;
+		}
+		
+		fireStackFormula.push(newStack);
+	}
+	let fireStackFormulaPlot = Plot.plot({
+		inset: 0,
+		grid: true,
+		x: {label: "Fire Stack"},
+		y: {label: "Burn Time (seconds)"},
+		marks: [
+			Plot.areaY(fireStackFormula, {x: "stackRaw", y: "time", fill: "stackGroup", fillOpacity: 0.3, strokeWidth: 1, stroke: "stackGroup"}),
+			Plot.line(fireStackFormula, {x: "stackRaw", y: "time", stroke: "stackGroup"}),
+			Plot.text(fireStackFormula, {filter: "hasMarker", x: "stackRaw", y: "time", text: "time", dy: -6, lineAnchor: "bottom"}),
+			Plot.dot(fireStackFormula, {filter: "hasMarker", x: "stackRaw", y: "time", symbol: "circle"})
+		],
+		color: {scheme: "Turbo"},
+		style: {color: "dodgerblue"},
+		document: (new JSDOM(`...`)).window.document,
+	});
+	savePlot(fireStackFormulaPlot, "Fire Stack Formula");
 	
 	//re-enable console.log
 	console.log = tempLog;

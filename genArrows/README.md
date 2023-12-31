@@ -14,6 +14,8 @@
 
 ![Maximum Fire Stacks](./Stats_MaximumFireStack.svg)
 
+![Fire Stack Formula](./Stats_FireStackFormula.svg)
+
 ![Name Length](./Stats_NameLength.svg)
 
 ![Item Output Amount](./Stats_ItemOutputAmount.svg)

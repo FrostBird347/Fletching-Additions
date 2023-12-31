@@ -29,6 +29,7 @@ let graphStats = {
 	damageMultDist: [],
 	itemOutputDist: []
 }
+let fireStackCounters = [];
 
 //----------
 //Functions
@@ -413,6 +414,14 @@ function genOutput(inputs) {
 			detailedChance["% Chance"] -= 1;
 			detailedChance["% Chance"] *= 100;
 			detailedChance["Fire Stack"] += 1;
+			
+			if (fireStackCounters[detailedChance["% Chance"].toString() + "|" + detailedChance["Fire Stack"].toString()] == undefined) {
+				fireStackCounters[detailedChance["% Chance"].toString() + "|" + detailedChance["Fire Stack"].toString()] = {count: 1};
+			} else {
+				fireStackCounters[detailedChance["% Chance"].toString() + "|" + detailedChance["Fire Stack"].toString()].count++;
+			}
+			detailedChance["SyncedCounter"] = fireStackCounters[detailedChance["% Chance"].toString() + "|" + detailedChance["Fire Stack"].toString()];
+			
 			graphStats.detailedFireChanceDist.push(detailedChance);
 		}
 	}
@@ -519,7 +528,17 @@ function realStart() {
 	genPlot(graphStats.gravityMultDist, "Gravity Multiplier");
 	genPlot(graphStats.itemOutputDist, "Item Output Amount");
 	//non-historgram plot
-	let detailedFireChancePlot = Plot.dot(graphStats.detailedFireChanceDist, {x: "Fire Stack", y: "% Chance", symbol: "triangle2"}).plot({y: {grid: true, domain: [0, 100]}, x: {type: "band", grid:false}, style: {color: "dodgerblue"}, document: (new JSDOM(`...`)).window.document});
+	let detailedFireChancePlot = Plot.plot({
+		y: {grid: true, domain: [0, 100]},
+		x: {grid: false, type: "band"},
+		marks: [
+			Plot.dot(graphStats.detailedFireChanceDist, {x: "Fire Stack", y: "% Chance", symbol: "triangle2", stroke: (d) => d.SyncedCounter.count}),
+			Plot.text(graphStats.detailedFireChanceDist, {x: "Fire Stack", y: "% Chance", text: (d) => `${d.SyncedCounter.count}`, fill: (d) => d.SyncedCounter.count, dx: 15, lineAnchor: "middle"})
+		],
+		style: {color: "dodgerblue"},
+		color: {scheme: "Cool"},
+		document: (new JSDOM(`...`)).window.document,
+	})
 	savePlot(detailedFireChancePlot, "Fire Chance");
 	
 	//re-enable console.log

@@ -59,10 +59,11 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 		SHOW_FIREWORK_SPARKS = DataTracker.registerData(CustomArrowEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 	}
 
-	//nbt
+	//Nbt stuff
 	private NbtCompound itemNbt = new NbtCompound();
 	private static final TrackedData<NbtCompound> ITEM_NBT;
 	private boolean clientHasNbt = false;
+	NbtList gameFlags = new NbtList();
 
 	//These values are not accessed via nbt for peformance reasons (I assume it's a bad idea to access nbt values each tick)
 	private float flySpeedMult = 1;
@@ -74,8 +75,6 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 	private boolean isSensor = false;
 	private boolean hasFirework = false;
 	private ArrayList<ParticleEffect> particles = new ArrayList<ParticleEffect>();
-	//This list is more of a pain to extract than I expected, so I am just saving it here
-	NbtList gameFlags = new NbtList();
 	
 	//Other stuff not directly related to nbt
 	Vec3d realVel = new Vec3d(0, 0, 0);
@@ -88,7 +87,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 	int echoDist = 1;
 	private final EntityGameEventHandler<VibrationListener> vibrationListenerEventHandler = new EntityGameEventHandler<VibrationListener>(new VibrationListener(new EntityPositionSource(this, 0f), 128, this, (VibrationListener.Vibration)null, 0f, 0));
 	Vec3i lastBlockHitDir = new Vec3i(0, 0, 0);
-	//echoLink returning/returned
+	//echoLink returning/returned, 
 	boolean[] tempGlobalFlags = new boolean[] {false};
 
 	public CustomArrowEntity(EntityType<? extends CustomArrowEntity> entityType, World world) {
@@ -111,7 +110,6 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 	public boolean reallyOnGround() {
 		return (this.isOnGround() || this.inGround);
 	}
-
 
 	public void swapToRealVel() {
 		swapToRealVel(true);
@@ -374,7 +372,6 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 			}
 
 			Vec3d targetDir = new Vec3d((double)targetPos.getX() - this.getX(), (double)targetPos.getY() - this.getY(), (double)targetPos.getZ() - this.getZ());
-			double targetDist = targetDir.length();
 			targetDir = targetDir.normalize();
 			Vec3d moveMult = new Vec3d(1, 1, 1);
 
@@ -448,7 +445,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 		if (breaksWhenWet) {
 			this.playSound(SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 0.25f, 1.2f / (this.random.nextFloat() * 0.2f + 0.9f));
 			if (!this.world.isClient) {
-				this.kill();
+				this.discard();
 			}
 		}
 		super.extinguish();
@@ -477,7 +474,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 		}
 
 		ItemStack stack = new ItemStack(ItemManager.CUSTOM_ARROW);
-		stack.setNbt(itemNbt);
+		stack.setNbt(itemNbt.copy());
 		return stack;
 	}
 
@@ -496,11 +493,6 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 		} else {
 			Vec3d vel = this.getVelocity();
 			this.world.addFireworkParticle(this.getX(), this.getY(), this.getZ(), vel.x, vel.y, vel.z, fireworkExplosion);
-		}
-
-		if (fireworkExplosion.asString().equals("{Explosions:[{}]}")) {
-			MainMod.LOGGER.error("Explosion data empty!");
-			MainMod.LOGGER.error("Maybe there wasn't enough time for the server to send the arrow's nbt data?");
 		}
 	}
 
@@ -662,7 +654,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 		} else {
 			serverSourcePos = new Vec3d(this.getX(), this.getY(), this.getZ());
 		}
-
+		
 		this.world.sendEntityStatus(this, (byte)1);
 	}
 

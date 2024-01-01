@@ -554,8 +554,8 @@ function realStart() {
 			hasMarker: (i) % 200 == 0
 		};
 		if (x > 6.977) {
-			//-12.32896+10.61645*x
-			newStack.time = -12.32896 + 10.61645 * x;
+			//-10.32896+10.61645*x
+			newStack.time = -10.32896 + 10.61645 * x;
 		}
 		
 		fireStackFormula.push(newStack);

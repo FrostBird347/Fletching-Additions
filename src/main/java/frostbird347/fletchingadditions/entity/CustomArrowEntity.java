@@ -615,8 +615,8 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 			double burnTime = -0.18466 * Math.pow(shiftedFireHits, 4) + 2.48169 * Math.pow(shiftedFireHits, 3) - 8.9517 * Math.pow(shiftedFireHits, 2) + 13.3603 * shiftedFireHits + 1.00379;
 			//We have to switch to a difference equation after the one above peaks
 			if (shiftedFireHits > 6.977) {
-				//-12.32896+10.61645*x
-				burnTime = -12.32896 + 10.61645 * shiftedFireHits;
+				//-10.32896+10.61645*x
+				burnTime = -10.32896 + 10.61645 * shiftedFireHits;
 			}
 
 			//Set the entity on fire

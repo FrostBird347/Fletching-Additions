@@ -437,7 +437,7 @@ function genPlot(dataset, name) {
 function savePlot(plot, name) {
 	plot.setAttribute("xmlns", "http://www.w3.org/2000/svg");
 	plot.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-	fs.writeFileSync("./Stats_" + name.replaceAll(" ", "") + ".svg", plot.outerHTML);
+	fs.writeFileSync("./Stats_" + name.replaceAll(" ", "") + ".svg", plot.outerHTML.replaceAll("&nbsp;", " "));
 }
 
 //----------
@@ -533,7 +533,8 @@ function realStart() {
 		x: {grid: false, type: "band"},
 		marks: [
 			Plot.dot(graphStats.detailedFireChanceDist, {x: "Fire Stack", y: "% Chance", symbol: "triangle2", stroke: (d) => d.SyncedCounter.count, fill: "dodgerblue"}),
-			Plot.text(graphStats.detailedFireChanceDist, {x: "Fire Stack", y: "% Chance", text: (d) => `${d.SyncedCounter.count}`, fill: (d) => d.SyncedCounter.count, dx: 15, lineAnchor: "middle", opacity: 0.75})
+			Plot.text(graphStats.detailedFireChanceDist, {x: "Fire Stack", y: "% Chance", text: (d) => `${d.SyncedCounter.count}`, fill: (d) => d.SyncedCounter.count, dx: 30, lineAnchor: "middle", textAnchor: "end", opacity: 0.75}),
+			Plot.text(graphStats.detailedFireChanceDist, {x: "Fire Stack", y: "% Chance", text: (d) => `${d["% Chance"].toPrecision(4)}%` , fill: (d) => d.SyncedCounter.count, dx: -10, lineAnchor: "middle", textAnchor: "end", opacity: 0.75})
 		],
 		color: {scheme: "Cool"},
 		style: {color: "dodgerblue"},

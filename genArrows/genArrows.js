@@ -3,6 +3,7 @@ const csv = require("csv-parse/sync");
 const fs = require('fs');
 const execFileSync = require('child_process').execFileSync;
 const JSDOM = require("jsdom").JSDOM;
+var prependAOrAn = require('indefinite');
 let Plot;
 const dyes = ["White", "Light gray", "Gray", "Black", "Brown", "Red", "Orange", "Yellow", "Lime", "Green", "Cyan", "Light blue", "Blue", "Purple", "Magenta", "Pink"];
 
@@ -338,6 +339,18 @@ function genOutput(inputs) {
 	} else if (overiddenPartialName != undefined) {
 		outputName = overiddenPartialName;
 	}
+	//Replace a with an if nessecary
+	if (outputName.toLowerCase().startsWith("A ")) {
+		outputName = "A" + prependAOrAn(outputName.split(" ")[1]).slice(1) + outputName.replace("A " + outputName.split(" ")[1], "");
+	}
+	let outputWords = (outputName).split(" ");
+	for (let iW = 0; iW < outputWords.length; iW++) {
+		if (outputWords[iW - 1] == "a") {
+			outputWords[iW - 1] = prependAOrAn(outputWords[iW]).split(" ")[0];
+		}
+	}
+	outputName = outputWords.join(" ");
+
 	outputNBT.display.Name = JSON.stringify([{text:outputName, italic: false}]);
 	
 	/*outputNBT.display.Lore = ['[{"text":"","italic":false}]'];

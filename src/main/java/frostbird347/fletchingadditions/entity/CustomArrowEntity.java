@@ -15,6 +15,8 @@ import net.minecraft.entity.damage.ProjectileDamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
@@ -609,6 +611,9 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 		swapToRealVel();
 		super.onEntityHit(entityHitResult);
 
+		//Get the entity that was hit
+		Entity target = entityHitResult.getEntity();
+
 		//Process fireChance
 		NbtList fireChances = itemNbt.getList("fireChance", NbtElement.FLOAT_TYPE);
 		int fireHits = 0;
@@ -632,7 +637,6 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 			}
 
 			//Set the entity on fire
-			Entity target = entityHitResult.getEntity();
 			target.setOnFireFor((int)Math.round(burnTime));
 			
 			//Use soul flames if the arrow is also on fire (from lava/fire or the flame enchant), if https://modrinth.com/mod/on-soul-fire is installed
@@ -641,6 +645,23 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 				ModCompatManager.ON_SOUL_FIRE.executeAction("applySoulFlame", new Object[] { (Object)target });
 			}
 			MainMod.LOGGER.info(Integer.toString(fireHits) + ":" + Double.toString(burnTime));
+		}
+
+		//Process effects
+		if (itemNbt.contains("effects", NbtElement.LIST_TYPE)) {
+			NbtList effectList = itemNbt.getList("effects", NbtElement.COMPOUND_TYPE);
+			for (int i = 0; i < effectList.size(); i++) {
+				NbtCompound effectInfo = effectList.getCompound(i);
+				int effectDuration = effectInfo.getInt("duration");
+				int effectAmplifier = effectInfo.getInt("amplifier");
+				Identifier effectId = Identifier.tryParse(effectInfo.getString("id"));
+				if (effectId != null) {
+					StatusEffect effect = (StatusEffect)Registry.STATUS_EFFECT.get(effectId);
+					if (effect != null && target instanceof LivingEntity && target.isAlive()) {
+						((LivingEntity)target).addStatusEffect(new StatusEffectInstance(effect, effectDuration * 20, effectAmplifier));
+					}
+				}
+			}
 		}
 	}
 

@@ -154,7 +154,7 @@ function parseItem(rawItem) {
 				item.fireChance.push(new nbt.Float(currentStat[1]));
 				break;
 			case "applyEffect":
-				item.effects.push({ id: currentStat[1], duration: new nbt.Int(currentStat[2]) });
+				item.effects.push({ id: currentStat[1], duration: new nbt.Int(currentStat[2]), amplifier: new nbt.Int(currentStat[3]) });
 				break;
 			case "replaceTextures":
 			case "partialNameIsFull":

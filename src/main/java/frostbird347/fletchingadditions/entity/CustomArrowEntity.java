@@ -100,11 +100,23 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 
 	public CustomArrowEntity(World world, double x, double y, double z) {
 		super(EntityManager.CUSTOM_ARROW, x, y, z, world);
-		
+	}
+
+	public CustomArrowEntity(World world, double x, double y, double z, ItemStack stack) {
+		this(world, x, y, z);
+		initFromStack(stack);
+	}
+
+	public CustomArrowEntity(World world, LivingEntity owner, ItemStack stack) {
+		this(world, owner);
+		initFromStack(stack);
 	}
 
 	public void initFromStack(ItemStack stack) {
 		initFromNbt(stack.getNbt().copy());
+		if (!this.world.isClient) {
+			this.dataTracker.set(ITEM_NBT, itemNbt.copy());
+		}
 	}
 
 	public boolean reallyOnGround() {

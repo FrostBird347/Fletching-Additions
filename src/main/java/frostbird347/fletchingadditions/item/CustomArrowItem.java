@@ -17,14 +17,12 @@ public class CustomArrowItem extends ArrowItem {
 
 	@Override
 	public PersistentProjectileEntity createArrow(World world, ItemStack stack, LivingEntity shooter) {
-		CustomArrowEntity customArrowEntity = new CustomArrowEntity(world, shooter);
-		customArrowEntity.initFromStack(stack);
+		CustomArrowEntity customArrowEntity = new CustomArrowEntity(world, shooter, stack);
 		return customArrowEntity;
 	}
 
 	public PersistentProjectileEntity createArrow(World world, ItemStack stack, Position position) {
-		CustomArrowEntity customArrowEntity = new CustomArrowEntity(world, position.getX(), position.getY(), position.getZ());
-		customArrowEntity.initFromStack(stack);
+		CustomArrowEntity customArrowEntity = new CustomArrowEntity(world, position.getX(), position.getY(), position.getZ(), stack);
 		customArrowEntity.serverSourcePos = new Vec3d(position.getX(), position.getY(), position.getZ());
 		return customArrowEntity;
 	}

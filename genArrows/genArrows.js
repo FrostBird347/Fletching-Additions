@@ -339,7 +339,7 @@ function genOutput(inputs) {
 	} else if (overiddenPartialName != undefined) {
 		outputName = overiddenPartialName;
 	}
-	//Replace a with an if nessecary
+	//Replace a with an to improve grammar
 	if (outputName.toLowerCase().startsWith("A ")) {
 		outputName = "A" + prependAOrAn(outputName.split(" ")[1]).slice(1) + outputName.replace("A " + outputName.split(" ")[1], "");
 	}

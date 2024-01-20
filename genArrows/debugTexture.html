@@ -92,21 +92,25 @@
 						switch (iY % 4) {
 							case 0:
 								cContext.fillStyle = "#ea4335";
+								cContext.fillRect(xOffset + 16, yOffset, 1, 1);
 								break;
 							case 1:
 								cContext.fillStyle = "#4285f4";
+								cContext.fillRect(xOffset + 16, yOffset + 1, 1, 1);
 								break;
 							case 2:
 								cContext.fillStyle = "#34a853";
+								cContext.fillRect(xOffset + 16, yOffset + 2, 1, 1);
 								break;
 							case 3:
 								cContext.fillStyle = "#fbbc04";
+								cContext.fillRect(xOffset + 16, yOffset + 3, 1, 1);
 								break;
 							default:
 								console.error("something is VERY wrong, I don't know how this could ever get triggered");
 						}
 						
-						cContext.fillRect(xOffset + 5, yOffset, 12, 4);
+						cContext.fillRect(xOffset + 5, yOffset, 11, 4);
 						
 						let xPos = iX.toString(16).padStart(2, "0").split("");
 						xPos[0] = parseInt(xPos[0], 16);

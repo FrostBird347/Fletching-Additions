@@ -11,6 +11,8 @@ import net.minecraft.util.Identifier;
 
 public class FletchingTableScreen extends HandledScreen<FletchingTableScreenHandler> {
 	private static final Identifier GUI_TEXTURE = new Identifier("fletching-additions", "textures/gui/container/fletching.png");
+	//Coordinates of each slot to cover when an item is present
+	private static final int[] slotHidePos = new int[] {44, 17, 44, 35, 44, 53, 80, 35};
 
 	public FletchingTableScreen(FletchingTableScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(handler, inventory, title);
@@ -24,6 +26,19 @@ public class FletchingTableScreen extends HandledScreen<FletchingTableScreenHand
 		int x = (width - backgroundWidth) / 2;
 		int y = (height - backgroundHeight) / 2;
 		drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight);
+		
+		//Display invalid output
+		if (this.getScreenHandler() != null && this.getScreenHandler().displayOutputWarning()) {
+			drawTexture(matrices, x + 99, y + 33, 176, 0, 28, 21);
+		}
+
+		//Hide slot texture when it isn't empty
+		boolean[] slotsToHide = this.getScreenHandler().slotGraphicsToHide();
+		for (int i = 0; i < slotsToHide.length; i++) {
+			if (slotsToHide[i]) {
+				drawTexture(matrices, x + slotHidePos[i * 2], y + slotHidePos[i * 2 + 1], 176, 21, 16, 16);
+			}
+		}
 	}
  
 	@Override

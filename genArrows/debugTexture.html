@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<script>
+			let hexFontUrls = [
+				"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAQAAAAD+Fb1AAAAE0lEQVR42mP4DwEMDCACgwGWAgDfUhnnMWKuGQAAAABJRU5ErkJggg==",
+				"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAQAAAAD+Fb1AAAAE0lEQVQIW2P4DwQMEIDOAEmBmADyMQ3zgUO2PQAAAABJRU5ErkJggg==",
+				"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAQAAAAD+Fb1AAAAE0lEQVQIW2P4DwQMMABlwimIJADuNQ3zHKf0LwAAAABJRU5ErkJggg==",
+				"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAQAAAAD+Fb1AAAAE0lEQVQIW2P4DwYMEABlQEVgUgBD7hHvC4Bq8AAAAABJRU5ErkJggg==",
+				"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAQAAAAD+Fb1AAAAFklEQVQIW2P4/58BAkAMMOc/GCCJAgAAMg3zpTrphwAAAABJRU5ErkJggg==",
+				"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAQAAAAD+Fb1AAAAFElEQVR42mP4DwEMDGACAqBMmAgAaMkP8Qmy2VsAAAAASUVORK5CYII=",
+				"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAQAAAAD+Fb1AAAAFUlEQVR42mP4/58BAv6DAZgBwXARACwGEe/xKCMCAAAAAElFTkSuQmCC",
+				"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAEElEQVQIW2P4jwQYkAHxAgD4dRfpS94NnQAAAABJRU5ErkJggg==",
+				"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAQAAAAD+Fb1AAAAFElEQVR42mNgYPgPAmCKAYMBohgAlZwV6z765XoAAAAASUVORK5CYII=",
+				"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAQAAAAD+Fb1AAAAFUlEQVR42mP4DwEMDCACxoCKMEBEAOFQGOgWAx0BAAAAAElFTkSuQmCC",
+				"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAEklEQVR4AWP4jwoYYAJwmrAKANrLOcei+us1AAAAAElFTkSuQmCC",
+				"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAF0lEQVQIW2P4DwUMMADjwAVhKjAEYDoACYEj3bW5lMkAAAAASUVORK5CYII=",
+				"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAQAAAAD+Fb1AAAAFElEQVR4XmP4DwEMDCACBFEYYCkAvnMX6da33hoAAAAASUVORK5CYII=",
+				"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAFUlEQVR4AWP4DwUMMADmIGhMAQwtAJvgH+EFX/tOAAAAAElFTkSuQmCC",
+				"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAQAAAAD+Fb1AAAAFklEQVQI12P4DwYMDAxgggHMgDJhUgBT3hHvRNylVQAAAABJRU5ErkJggg==",
+				"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAQAAAAD+Fb1AAAAFElEQVR42mP4DwEMDGACBKB8hAgAiagR7yiHiS0AAAAASUVORK5CYII="
+			];
+			let hexFontImgs = [];
+			for (let i = 0; i < hexFontUrls.length; i++) {
+				const img = new Image();
+				img.src = hexFontUrls[i];
+				hexFontImgs.push(img);
+			}
+			
+			function main() {
+				let cElem = document.body.firstElementChild;
+				let cContext = cElem.getContext("2d");
+				
+				for (let iX = 0; iX < 256; iX++) {
+					for (let iY = 0; iY < 256; iY++) {
+						let xOffset = iX * 16;
+						let yOffset = iY * 16;
+						
+						switch (iY % 4) {
+							case 0:
+								cContext.fillStyle = "#ea4335";
+								break;
+							case 1:
+								cContext.fillStyle = "#4285f4";
+								xOffset += 8;
+								break;
+							case 2:
+								cContext.fillStyle = "#34a853";
+								yOffset += 8;
+								break;
+							case 3:
+								cContext.fillStyle = "#fbbc04";
+								xOffset += 8;
+								yOffset += 8;
+								break;
+							default:
+								console.error("something is VERY wrong, I don't know how this could ever get triggered");
+						}
+						
+						cContext.fillRect(xOffset, yOffset, 8, 8);
+						
+						let xPos = iX.toString(16).padStart(2, "0").split("");
+						xPos[0] = parseInt(xPos[0], 16);
+						xPos[1] = parseInt(xPos[1], 16);
+						let yPos = iY.toString(16).padStart(2, "0").split("");
+						yPos[0] = parseInt(yPos[0], 16);
+						yPos[1] = parseInt(yPos[1], 16);
+						
+						cContext.drawImage(hexFontImgs[xPos[0]], xOffset, yOffset);
+						cContext.drawImage(hexFontImgs[xPos[1]], xOffset + 4, yOffset);
+						cContext.globalCompositeOperation = 'difference';
+						cContext.drawImage(hexFontImgs[yPos[0]], xOffset, yOffset + 4);
+						cContext.drawImage(hexFontImgs[yPos[1]], xOffset + 4, yOffset + 4);
+						cContext.globalCompositeOperation = 'source-over';
+						
+					}
+				}
+			}
+		</script>
+	</head>
+	<body onload="main()" style="background-color: slategray;">
+		<!-- 16*256 -->
+		<canvas width="4096" height="4096" style="image-rendering: pixelated"></canvas>
+	</body>
+</html>

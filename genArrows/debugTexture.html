@@ -31,8 +31,8 @@
 				let cElem = document.body.firstElementChild;
 				let cContext = cElem.getContext("2d");
 				
-				for (let iX = 0; iX < 256; iX++) {
-					for (let iY = 0; iY < 256; iY++) {
+				for (let iX = 0; iX < 32; iX++) {
+					for (let iY = 0; iY < 32; iY++) {
 						let xOffset = iX * 16;
 						let yOffset = iY * 16;
 						
@@ -79,7 +79,7 @@
 		</script>
 	</head>
 	<body onload="main()" style="background-color: slategray;">
-		<!-- 16*256 -->
-		<canvas width="4096" height="4096" style="image-rendering: pixelated"></canvas>
+		<!-- 16*32 -->
+		<canvas width="512" height="512" style="image-rendering: pixelated"></canvas>
 	</body>
 </html>

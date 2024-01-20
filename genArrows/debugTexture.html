@@ -28,6 +28,7 @@
 			}
 			
 			function main() {
+				//Item texture
 				let cElem = document.body.firstElementChild;
 				let cContext = cElem.getContext("2d");
 				
@@ -75,11 +76,62 @@
 						
 					}
 				}
+				
+				//Entity texture
+				cElem = document.getElementById("entityTexture");
+				cContext = cElem.getContext("2d");
+				
+				for (let iX = 0; iX < 256; iX++) {
+					for (let iY = 0; iY < 256; iY++) {
+						let xOffset = iX * 21;
+						let yOffset = iY * 5;
+						
+						cContext.fillStyle = "#000000";
+						cContext.fillRect(xOffset, yOffset, 5, 16);
+						
+						let xPos = iX.toString(16).padStart(2, "0").split("");
+						xPos[0] = parseInt(xPos[0], 16);
+						xPos[1] = parseInt(xPos[1], 16);
+						let yPos = iY.toString(16).padStart(2, "0").split("");
+						yPos[0] = parseInt(yPos[0], 16);
+						yPos[1] = parseInt(yPos[1], 16);
+						
+						cContext.drawImage(hexFontImgs[xPos[0]], xOffset, yOffset);
+						cContext.drawImage(hexFontImgs[xPos[1]], xOffset + 4, yOffset);
+						cContext.globalCompositeOperation = 'difference';
+						cContext.drawImage(hexFontImgs[yPos[0]], xOffset + 8, yOffset);
+						cContext.drawImage(hexFontImgs[yPos[1]], xOffset + 12, yOffset);
+						cContext.globalCompositeOperation = 'source-over';
+						
+						switch (iY % 4) {
+							case 0:
+								cContext.fillStyle = "#ea4335";
+								break;
+							case 1:
+								cContext.fillStyle = "#4285f4";
+								break;
+							case 2:
+								cContext.fillStyle = "#34a853";
+								break;
+							case 3:
+								cContext.fillStyle = "#fbbc04";
+								break;
+							default:
+								console.error("something is VERY wrong, I don't know how this could ever get triggered");
+						}
+						
+						cContext.fillRect(xOffset, yOffset + 4, 21, 1);
+						cContext.fillRect(xOffset + 20, yOffset, 1, 5);
+					}
+				}
 			}
 		</script>
 	</head>
 	<body onload="main()" style="background-color: slategray;">
 		<!-- 16*32 -->
-		<canvas width="512" height="512" style="image-rendering: pixelated"></canvas>
+		<canvas id="itemTexture" width="512" height="512" style="image-rendering: pixelated"></canvas>
+		<br>
+		<!-- 21x5 * 32 -->
+		<canvas id="entityTexture" width="5376" height="1280" style="image-rendering: pixelated"></canvas>
 	</body>
 </html>

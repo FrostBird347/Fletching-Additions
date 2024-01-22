@@ -12,7 +12,7 @@ import net.minecraft.util.Identifier;
 public class FletchingTableScreen extends HandledScreen<FletchingTableScreenHandler> {
 	private static final Identifier GUI_TEXTURE = new Identifier("fletching-additions", "textures/gui/container/fletching.png");
 	//Coordinates of each slot to cover when an item is present
-	private static final int[] slotHidePos = new int[] {44, 17, 44, 35, 44, 53, 80, 35};
+	private static final int[] slotHidePos = new int[] {44, 17, 44, 35, 44, 53, 80, 35, 134, 35};
 
 	public FletchingTableScreen(FletchingTableScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(handler, inventory, title);
@@ -36,7 +36,7 @@ public class FletchingTableScreen extends HandledScreen<FletchingTableScreenHand
 		boolean[] slotsToHide = this.getScreenHandler().slotGraphicsToHide();
 		for (int i = 0; i < slotsToHide.length; i++) {
 			if (slotsToHide[i]) {
-				drawTexture(matrices, x + slotHidePos[i * 2], y + slotHidePos[i * 2 + 1], 176, 21, 16, 16);
+				drawTexture(matrices, x + slotHidePos[i * 2], y + slotHidePos[(i * 2) + 1], 176, 21, 16, 16);
 			}
 		}
 	}

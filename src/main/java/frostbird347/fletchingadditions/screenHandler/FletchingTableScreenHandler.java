@@ -291,6 +291,7 @@ public class FletchingTableScreenHandler extends ScreenHandler {
 			!this.inputInventory.getStack(FletchingTableScreenHandler.ARROW_TIP_SLOT_INDEX).isEmpty(),
 			!this.inputInventory.getStack(FletchingTableScreenHandler.ARROW_STICK_SLOT_INDEX).isEmpty(),
 			!this.inputInventory.getStack(FletchingTableScreenHandler.ARROW_FINS_SLOT_INDEX).isEmpty(),
+			!this.inputInventory.getStack(FletchingTableScreenHandler.EFFECT_SLOT_INDEX).isEmpty(),
 			!this.outputInventory.getStack(FletchingTableScreenHandler.RESULT_SLOT_INDEX).isEmpty()
 		};
 	}

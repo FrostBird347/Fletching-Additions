@@ -470,7 +470,7 @@ function genOutput(inputs) {
 		}
 		fs.writeFileSync(outputFilePath.replace("../src/main/resources/data/fletching-additions/recipes/", "../src/main/resources/assets/fletching-additions/models/item/"), JSON.stringify(currentItemModel));
 
-		//If it has a rocket, make sure to add an alternate model without the tip
+		//If it has a rocket, make sure to add an alternate model without the fins
 		if (hasFireworkRocket) {
 			currentItemModel.textures.layer1 = currentItemModel.textures.layer2;
 			if (currentItemModel.textures.layer3 != undefined) {

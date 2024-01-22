@@ -13,11 +13,11 @@ Parsing...
 	stats missing:   	 minecraft:slime
 	fullName missing:	 minecraft:magma_cream
 	fullName missing:	 minecraft:ghast_tear
-	fullName missing:	 minecraft:quartz
-	fullName missing:	 minecraft:emerald
+	unknown type:	 minecraft:quartz
+	unknown type:	 minecraft:emerald
 	fullName missing:	 minecraft:phantom_membrane
 	fullName missing:	 minecraft:netherite_scrap
-	fullName missing:	 minecraft:chorus_fruit
+	unknown type:	 minecraft:chorus_fruit
 	fullName missing:	 twigs:pebble
 	fullName missing:	 twigs:roseate_seashell
 	fullName missing:	 twigs:opaline_seashell/ecologics:seashell
@@ -26,7 +26,7 @@ Parsing...
 	fullName missing:	 create:cogwheel
 	fullName missing:	 create:propeller
 	fullName missing:	 create:brass_hand
-	fullName missing:	 create:rose_quartz
+	unknown type:	 create:rose_quartz
 	fullName missing:	 farmersdelight:flint_knife
 	fullName missing:	 minecraft:pufferfish
 	fullName missing:	 minecraft:sugar_cane

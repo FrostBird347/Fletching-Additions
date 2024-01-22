@@ -32,6 +32,16 @@ let graphStats = {
 }
 let fireStackCounters = [];
 
+//Root item model
+let itemModelRoot = {
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "fletching-additions:item/unknown_arrow"
+	},
+	"overrides": []
+}
+let itemTextureLists = {"t": [], "s": [], "f": [], "e": []};
+
 //----------
 //Functions
 
@@ -64,16 +74,33 @@ function getAddOrEmpty(item, key, defValue, prependValue, appendValue) {
 	return "";
 }
 
+function encodeTextureDataToFloat(tipId, stickId, finId, effectId) {
+	const rawTextureDataBuffer = new ArrayBuffer(4);
+	const textureDataByteArray = new Uint8Array(rawTextureDataBuffer);
+	textureDataByteArray[0] = stickId + 1;
+	textureDataByteArray[1] = finId + 1;
+	textureDataByteArray[2] = tipId + 1;
+	textureDataByteArray[3] = effectId + 1;
+	textureDataFloat = new Float32Array(rawTextureDataBuffer);
+	return textureDataFloat[0];
+}
+
 function parseItem(rawItem) {
 	let item = {valid: false};
 	
 	if (!exists(rawItem[0])) { console.log("\titem missing:\t", rawItem); return item; };
 	item.id = rawItem[0];
+	if (!exists(rawItem[3])) { console.log("\tunknown type:\t", rawItem[0]); return item; };
+	
+	//Even assign invalid listed items texture IDs... as long as it has a name and type
+	if (itemTextureLists[rawItem[3]].indexOf(item.id) == -1 && item.id != "_") {
+		itemTextureLists[rawItem[3]].push(item.id);
+	}
+	
 	if (!exists(rawItem[1])) { console.log("\tfullName missing:\t", rawItem[0]); return item; };
 	item.fullName = rawItem[1];
 	if (!exists(rawItem[2])) { console.log("\tpartName missing:\t", rawItem[0]); return item; };
 	item.partName = rawItem[2];
-	if (!exists(rawItem[3])) { console.log("\tunknown type:\t", rawItem[0]); return item; };
 	
 	if (!exists(rawItem[4])) { console.log("\tcategories missing:\t", rawItem[0]); return item; };
 	let categories = rawItem[4].split(" ");
@@ -158,6 +185,18 @@ function parseItem(rawItem) {
 				item.effects.push({ id: currentStat[1], duration: new nbt.Int(currentStat[2]), amplifier: new nbt.Int(currentStat[3]) });
 				break;
 			case "replaceTextures":
+				itemModelRoot.overrides.push({
+					"predicate": {
+						"fletching-additions:texture_data": encodeTextureDataToFloat(0, 0, 0, (itemTextureLists[rawItem[3]].indexOf(item.id)))
+					},
+					"model": "fletching-additions:item/zzzzzzzzzz_autogen_" + item.id.replace("minecraft:", "").split(":").join("_")
+				});
+				fs.writeFileSync("../src/main/resources/assets/fletching-additions/models/item/zzzzzzzzzz_autogen_" + item.id.replace("minecraft:", "").split(":").join("_") + ".json", JSON.stringify({
+					"parent": "item/generated",
+					"textures": {
+						"layer0": "fletching-additions:item/" + item.id.replace("minecraft:", "").split(":").join("_") + "_arrow_part"
+					}
+				}));
 			case "partialNameIsFull":
 				item.genFlags.push(currentStat[0]);
 				break;
@@ -240,7 +279,7 @@ function checkCompat(tip, stick, fin, effect) {
 }
 
 function genOutput(inputs) {
-	let modelOverride = undefined;
+	let renderOverride = undefined;
 	let overiddenPartialName = undefined;
 	let tipID = 0, stickID = 1, finID = 2, effectID = 3;
 	let outputJSON = {type: "fletching-additions:fletching_recipe", outputItem: "fletching-additions:custom_arrow", outputAmount: 6};
@@ -303,7 +342,7 @@ function genOutput(inputs) {
 						outputNBT.fireChance.push(...inputs[i].fireChance);
 						break;
 					case "replaceTextures":
-						modelOverride = {modelType: inputs[i].modelType, modelTexture: inputs[i].modelTexture};
+						renderOverride = i;
 						break;
 					case "partialNameIsFull":
 						overiddenPartialName = inputs[i].partName;
@@ -383,12 +422,6 @@ function genOutput(inputs) {
 		}
 	}*/
 	
-	//console.log(outputName);
-	//console.log(inputs);
-	//console.log(outputNBT);
-	outputJSON.outputNbt = nbt.stringify(outputNBT);
-	//console.log(outputJSON);
-	
 	let outputFilePath = `../src/main/resources/data/fletching-additions/recipes/zzzzzzzzzz_autogen_${inputs[tipID].id.split(":")[1]}_${inputs[stickID].id.split(":")[1]}_${inputs[finID].id.split(":")[1]}`;
 	if (inputs[effectID].id != "_") {
 		outputFilePath += `_${inputs[effectID].id.split(":")[1]}`;
@@ -402,6 +435,44 @@ function genOutput(inputs) {
 	}
 	outputFilePath += appendString + ".json";
 	
+	//Custom texture stuff
+	if (renderOverride == undefined) {
+		
+		let textureData = encodeTextureDataToFloat(
+			itemTextureLists["t"].indexOf(inputs[tipID].id),
+			itemTextureLists["s"].indexOf(inputs[stickID].id),
+			itemTextureLists["f"].indexOf(inputs[finID].id),
+			itemTextureLists["e"].indexOf(inputs[effectID].id)
+		);
+		
+		let predicate = {
+			"fletching-additions:texture_data": textureData
+		}
+		itemModelRoot.overrides.push({
+			"predicate": predicate,
+			"model": "fletching-additions:item/" + outputFilePath.replace("../src/main/resources/data/fletching-additions/recipes/", "").replace(".json", "")
+		});
+		
+		outputNBT.itemTextureData = new nbt.Float(textureData);
+		
+		let currentItemModel = {
+			"parent": "item/generated",
+			"textures": {
+				"layer0": "fletching-additions:item/" + inputs[stickID].id.replace("minecraft:", "").split(":").join("_") + "_arrow_part",
+				"layer1": "fletching-additions:item/" + inputs[finID].id.replace("minecraft:", "").split(":").join("_") + "_arrow_part",
+				"layer2": "fletching-additions:item/" + inputs[tipID].id.replace("minecraft:", "").split(":").join("_") + "_arrow_part"
+			}
+		};
+		if (inputs[effectID].id != "_") {
+			currentItemModel.textures.layer3 = "fletching-additions:item/" + inputs[effectID].id.replace("minecraft:", "").split(":").join("_") + "_arrow_part"
+		}
+		fs.writeFileSync(outputFilePath.replace("../src/main/resources/data/fletching-additions/recipes/", "../src/main/resources/assets/fletching-additions/models/item/"), JSON.stringify(currentItemModel));
+	} else {
+		outputNBT.itemTextureData = new nbt.Float(encodeTextureDataToFloat(0, 0, 0, itemTextureLists[(["t", "s", "f", "e"])[renderOverride]].indexOf(inputs[renderOverride].id)));
+	}
+	
+	//Finally save the file
+	outputJSON.outputNbt = nbt.stringify(outputNBT);
 	fs.writeFileSync(outputFilePath, JSON.stringify(outputJSON));
 	
 	//More stats
@@ -526,6 +597,12 @@ function realStart() {
 			}
 		}
 	}
+	
+	//Make sure to sort predicate from lowest to highest, otherwise this horrible method won't work
+	itemModelRoot.overrides.sort((a,b) => a.predicate["fletching-additions:texture_data"] - b.predicate["fletching-additions:texture_data"]);
+	fs.writeFileSync("../src/main/resources/assets/fletching-additions/models/item/custom_arrow.json", JSON.stringify(itemModelRoot, null, "\t"));
+	
+	
 	console.log("Stats:", stats);
 	console.log("Saving graphs...");
 	//temporarily disable console.log, because it spams out a bunch of junk info and I don't know how to stop it

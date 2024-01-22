@@ -52,11 +52,8 @@ minecraft:magma_cream,,,e,,,
 minecraft:firework_star,Firework Arrow,Firework Tipped,t,noFire,inheritFireworkStarNBT@damageMult&0.125,_
 minecraft:ghast_tear,,,e,Wet,,
 minecraft:echo_shard,Recovery Arrow,Echo Finned,f,_,applyEffect&minecraft:darkness&4&1@particle&minecraft:sculk_charge_pop@echoLink,_
-minecraft:quartz,,,,,,
-minecraft:emerald,,,,,,
 minecraft:phantom_membrane,,,e,,,
 minecraft:netherite_scrap,,,t,,,
-minecraft:chorus_fruit,,,,,,
 twigs:pebble,,,t,,,
 twigs:roseate_seashell,,,t,,,
 twigs:opaline_seashell/ecologics:seashell,,,f,_,,
@@ -65,7 +62,6 @@ create:shaft,,,s,SturdyCore,outputCountMult&0.5,blockUp&create:shaft
 create:cogwheel,,,s,SturdyCore noHidesInfo,outputCountMult&0.5,blockUp&create:cogwheel
 create:propeller,,,f,noHidesInfo,outputCountMult&0.75,_
 create:brass_hand,,,t,noHidesInfo,outputCountMult&0.75,_
-create:rose_quartz,,,,,,
 farmersdelight:flint_knife,,,t,noHidesInfo noFire,outputCountMult&0.5,
 minecraft:pufferfish,,,t,,,
 minecraft:sugar_cane,,,s,noFire,,
@@ -75,3 +71,7 @@ _,_,_,e,_,_,_
 minecraft:sculk_sensor,Sculk Arrow,Sculk Finned,f,_,isSensor,_
 minecraft:carrot,Carrot Tipped Arrow,Carrot Tipped,t,noFire,damageMult&0.25,_
 minecraft:kelp,Wet Kelp Arrow,Kelp Finned,f,noFire Wet,flySpeed&0.75@damageMult&0.75@arrowDrift,_
+minecraft:quartz,,,,,,
+minecraft:emerald,,,,,,
+minecraft:chorus_fruit,,,,,,
+create:rose_quartz,,,,,,

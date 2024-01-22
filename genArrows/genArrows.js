@@ -281,6 +281,7 @@ function checkCompat(tip, stick, fin, effect) {
 function genOutput(inputs) {
 	let renderOverride = undefined;
 	let overiddenPartialName = undefined;
+	let hasFireworkRocket = false;
 	let tipID = 0, stickID = 1, finID = 2, effectID = 3;
 	let outputJSON = {type: "fletching-additions:fletching_recipe", outputItem: "fletching-additions:custom_arrow", outputAmount: 6};
 	let outputNBT = {display:{}};
@@ -361,6 +362,8 @@ function genOutput(inputs) {
 						console.log("\tunknown stat:    \t", inputs[i].statsPresent[iS]);
 						//execFileSync("/bin/sleep", ["2"]);
 				}
+			} else if (inputs[i].statsPresent[iS] == "inheritFireworkNBT") {
+				hasFireworkRocket = true;
 			}
 		}
 	}
@@ -444,7 +447,6 @@ function genOutput(inputs) {
 			itemTextureLists["f"].indexOf(inputs[finID].id),
 			itemTextureLists["e"].indexOf(inputs[effectID].id)
 		);
-		
 		let predicate = {
 			"fletching-additions:texture_data": textureData
 		}
@@ -467,6 +469,35 @@ function genOutput(inputs) {
 			currentItemModel.textures.layer3 = "fletching-additions:item/" + inputs[effectID].id.replace("minecraft:", "").split(":").join("_") + "_arrow_part"
 		}
 		fs.writeFileSync(outputFilePath.replace("../src/main/resources/data/fletching-additions/recipes/", "../src/main/resources/assets/fletching-additions/models/item/"), JSON.stringify(currentItemModel));
+
+		//If it has a rocket, make sure to add an alternate model without the tip
+		if (hasFireworkRocket) {
+			currentItemModel.textures.layer1 = currentItemModel.textures.layer2;
+			if (currentItemModel.textures.layer3 != undefined) {
+				currentItemModel.textures.layer2 = currentItemModel.textures.layer3;
+				delete currentItemModel.textures.layer3;
+			} else {
+				delete currentItemModel.textures.layer2;
+			}
+
+			let newPath = outputFilePath.replace("../src/main/resources/data/fletching-additions/recipes/", "../src/main/resources/assets/fletching-additions/models/item/").replace(".json", "_norocket.json");
+			fs.writeFileSync(newPath, JSON.stringify(currentItemModel));
+
+			let newTextureData = encodeTextureDataToFloat(
+				itemTextureLists["t"].indexOf(inputs[tipID].id),
+				itemTextureLists["s"].indexOf(inputs[stickID].id),
+				-1,
+				itemTextureLists["e"].indexOf(inputs[effectID].id)
+			);
+			itemModelRoot.overrides.push({
+				"predicate": {
+					"fletching-additions:texture_data": newTextureData
+				},
+				"model": "fletching-additions:" + newPath.replace("../src/main/resources/assets/fletching-additions/models/", "").replace(".json", "")
+			});
+
+			outputNBT.afterRocketItemTextureData = new nbt.Float(newTextureData);
+		}
 	} else {
 		outputNBT.itemTextureData = new nbt.Float(encodeTextureDataToFloat(0, 0, 0, itemTextureLists[(["t", "s", "f", "e"])[renderOverride]].indexOf(inputs[renderOverride].id)));
 	}

@@ -568,6 +568,10 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 		}
 		itemNbt.remove("inheritFireworkNBT");
 
+		//Update texture
+		itemNbt.putFloat("itemTextureData", itemNbt.getFloat("afterRocketItemTextureData"));
+		itemNbt.remove("afterRocketItemTextureData");
+		
 		//Refresh gravity
 		gravityMult = 1;
 		if (itemNbt.contains("gravityMult", NbtElement.FLOAT_TYPE)) {

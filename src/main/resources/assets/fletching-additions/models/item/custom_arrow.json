@@ -6,6 +6,24 @@
 	"overrides": [
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 9.183689745645554e-41
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_stick_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 9.184250265031284e-41
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_bamboo_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 9.184390394877716e-41
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_iron_bars_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 9.220123505717999e-41
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_bamboo_feather"
@@ -141,6 +159,24 @@
 				"fletching-additions:texture_data": 9.54312280174487e-41
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_iron_bars_kelp"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8367239361444675e-40
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_stick_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8367799880830405e-40
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_bamboo_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8367940010676837e-40
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_iron_bars_firework_rocket_norocket"
 		},
 		{
 			"predicate": {
@@ -288,6 +324,24 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 2.7550788977243796e-40
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_stick_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.7551349496629526e-40
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_bamboo_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.755148962647596e-40
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_iron_bars_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 2.758666221793051e-40
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_stick_feather"
@@ -429,6 +483,24 @@
 				"fletching-additions:texture_data": 2.791022203334311e-40
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_iron_bars_kelp"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 3.673433859304292e-40
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_stick_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 3.673489911242865e-40
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_bamboo_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 3.673503924227508e-40
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_iron_bars_firework_rocket_norocket"
 		},
 		{
 			"predicate": {
@@ -576,6 +648,12 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 5.510213847387332e-40
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_iron_bars_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 5.513801171456004e-40
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_iron_bars_feather"
@@ -633,6 +711,24 @@
 				"fletching-additions:texture_data": 5.5460870880740475e-40
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_iron_bars_kelp"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 9.183563628783764e-40
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_stick_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 9.183619680722337e-40
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_bamboo_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 9.18363369370698e-40
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_iron_bars_firework_rocket_norocket"
 		},
 		{
 			"predicate": {
@@ -762,6 +858,12 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 1.5612118424766365e-39
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_grindstone_iron_bars_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 1.5615705748835037e-39
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_grindstone_iron_bars_feather"
@@ -801,6 +903,12 @@
 				"fletching-additions:texture_data": 1.564799166545308e-39
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_grindstone_iron_bars_kelp"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.653040332142306e-39
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_white_carpet_stick_firework_rocket_norocket"
 		},
 		{
 			"predicate": {
@@ -846,6 +954,12 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 1.7448758283002973e-39
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_light_gray_carpet_stick_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 1.7452345607071645e-39
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_light_gray_carpet_stick_feather"
@@ -885,6 +999,12 @@
 				"fletching-additions:texture_data": 1.748463152368969e-39
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_light_gray_carpet_stick_kelp"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8367113244582886e-39
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_gray_carpet_stick_firework_rocket_norocket"
 		},
 		{
 			"predicate": {
@@ -930,6 +1050,12 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 1.9285468206162798e-39
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_black_carpet_stick_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 1.928905553023147e-39
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_black_carpet_stick_feather"
@@ -969,6 +1095,12 @@
 				"fletching-additions:texture_data": 1.9321341446849513e-39
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_black_carpet_stick_kelp"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.020382316774271e-39
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_brown_carpet_stick_firework_rocket_norocket"
 		},
 		{
 			"predicate": {
@@ -1014,6 +1146,12 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 2.1122178129322622e-39
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_red_carpet_stick_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 2.1125765453391293e-39
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_red_carpet_stick_feather"
@@ -1053,6 +1191,12 @@
 				"fletching-additions:texture_data": 2.1158051370009337e-39
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_red_carpet_stick_kelp"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.2040533090902534e-39
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_orange_carpet_stick_firework_rocket_norocket"
 		},
 		{
 			"predicate": {
@@ -1098,6 +1242,12 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 2.2958888052482446e-39
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_yellow_carpet_stick_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 2.2962475376551118e-39
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_yellow_carpet_stick_feather"
@@ -1137,6 +1287,12 @@
 				"fletching-additions:texture_data": 2.299476129316916e-39
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_yellow_carpet_stick_kelp"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.3877243014062358e-39
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_lime_carpet_stick_firework_rocket_norocket"
 		},
 		{
 			"predicate": {
@@ -1182,6 +1338,12 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 2.479559797564227e-39
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_green_carpet_stick_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 2.4799185299710942e-39
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_green_carpet_stick_feather"
@@ -1221,6 +1383,12 @@
 				"fletching-additions:texture_data": 2.4831471216328986e-39
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_green_carpet_stick_kelp"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.5713952937222182e-39
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_cyan_carpet_stick_firework_rocket_norocket"
 		},
 		{
 			"predicate": {
@@ -1266,6 +1434,12 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 2.6632307898802095e-39
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_light_blue_carpet_stick_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 2.6635895222870766e-39
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_light_blue_carpet_stick_feather"
@@ -1305,6 +1479,12 @@
 				"fletching-additions:texture_data": 2.666818113948881e-39
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_light_blue_carpet_stick_kelp"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.7550662860382007e-39
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_blue_carpet_stick_firework_rocket_norocket"
 		},
 		{
 			"predicate": {
@@ -1350,6 +1530,12 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 2.846901782196192e-39
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_purple_carpet_stick_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 2.847260514603059e-39
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_purple_carpet_stick_feather"
@@ -1389,6 +1575,12 @@
 				"fletching-additions:texture_data": 2.8504891062648634e-39
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_purple_carpet_stick_kelp"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.938737278354183e-39
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_magenta_carpet_stick_firework_rocket_norocket"
 		},
 		{
 			"predicate": {
@@ -1434,6 +1626,12 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 3.030572774512174e-39
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_pink_carpet_stick_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 3.0309315069190415e-39
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_pink_carpet_stick_feather"
@@ -1473,6 +1671,24 @@
 				"fletching-additions:texture_data": 3.034160098580846e-39
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_pink_carpet_stick_kelp"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 3.1224082706701655e-39
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_stick_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 3.122413875864023e-39
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_bamboo_firework_rocket_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 3.122415277162487e-39
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_iron_bars_firework_rocket_norocket"
 		},
 		{
 			"predicate": {
@@ -1602,6 +1818,24 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 2.369356081135866e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_stick_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.3693572021746376e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_bamboo_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.3693574824343304e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_iron_bars_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 2.369428948656011e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_bamboo_feather_glowstone_dust"
@@ -1719,6 +1953,24 @@
 				"fletching-additions:texture_data": 2.3700032007666913e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_iron_bars_sculk_sensor_glowstone_dust"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.3877231803674644e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_stick_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.387724301406236e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_bamboo_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.3877245816659287e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_iron_bars_firework_rocket_glowstone_dust_norocket"
 		},
 		{
 			"predicate": {
@@ -1848,6 +2100,24 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 2.4060902795990626e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_stick_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.406091400637834e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_bamboo_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.406091680897527e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_iron_bars_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 2.406162026080436e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_stick_feather_glowstone_dust"
@@ -1971,6 +2241,24 @@
 				"fletching-additions:texture_data": 2.406737399229888e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_iron_bars_sculk_sensor_glowstone_dust"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.424457378830661e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_stick_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.4244584998694323e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_bamboo_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.424458780129125e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_iron_bars_firework_rocket_glowstone_dust_norocket"
 		},
 		{
 			"predicate": {
@@ -2100,6 +2388,12 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 2.4611929785923217e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_iron_bars_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 2.461264725073695e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_iron_bars_feather_glowstone_dust"
@@ -2151,6 +2445,24 @@
 				"fletching-additions:texture_data": 2.4618386969246825e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_iron_bars_sculk_sensor_glowstone_dust"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.5346599742202503e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_stick_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.534661095259022e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_bamboo_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.5346613755187146e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_iron_bars_firework_rocket_glowstone_dust_norocket"
 		},
 		{
 			"predicate": {
@@ -2262,6 +2574,12 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 2.6632310701399023e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_grindstone_iron_bars_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 2.663302816621276e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_grindstone_iron_bars_feather_glowstone_dust"
@@ -2295,6 +2613,12 @@
 				"fletching-additions:texture_data": 2.663876788472263e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_grindstone_iron_bars_sculk_sensor_glowstone_dust"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.681596768073036e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_white_carpet_stick_firework_rocket_glowstone_dust_norocket"
 		},
 		{
 			"predicate": {
@@ -2334,6 +2658,12 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 2.6999638673046345e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_light_gray_carpet_stick_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 2.700035613786008e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_light_gray_carpet_stick_feather_glowstone_dust"
@@ -2367,6 +2697,12 @@
 				"fletching-additions:texture_data": 2.7006095856369954e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_light_gray_carpet_stick_sculk_sensor_glowstone_dust"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.7183309665362327e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_gray_carpet_stick_firework_rocket_glowstone_dust_norocket"
 		},
 		{
 			"predicate": {
@@ -2406,6 +2742,12 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 2.736698065767831e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_black_carpet_stick_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 2.7367698122492044e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_black_carpet_stick_feather_glowstone_dust"
@@ -2439,6 +2781,12 @@
 				"fletching-additions:texture_data": 2.737343784100192e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_black_carpet_stick_sculk_sensor_glowstone_dust"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.755065164999429e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_brown_carpet_stick_firework_rocket_glowstone_dust_norocket"
 		},
 		{
 			"predicate": {
@@ -2478,6 +2826,12 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 2.7734322642310275e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_red_carpet_stick_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 2.773504010712401e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_red_carpet_stick_feather_glowstone_dust"
@@ -2511,6 +2865,12 @@
 				"fletching-additions:texture_data": 2.7740779825633883e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_red_carpet_stick_sculk_sensor_glowstone_dust"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.7917993634626257e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_orange_carpet_stick_firework_rocket_glowstone_dust_norocket"
 		},
 		{
 			"predicate": {
@@ -2550,6 +2910,12 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 2.810166462694224e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_yellow_carpet_stick_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 2.8102382091755974e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_yellow_carpet_stick_feather_glowstone_dust"
@@ -2583,6 +2949,12 @@
 				"fletching-additions:texture_data": 2.810812181026585e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_yellow_carpet_stick_sculk_sensor_glowstone_dust"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.828533561925822e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_lime_carpet_stick_firework_rocket_glowstone_dust_norocket"
 		},
 		{
 			"predicate": {
@@ -2622,6 +2994,12 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 2.8469006611574204e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_green_carpet_stick_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 2.846972407638794e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_green_carpet_stick_feather_glowstone_dust"
@@ -2655,6 +3033,12 @@
 				"fletching-additions:texture_data": 2.8475463794897813e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_green_carpet_stick_sculk_sensor_glowstone_dust"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.8652677603890187e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_cyan_carpet_stick_firework_rocket_glowstone_dust_norocket"
 		},
 		{
 			"predicate": {
@@ -2694,6 +3078,12 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 2.883634859620617e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_light_blue_carpet_stick_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 2.8837066061019903e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_light_blue_carpet_stick_feather_glowstone_dust"
@@ -2727,6 +3117,12 @@
 				"fletching-additions:texture_data": 2.884280577952978e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_light_blue_carpet_stick_sculk_sensor_glowstone_dust"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.902001958852215e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_blue_carpet_stick_firework_rocket_glowstone_dust_norocket"
 		},
 		{
 			"predicate": {
@@ -2766,6 +3162,12 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 2.9203690580838134e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_purple_carpet_stick_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 2.920440804565187e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_purple_carpet_stick_feather_glowstone_dust"
@@ -2799,6 +3201,12 @@
 				"fletching-additions:texture_data": 2.9210147764161743e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_purple_carpet_stick_sculk_sensor_glowstone_dust"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.9387361573154116e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_magenta_carpet_stick_firework_rocket_glowstone_dust_norocket"
 		},
 		{
 			"predicate": {
@@ -2838,6 +3246,12 @@
 		},
 		{
 			"predicate": {
+				"fletching-additions:texture_data": 2.95710325654701e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_pink_carpet_stick_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
 				"fletching-additions:texture_data": 2.9571750030283833e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_pink_carpet_stick_feather_glowstone_dust"
@@ -2871,6 +3285,24 @@
 				"fletching-additions:texture_data": 2.957748974879371e-38
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_pink_carpet_stick_sculk_sensor_glowstone_dust"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.975470355778608e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_stick_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.9754714768173796e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_bamboo_firework_rocket_glowstone_dust_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 2.9754717570770724e-38
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_iron_bars_firework_rocket_glowstone_dust_norocket"
 		},
 		{
 			"predicate": {

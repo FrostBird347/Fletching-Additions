@@ -14,8 +14,8 @@ import net.minecraft.util.math.Matrix3f;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3f;
 
-	public static final Identifier TEXTURE = new Identifier("textures/entity/projectiles/spectral_arrow.png");
 public class CustomArrowEntityRenderer extends EntityRenderer<CustomArrowEntity> {
+	public static final Identifier TEXTURE = new Identifier("fletching-additions:textures/entity/projectiles/custom_arrow.png");
 
 	public CustomArrowEntityRenderer(EntityRendererFactory.Context context) {
 		super(context);

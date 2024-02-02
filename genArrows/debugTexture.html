@@ -91,15 +91,15 @@
 				
 				for (let iY = 0; iY < 16; iY++) {
 					for (let iX = 0; (iY < 8 && iX < 20) || (iX < 12); iX++) {
-						let xOffset = iX * 45;
+						let xOffset = iX * 40;
 						let yOffset = (8 * 5) + (iY - 8) * 9;
-						let boxSizes = [[0, 7, 9], [7, 22, 9], [29, 7, 9], [36, 9, 9]];
+						let boxSizes = [[0, 8, 9], [8, 22, 9], [30, 10, 9], [25, 5, 8]];
 						let boxColours = ["#ea4335", "#4285f4", "#34a853", "#66a853"];
 						let currentIndex = ((iY - 8) * 12) + 160 + iX;
 						if (iY < 8) {
-							xOffset = iX * 27;
+							xOffset = iX * 24;
 							yOffset = iY * 5;
-							boxSizes = [[0, 4, 5], [4, 14, 5], [18, 4, 5], [22, 5, 5]];
+							boxSizes = [[0, 4, 5], [4, 14, 5], [18, 6, 5], [13, 5, 4]];
 							currentIndex = (iY * 20) + iX;
 						}
 						
@@ -114,22 +114,15 @@
 								cContext.fillRect(xOffset + boxSizes[iB][0], yOffset, boxSizes[iB][1], boxSizes[iB][2]);
 							}
 							
-							//Add darker tint for back stick pixels
-							//And also erase "unused" pixels (they might still be used, but they should remain empty)
+							//Add darker tint for the stick pixel in the back texture
 							//This is only done once per group
-							cContext.fillStyle = "#00000055";
-							if (iY < 8 && iB == 3) {
-								cContext.fillRect(xOffset + 17, yOffset + 2, 1, 1);
-								cContext.clearRect(xOffset + 13, yOffset, 5, 2);
-								cContext.clearRect(xOffset + 13, yOffset + 3, 5, 2);
-								cContext.clearRect(xOffset + 18, yOffset + 2, 4, 1);
-								cContext.clearRect(xOffset + 24, yOffset + 2, 1, 1);
-							} else {
-								cContext.fillRect(xOffset + 28, yOffset + 4, 1, 1);
-								cContext.clearRect(xOffset + 24, yOffset, 5, 4);
-								cContext.clearRect(xOffset + 24, yOffset + 5, 5, 4);
-								cContext.clearRect(xOffset + 29, yOffset + 4, 4, 1);
-								cContext.clearRect(xOffset + 40, yOffset + 4, 1, 1);
+							if (iB == 3) {
+								cContext.fillStyle = "#00000055";
+								if (iY < 8) {
+									cContext.fillRect(xOffset + 17, yOffset + 4, 1, 1);
+								} else {
+									cContext.fillRect(xOffset + 29, yOffset + 8, 1, 1);
+								}
 							}
 							
 							let currentIndexHex = currentIndex.toString(16).padStart(2, "0");
@@ -158,7 +151,7 @@
 		<!-- 16*32 -->
 		<canvas id="itemTexture" width="512" height="512" style="image-rendering: pixelated"></canvas>
 		<br>
-		<!-- (27*20 & 45*12)x(5*8 & 9*8) -->
-		<canvas id="entityTexture" width="540" height="112" style="image-rendering: pixelated"></canvas>
+		<!-- (24*20 & 40*12)x(5*8 & 9*8) -->
+		<canvas id="entityTexture" width="480" height="112" style="image-rendering: pixelated"></canvas>
 	</body>
 </html>

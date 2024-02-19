@@ -31,6 +31,10 @@ let graphStats = {
 	itemOutputDist: []
 }
 let fireStackCounters = [];
+let textureSlots = [[0, 0, 0]];
+for (let i = 0; i < 254; i++) {
+	textureSlots.push([1, 1, 1]);
+}
 
 //Root item model
 let itemModelRoot = {
@@ -92,6 +96,12 @@ function parseItem(rawItem) {
 	item.id = rawItem[0];
 	if (!exists(rawItem[3])) { console.log("\tunknown type:\t", rawItem[0]); return item; };
 	
+	//Make sure invalid entires are still marked out on the texture slots csv file
+	let _tempData = rawItem[6].split("&")[1];
+	if (!isNaN(parseFloat(_tempData)) && isFinite(_tempData)) {
+		textureSlots[parseFloat(_tempData)][({"t":0,"s":1,"f":2})[rawItem[3]]] = 2;
+	}
+	
 	//Even assign invalid listed items texture IDs... as long as it has a name and type
 	if (itemTextureLists[rawItem[3]].indexOf(item.id) == -1 && item.id != "_") {
 		itemTextureLists[rawItem[3]].push(item.id);
@@ -119,8 +129,8 @@ function parseItem(rawItem) {
 	}
 	
 	if (!exists(rawItem[6])) { console.log("\trenderMode missing:\t", rawItem[0]); return item; };
-	item.modelType = rawItem[6].split("&")[0];
-	item.modelTexture = rawItem[6].split("&")[1];
+	item.modelMode = rawItem[6].split("&")[0];
+	item.modelData = rawItem[6].split("&")[1];
 	
 	if (!exists(rawItem[5])) { console.log("\tstats missing:   \t", rawItem[0]); return item; };
 	//flags that will be processed by the game and not this script
@@ -312,8 +322,24 @@ function genOutput(inputs) {
 	outputJSON.outputAmount = Math.max(Math.round(outputJSON.outputAmount * getOrDefault(inputs[tipID], "outputCountMult", 1) * getOrDefault(inputs[stickID], "outputCountMult", 1) * getOrDefault(inputs[finID], "outputCountMult", 1) * getOrDefault(inputs[effectID], "outputCountMult", 1)), 1);
 	
 	outputNBT.gameFlags = [];
+	outputNBT.renderParts = [];
 	
 	for (let i = 0; i < fakeLength; i++) {
+		
+		//Add entity render data
+		if (inputs[i].modelMode != "none" && renderOverride == undefined) {
+			let newModelInfo = {mode: inputs[i].modelMode, data: inputs[i].modelData, type: ["t", "s", "f", "e"][i]};
+			
+			if (inputs[i].modelData.split("+").length != 1) {
+				inputs[i].modelData = inputs[i].modelData.split("+").reduce((sum, add) => parseInt(sum) + parseInt(add), 0).toString();
+			}
+			
+			if (inputs[i].modelMode == "texture" && textureSlots[inputs[i].modelData] != undefined) {
+				textureSlots[inputs[i].modelData][i] = 0;
+			}
+			
+			outputNBT.renderParts.push(newModelInfo);
+		}
 		
 		//Combine all game flags
 		outputNBT.gameFlags.push(...inputs[i].gameFlags);
@@ -344,6 +370,9 @@ function genOutput(inputs) {
 						break;
 					case "replaceTextures":
 						renderOverride = i;
+						let newModelData = inputs[i].modelData.split("+").reduce((sum, add) => parseInt(sum) + parseInt(add), 0).toString();
+						outputNBT.renderParts = [{mode: inputs[i].modelMode, data: newModelData, type: "tip"}, {mode: inputs[i].modelMode, data: newModelData, type: "stick"}, {mode: inputs[i].modelMode, data: newModelData, type: "fin"}];
+						textureSlots[newModelData] = [0, 0, 0];
 						break;
 					case "partialNameIsFull":
 						overiddenPartialName = inputs[i].partName;
@@ -579,7 +608,7 @@ function realStart() {
 				splitItems.push(JSON.parse(JSON.stringify(fullDataset[i])));
 
 				for (let iC = 0; iC < fullDataset[i].length; iC++) {
-					splitItems[iD][iC] = splitItems[iD][iC].replaceAll("[DYE]", dyes[iD]);
+					splitItems[iD][iC] = splitItems[iD][iC].replaceAll("[DYE]", dyes[iD]).replaceAll("[DYE_INDEX]", iD);
 				}
 
 				//Make sure to remove spaces for the item id as well as the texture/model id
@@ -701,4 +730,16 @@ function realStart() {
 	
 	//re-enable console.log
 	console.log = tempLog;
+	
+	console.log("Saving FreeTextureSlots.csv...");
+	let textureSlotsCsv = "id,t,s,f\n";
+	for (let iId = 0; iId < textureSlots.length; iId++) {
+		textureSlotsCsv += iId;
+		for (let iType = 0; iType < 3; iType++) {
+			textureSlotsCsv += ([", ", ",•", ",·"])[textureSlots[iId][iType]]
+		}
+		textureSlotsCsv += "\n"
+	}
+	fs.writeFileSync("FreeTextureSlots.csv", textureSlotsCsv);
+	
 }

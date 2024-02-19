@@ -23,54 +23,54 @@ Finally, damage mult only applies to the damage the arrow does directly, things 
 
 ModelType&TextureID
 Note that ModelType/TextureID are different depending on the item type (e.g ""Blaze"" stick and effect textures are different)"
-minecraft:flint,_,_,t,_,_,_
-minecraft:stick,_,_,s,noFire Stick,_,_
-minecraft:feather,_,_,f,noFire,_,_
-minecraft:glowstone_dust,_,Spectral,e,noWet,applyEffect&minecraft:glowing&10&1@particle&minecraft:instant_effect,_
-minecraft:blaze_rod,Blaze Arrow,Blaze,s,noWet noCold Fire,fireChance&0.05@fireChance&0.5@damageMult&1.125@drawSpeed&1.25@gravityMult&0.75@breaksWhenWet@blockHitActions&0.5&destroy&fletching-additions:blaze_crush&0.25&drop&minecraft:blaze_powder&1&fletching-additions:blaze_crush&0.25&doNothing&fletching-additions:blaze_impact@dynamicLightingIfPossible,_
-minecraft:prismarine_shard,Prismarine Arrow,Prismarine Finned,f,_,waterSpeed,_
-minecraft:bone,Bone Arrow,Bone,s,_,,_
-minecraft:amethyst_shard,Amethyst Arrow,Amethyst Tipped,t,_,damageMult&1.5@impactSoundIncreasePitchNoAngle@blockHitActions&1&doNothing&fletching-additions:crystal_impact@farSound,_
-minecraft:blaze_powder,Blaze Infused Arrow,Blaze Infused,e,noWet Fire,fireChance&0.05@fireChance&0.75,_
-minecraft:firework_rocket,Rocket Powered Arrow,Rocket Powered,f,noHidesInfo noFire,skipThisComment&gravityMult only applies after the firework duration. otherwise its 0@damageMult&1@drawSpeed&0.25@inheritFireworkNBT@gravityMult&1.25@flySpeed&2@drawMinMult&2,_
-minecraft:dried_kelp,Dried Kelp Arrow,Dried Kelp Finned,f,noFire,flySpeed&0.75@damageMult&0.75,_
-minecraft:lightning_rod,,,s,SturdyCore,,blockUp&minecraft:lightning_rod
-minecraft:bamboo,Bamboo Arrow,Bamboo,s,noFire,gravityMult&0.875@flySpeed&1.125@damageMult&0.875&drawSpeed&1.125,_
-minecraft:iron_bars,Iron Arrow,Iron,s,SturdyCore,gravityMult&1.75@flySpeed&0.5714285714@damageMult&1.75&drawSpeed&0.5714285714,blockUp&minecraft:iron_bars
-minecraft:torch,Flaming Arrow,Flaming,t,_,fireChance&0.25,_
-minecraft:soul_torch,Soul Flame Arrow,Soul Flame,t,_,fireChance&0.20@isSoulFire,_
-minecraft:pointed_dripstone,Dripstone Arrow,,t,,,
-minecraft:fire_charge,Fire Charged Arrow,Fire Charged,t,Fire noWet noCold,fireChance&1@fireChance&0.25,_
+minecraft:flint,_,_,t,_,_,texture&1
+minecraft:stick,_,_,s,noFire Stick,_,texture&1
+minecraft:feather,_,_,f,noFire,_,texture&1
+minecraft:glowstone_dust,_,Spectral,e,noWet,applyEffect&minecraft:glowing&10&1@particle&minecraft:instant_effect,none&
+minecraft:blaze_rod,Blaze Arrow,Blaze,s,noWet noCold Fire,fireChance&0.05@fireChance&0.5@damageMult&1.125@drawSpeed&1.25@gravityMult&0.75@breaksWhenWet@blockHitActions&0.5&destroy&fletching-additions:blaze_crush&0.25&drop&minecraft:blaze_powder&1&fletching-additions:blaze_crush&0.25&doNothing&fletching-additions:blaze_impact@dynamicLightingIfPossible,texture&2
+minecraft:prismarine_shard,Prismarine Arrow,Prismarine Finned,f,_,waterSpeed,texture&2
+minecraft:bone,Bone Arrow,Bone,s,_,,texture&5
+minecraft:amethyst_shard,Amethyst Arrow,Amethyst Tipped,t,_,damageMult&1.5@impactSoundIncreasePitchNoAngle@blockHitActions&1&doNothing&fletching-additions:crystal_impact@farSound,texture&2
+minecraft:blaze_powder,Blaze Infused Arrow,Blaze Infused,e,noWet Fire,fireChance&0.05@fireChance&0.75,none&
+minecraft:firework_rocket,Rocket Powered Arrow,Rocket Powered,f,noHidesInfo noFire,skipThisComment&gravityMult only applies after the firework duration. otherwise its 0@damageMult&1@drawSpeed&0.25@inheritFireworkNBT@gravityMult&1.25@flySpeed&2@drawMinMult&2,texture&162
+minecraft:dried_kelp,Dried Kelp Arrow,Dried Kelp Finned,f,noFire,flySpeed&0.75@damageMult&0.75,texture&4
+minecraft:lightning_rod,,,s,SturdyCore,,model&minecraft:lightning_rod
+minecraft:bamboo,Bamboo Arrow,Bamboo,s,noFire,gravityMult&0.875@flySpeed&1.125@damageMult&0.875&drawSpeed&1.125,texture&3
+minecraft:iron_bars,Iron Arrow,Iron,s,SturdyCore,gravityMult&1.75@flySpeed&0.5714285714@damageMult&1.75&drawSpeed&0.5714285714,model&minecraft:iron_bars
+minecraft:torch,Flaming Arrow,Flaming,t,_,fireChance&0.25,texture&3
+minecraft:soul_torch,Soul Flame Arrow,Soul Flame,t,_,fireChance&0.20@isSoulFire,texture&4
+minecraft:pointed_dripstone,Dripstone Arrow,,t,,,texture&161
+minecraft:fire_charge,Fire Charged Arrow,Fire Charged,t,Fire noWet noCold,fireChance&1@fireChance&0.25,texture&5
 minecraft:ice,,,t,Cold noFire,,
-minecraft:packed_ice,,,t,Cold,,
-minecraft:blue_ice,,,t,Cold,,
-minecraft:end_rod,,,s,SturdyCore,,
-minecraft:gunpowder,,,e,noFire noWet,,
-minecraft:slime,Slimy Arrow,Slimy,e,Sticky,,_
-minecraft:[DYE]_dye,[DYE] Arrow,[DYE] Arrow?,e,noWet HidesInfo,skipThisComment&dyes can be used to hide what a custom arrow is made of@replaceTextures@partialNameIsFull,_
-minecraft:magma_cream,,,e,,,
-minecraft:firework_star,Firework Arrow,Firework Tipped,t,noFire,inheritFireworkStarNBT@damageMult&0.125,_
-minecraft:ghast_tear,,,e,Wet,,
-minecraft:echo_shard,Recovery Arrow,Echo Finned,f,_,applyEffect&minecraft:darkness&4&1@particle&minecraft:sculk_charge_pop@echoLink,_
-minecraft:phantom_membrane,,,e,,,
-minecraft:netherite_scrap,,,t,,,
-twigs:pebble,,,t,,,
-twigs:roseate_seashell,,,t,,,
-twigs:opaline_seashell/ecologics:seashell,,,f,_,,
-twigs:bamboo_leaves,,,f,noFire,,
-create:shaft,,,s,SturdyCore,outputCountMult&0.5,blockUp&create:shaft
-create:cogwheel,,,s,SturdyCore noHidesInfo,outputCountMult&0.5,blockUp&create:cogwheel
-create:propeller,,,f,noHidesInfo,outputCountMult&0.75,_
-create:brass_hand,,,t,noHidesInfo,outputCountMult&0.75,_
-farmersdelight:flint_knife,,,t,noHidesInfo noFire,outputCountMult&0.5,
-minecraft:pufferfish,,,t,,,
-minecraft:sugar_cane,,,s,noFire,,
-minecraft:grindstone,Grindstone Arrow,Grindstone Attached to a,t,reqSturdyCore noHidesInfo,outputCountMult&0,blockUp&minecraft:grindstone
-minecraft:[DYE]_carpet,Harmless [DYE] Arrow,Soft,t,noFire reqStick noWet noHidesInfo,"skipThisComment&requires something sticky (or a regular stick) to prevent this from exploding the combination count, also noWet because it would be quite noisy if it was wet@damageMult&0@silent@flySpeed&0.75",_
-_,_,_,e,_,_,_
-minecraft:sculk_sensor,Sculk Arrow,Sculk Finned,f,_,isSensor,_
-minecraft:carrot,Carrot Tipped Arrow,Carrot Tipped,t,noFire,damageMult&0.25,_
-minecraft:kelp,Wet Kelp Arrow,Kelp Finned,f,noFire Wet,flySpeed&0.75@damageMult&0.75@arrowDrift,_
+minecraft:packed_ice,,,t,Cold,,texture&6
+minecraft:blue_ice,,,t,Cold,,texture&7
+minecraft:end_rod,,,s,SturdyCore,,model&minecraft:end_rod
+minecraft:gunpowder,,,e,noFire noWet,,none&
+minecraft:slime,Slimy Arrow,Slimy,e,Sticky,,tint&#00ff00
+minecraft:[DYE]_dye,[DYE] Arrow,[DYE] Arrow?,e,noWet HidesInfo,skipThisComment&dyes can be used to hide what a custom arrow is made of@replaceTextures@partialNameIsFull,texture&8+[DYE_INDEX]
+minecraft:magma_cream,,,e,,,none&
+minecraft:firework_star,Firework Arrow,Firework Tipped,t,noFire,inheritFireworkStarNBT@damageMult&0.125,texture&40
+minecraft:ghast_tear,,,e,Wet,,none&
+minecraft:echo_shard,Recovery Arrow,Echo Finned,f,_,applyEffect&minecraft:darkness&4&1@particle&minecraft:sculk_charge_pop@echoLink,texture&3
+minecraft:phantom_membrane,,,e,,,none&
+minecraft:netherite_scrap,,,t,,,texture&41
+twigs:pebble,,,t,,,texture&42
+twigs:roseate_seashell,,,t,,,texture&43
+twigs:opaline_seashell/ecologics:seashell,,,f,_,,texture&6
+twigs:bamboo_leaves,,,f,noFire,,texture&7
+create:shaft,,,s,SturdyCore,outputCountMult&0.5,model&create:shaft
+create:cogwheel,,,s,SturdyCore noHidesInfo,outputCountMult&0.5,model&create:cogwheel
+create:propeller,,,f,noHidesInfo,outputCountMult&0.75,texture&161
+create:brass_hand,,,t,noHidesInfo,outputCountMult&0.75,texture&162
+farmersdelight:flint_knife,,,t,noHidesInfo noFire,outputCountMult&0.5,texture&163
+minecraft:pufferfish,,,t,,,texture&164
+minecraft:sugar_cane,,,s,noFire,,texture&4
+minecraft:grindstone,Grindstone Arrow,Grindstone Attached to a,t,reqSturdyCore noHidesInfo,outputCountMult&0,model&minecraft:grindstone
+minecraft:[DYE]_carpet,Harmless [DYE] Arrow,Soft,t,noFire reqStick noWet noHidesInfo,"skipThisComment&requires something sticky (or a regular stick) to prevent this from exploding the combination count, also noWet because it would be quite noisy if it was wet@damageMult&0@silent@flySpeed&0.75",texture&24+[DYE_INDEX]
+_,_,_,e,_,_,none&
+minecraft:sculk_sensor,Sculk Arrow,Sculk Finned,f,_,isSensor,texture&162
+minecraft:carrot,Carrot Tipped Arrow,Carrot Tipped,t,noFire,damageMult&0.25,texture&165
+minecraft:kelp,Wet Kelp Arrow,Kelp Finned,f,noFire Wet,flySpeed&0.75@damageMult&0.75@arrowDrift,texture&163
 minecraft:quartz,,,,,,
 minecraft:emerald,,,,,,
 minecraft:chorus_fruit,,,,,,

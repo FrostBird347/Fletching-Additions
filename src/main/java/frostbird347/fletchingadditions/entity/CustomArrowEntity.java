@@ -77,6 +77,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 	private boolean isSensor = false;
 	private boolean hasFirework = false;
 	private ArrayList<ParticleEffect> particles = new ArrayList<ParticleEffect>();
+	private CustomArrowEntityRenderInfo renderInfo = new CustomArrowEntityRenderInfo(this);
 	
 	//Other stuff not directly related to nbt
 	Vec3d realVel = new Vec3d(0, 0, 0);
@@ -215,6 +216,12 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 			}
 		} catch(Exception err) {
 			MainMod.LOGGER.error("Failed to parse arrow name: ", err);
+		}
+
+		//Process render info if client
+		this.renderInfo = new CustomArrowEntityRenderInfo(this);
+		if (this.world.isClient) {
+			
 		}
 		
 		MainMod.LOGGER.info(itemNbt.asString());

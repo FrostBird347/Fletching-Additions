@@ -22,7 +22,7 @@ public class CustomArrowEntityRenderer extends EntityRenderer<CustomArrowEntity>
 	}
 
 	@Override
-	public Identifier getTexture(CustomArrowEntity spectralArrowEntity) {
+	public Identifier getTexture(CustomArrowEntity arrow) {
 		return TEXTURE;
 	}
 

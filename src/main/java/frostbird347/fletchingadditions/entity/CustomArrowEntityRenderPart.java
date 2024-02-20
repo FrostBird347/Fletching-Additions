@@ -7,13 +7,13 @@ import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.text.Text;
 
 public class CustomArrowEntityRenderPart {
-	enum Type {
+	public enum Type {
 		TIP,
 		STICK,
 		FIN,
 		EFFECT
 	}
-	enum RenderMode {
+	public enum RenderMode {
 		TEXTURE,
 		MODEL,
 		NONE
@@ -38,7 +38,7 @@ public class CustomArrowEntityRenderPart {
 	*/
 	private float[][] cachedTexturePoints = {{-1f, -1f, -1f, -1f}, {-1f, -1f, -1f, -1f}, {-1f, -1f, -1f, -1f}};
 	private final byte[] POINT_LOOKUP_X = {0, 2, 2, 0};
-	private final byte[] POINT_LOOKUP_Y = {0, 1, 1, 3};
+	private final byte[] POINT_LOOKUP_Y = {1, 1, 3, 3};
 	//TODO: Add model support
 	private ModelIdentifier cachedModel = null;
 	private final boolean IS_SERVER_SIDE;
@@ -61,8 +61,8 @@ public class CustomArrowEntityRenderPart {
 
 	public CustomArrowEntityRenderPart(CustomArrowEntity arrow) {
 		size = -1;
-		textureId = -1;
-		lastId = 0;
+		textureId = 0;
+		lastId = -1;
 		modelId = "";
 		cachedModel = null;
 		IS_SERVER_SIDE = !arrow.world.isClient;
@@ -73,7 +73,7 @@ public class CustomArrowEntityRenderPart {
 		}
 	}
 
-	public float getCoord(byte index, boolean getY, byte rectIndex) {
+	public float getCoord(int index, boolean getY, int rectIndex) {
 		if (IS_SERVER_SIDE) {
 			MainMod.LOGGER.error("getCoord was called on the server!");
 			MainMod.LOGGER.error("This should never happen!");
@@ -84,75 +84,75 @@ public class CustomArrowEntityRenderPart {
 			lastId = textureId;
 			size = -1;
 
-			int currentPixelX = ((int)index * 24) % 480;
-			int currentPixelY = (int)(index / 20f) * 5;
+			int currentPixelX = (textureId * 24) % 480;
+			int currentPixelY = (int)(textureId / 20f) * 5;
 
-			if (index >= 160) {
-				currentPixelX = ((((int)index - 160) * 40)) % 480;
-				currentPixelY = 40 + ((int)((index - 160f) / 12f) * 9);
+			if (textureId >= 160) {
+				currentPixelX = (((textureId - 160) * 40)) % 480;
+				currentPixelY = 40 + ((int)((textureId - 160) / 12f) * 9);
 
 				switch (type) {
 					case TIP:
 						//Top left
 						cachedTexturePoints[0][0] = (currentPixelX / 480f);
-						cachedTexturePoints[0][1] = (currentPixelY / 480f);
+						cachedTexturePoints[0][1] = (currentPixelY / 112f);
 						//Shift to bottom right
 						currentPixelX += 8;
 						currentPixelY += 9;
 						cachedTexturePoints[0][2] = (currentPixelX / 480f);
-						cachedTexturePoints[0][3] = (currentPixelY / 480f);
+						cachedTexturePoints[0][3] = (currentPixelY / 112f);
 						break;
 					case STICK:
 						//First face
 						currentPixelX += 8;
 						cachedTexturePoints[0][0] = (currentPixelX / 480f);
-						cachedTexturePoints[0][1] = (currentPixelY / 480f);
+						cachedTexturePoints[0][1] = (currentPixelY / 112f);
 
 						currentPixelX += 17;
 						currentPixelY += 9;
 						cachedTexturePoints[0][2] = (currentPixelX / 480f);
-						cachedTexturePoints[0][3] = (currentPixelY / 480f);
+						cachedTexturePoints[0][3] = (currentPixelY / 112f);
 
 						//Second face
 						currentPixelY -= 1;
 						cachedTexturePoints[1][0] = (currentPixelX / 480f);
-						cachedTexturePoints[1][1] = (currentPixelY / 480f);
+						cachedTexturePoints[1][1] = (currentPixelY / 112f);
 
 						currentPixelX += 4;
 						currentPixelY += 1;
 						cachedTexturePoints[1][2] = (currentPixelX / 480f);
-						cachedTexturePoints[1][3] = (currentPixelY / 480f);
+						cachedTexturePoints[1][3] = (currentPixelY / 112f);
 
 						//Third face
 						currentPixelY -= 1;
 						cachedTexturePoints[2][0] = (currentPixelX / 480f);
-						cachedTexturePoints[2][1] = (currentPixelY / 480f);
+						cachedTexturePoints[2][1] = (currentPixelY / 112f);
 
 						currentPixelX += 1;
 						currentPixelY += 1;
 						cachedTexturePoints[2][2] = (currentPixelX / 480f);
-						cachedTexturePoints[2][3] = (currentPixelY / 480f);
+						cachedTexturePoints[2][3] = (currentPixelY / 112f);
 						break;
 					case FIN:
 						//First face
 						currentPixelX += 25;
 						cachedTexturePoints[0][0] = (currentPixelX / 480f);
-						cachedTexturePoints[0][1] = (currentPixelY / 480f);
+						cachedTexturePoints[0][1] = (currentPixelY / 112f);
 
 						currentPixelX += 5;
 						currentPixelY += 8;
 						cachedTexturePoints[0][2] = (currentPixelX / 480f);
-						cachedTexturePoints[0][3] = (currentPixelY / 480f);
+						cachedTexturePoints[0][3] = (currentPixelY / 112f);
 
 						//Second face
 						currentPixelY -= 8;
 						cachedTexturePoints[1][0] = (currentPixelX / 480f);
-						cachedTexturePoints[1][1] = (currentPixelY / 480f);
+						cachedTexturePoints[1][1] = (currentPixelY / 112f);
 
 						currentPixelX += 10;
 						currentPixelY += 9;
 						cachedTexturePoints[1][2] = (currentPixelX / 480f);
-						cachedTexturePoints[1][3] = (currentPixelY / 480f);
+						cachedTexturePoints[1][3] = (currentPixelY / 112f);
 						break;
 					default:
 						MainMod.LOGGER.error("Unknown part type \"" + type.toString() + "\" with an id of " + modelId + "!");
@@ -163,64 +163,64 @@ public class CustomArrowEntityRenderPart {
 					case TIP:
 						//Top left
 						cachedTexturePoints[0][0] = (currentPixelX / 480f);
-						cachedTexturePoints[0][1] = (currentPixelY / 480f);
+						cachedTexturePoints[0][1] = (currentPixelY / 112f);
 						//Shift to bottom right
 						currentPixelX += 4;
 						currentPixelY += 5;
 						cachedTexturePoints[0][2] = (currentPixelX / 480f);
-						cachedTexturePoints[0][3] = (currentPixelY / 480f);
+						cachedTexturePoints[0][3] = (currentPixelY / 112f);
 						break;
 					case STICK:
 						//First face
 						currentPixelX += 4;
 						cachedTexturePoints[0][0] = (currentPixelX / 480f);
-						cachedTexturePoints[0][1] = (currentPixelY / 480f);
+						cachedTexturePoints[0][1] = (currentPixelY / 112f);
 
 						currentPixelX += 9;
 						currentPixelY += 5;
 						cachedTexturePoints[0][2] = (currentPixelX / 480f);
-						cachedTexturePoints[0][3] = (currentPixelY / 480f);
+						cachedTexturePoints[0][3] = (currentPixelY / 112f);
 
 						//Second face
 						currentPixelY -= 1;
 						cachedTexturePoints[1][0] = (currentPixelX / 480f);
-						cachedTexturePoints[1][1] = (currentPixelY / 480f);
+						cachedTexturePoints[1][1] = (currentPixelY / 112f);
 
 						currentPixelX += 4;
 						currentPixelY += 1;
 						cachedTexturePoints[1][2] = (currentPixelX / 480f);
-						cachedTexturePoints[1][3] = (currentPixelY / 480f);
+						cachedTexturePoints[1][3] = (currentPixelY / 112f);
 
 						//Third face
 						currentPixelY -= 1;
 						cachedTexturePoints[2][0] = (currentPixelX / 480f);
-						cachedTexturePoints[2][1] = (currentPixelY / 480f);
+						cachedTexturePoints[2][1] = (currentPixelY / 112f);
 
 						currentPixelX += 1;
 						currentPixelY += 1;
 						cachedTexturePoints[2][2] = (currentPixelX / 480f);
-						cachedTexturePoints[2][3] = (currentPixelY / 480f);
+						cachedTexturePoints[2][3] = (currentPixelY / 112f);
 						break;
 					case FIN:
 						//First face
 						currentPixelX += 13;
 						cachedTexturePoints[0][0] = (currentPixelX / 480f);
-						cachedTexturePoints[0][1] = (currentPixelY / 480f);
+						cachedTexturePoints[0][1] = (currentPixelY / 112f);
 
 						currentPixelX += 5;
 						currentPixelY += 4;
 						cachedTexturePoints[0][2] = (currentPixelX / 480f);
-						cachedTexturePoints[0][3] = (currentPixelY / 480f);
+						cachedTexturePoints[0][3] = (currentPixelY / 112f);
 
 						//Second face
 						currentPixelY -= 4;
 						cachedTexturePoints[1][0] = (currentPixelX / 480f);
-						cachedTexturePoints[1][1] = (currentPixelY / 480f);
+						cachedTexturePoints[1][1] = (currentPixelY / 112f);
 
 						currentPixelX += 6;
 						currentPixelY += 5;
 						cachedTexturePoints[1][2] = (currentPixelX / 480f);
-						cachedTexturePoints[1][3] = (currentPixelY / 480f);
+						cachedTexturePoints[1][3] = (currentPixelY / 112f);
 						break;
 					default:
 						MainMod.LOGGER.error("Unknown part type \"" + type.toString() + "\" with an id of " + modelId + "!");

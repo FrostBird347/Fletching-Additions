@@ -5,7 +5,7 @@ Parsing...
 	stats missing:   	 minecraft:bone
 	fullName missing:	 minecraft:lightning_rod
 	partName missing:	 minecraft:pointed_dripstone
-	fullName missing:	 minecraft:ice
+	fullName missing:	 ???
 	fullName missing:	 minecraft:packed_ice
 	fullName missing:	 minecraft:blue_ice
 	fullName missing:	 minecraft:end_rod
@@ -23,7 +23,6 @@ Parsing...
 	fullName missing:	 create:cogwheel
 	fullName missing:	 create:propeller
 	fullName missing:	 create:brass_hand
-	fullName missing:	 farmersdelight:flint_knife
 	fullName missing:	 minecraft:pufferfish
 	fullName missing:	 minecraft:sugar_cane
 	unknown type:	 minecraft:quartz
@@ -32,14 +31,14 @@ Parsing...
 	unknown type:	 create:rose_quartz
 Combining...
 Stats: {
-  totalCount: 2289,
+  totalCount: 2328,
   mostFireChances: 6,
   longestName: 'Grindstone Attached to a Prismarine Finned Blaze Infused Arrow with an Iron Core',
   flySpeedStats: [ Float { value: 0.42857142855 }, Float { value: 2.25 } ],
   gravityMultStats: [ Float { value: 0.75 }, Float { value: 2.1875 } ],
   drawSpeedStats: [ Float { value: 0.25 }, Float { value: 1.25 } ],
   drawMinMultStats: [ Float { value: 2 }, Float { value: 2 } ],
-  damageMultStats: [ Float { value: 0.08203125 }, Float { value: 2.625 } ],
+  damageMultStats: [ Float { value: 0.08203125 }, Float { value: 3.5 } ],
   itemOutputStats: [ 1, 6 ]
 }
 Saving graphs...

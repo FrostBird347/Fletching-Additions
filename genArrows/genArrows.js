@@ -131,6 +131,7 @@ function parseItem(rawItem) {
 	if (!exists(rawItem[6])) { console.log("\trenderMode missing:\t", rawItem[0]); return item; };
 	item.modelMode = rawItem[6].split("&")[0];
 	item.modelData = rawItem[6].split("&")[1];
+	item.modelDataExtra = rawItem[6].split("&")[2];
 	
 	if (!exists(rawItem[5])) { console.log("\tstats missing:   \t", rawItem[0]); return item; };
 	//flags that will be processed by the game and not this script
@@ -330,6 +331,9 @@ function genOutput(inputs) {
 		if (inputs[i].modelMode != "none" && renderOverride == undefined) {
 			let newModelInfo = {mode: inputs[i].modelMode, data: inputs[i].modelData, type: ["t", "s", "f", "e"][i]};
 			
+			//Don't need to worry if it's undefined, since undefined values will be lost when converted to nbt
+			newModelInfo.extraData = inputs[i].modelDataExtra;
+
 			if (inputs[i].modelData.split("+").length != 1) {
 				inputs[i].modelData = inputs[i].modelData.split("+").reduce((sum, add) => parseInt(sum) + parseInt(add), 0).toString();
 			}
@@ -371,7 +375,7 @@ function genOutput(inputs) {
 					case "replaceTextures":
 						renderOverride = i;
 						let newModelData = inputs[i].modelData.split("+").reduce((sum, add) => parseInt(sum) + parseInt(add), 0).toString();
-						outputNBT.renderParts = [{mode: inputs[i].modelMode, data: newModelData, type: "tip"}, {mode: inputs[i].modelMode, data: newModelData, type: "stick"}, {mode: inputs[i].modelMode, data: newModelData, type: "fin"}];
+						outputNBT.renderParts = [{mode: inputs[i].modelMode, data: newModelData, type: "tip", extraData: inputs[i].modelDataExtra}, {mode: inputs[i].modelMode, data: newModelData, type: "stick", extraData: inputs[i].modelDataExtra}, {mode: inputs[i].modelMode, data: newModelData, type: "fin", extraData: inputs[i].modelDataExtra}];
 						textureSlots[newModelData] = [0, 0, 0];
 						break;
 					case "partialNameIsFull":

@@ -23,7 +23,7 @@ public class CustomArrowEntityRenderPart {
 		FLAT_HORIZONTAL,
 		FLAT_VERTICAL
 	}
-	private static final Map<Character, Type> TYPE_MAP = Map.of(Character.valueOf('t'), Type.TIP, Character.valueOf('s'), Type.STICK, Character.valueOf('f'), Type.FIN, Character.valueOf('e'), Type.EFFECT);
+	private static final Map<String, Type> TYPE_MAP = Map.of("t", Type.TIP, "s", Type.STICK, "f", Type.FIN, "e", Type.EFFECT);
 	private static final Map<String, RenderMode> MODE_MAP = Map.of("texture", RenderMode.TEXTURE, "model", RenderMode.MODEL, "none", RenderMode.NONE);
 	private static final Map<String, TextureSide> SIDE_MAP = Map.of("b", TextureSide.BOTH, "h", TextureSide.FLAT_HORIZONTAL, "v", TextureSide.FLAT_VERTICAL);
 
@@ -50,7 +50,7 @@ public class CustomArrowEntityRenderPart {
 	private ModelIdentifier cachedModel = null;
 	private final boolean IS_SERVER_SIDE;
 
-	public CustomArrowEntityRenderPart(CustomArrowEntity arrow, char _type, String _mode, String data, String extraData) {
+	public CustomArrowEntityRenderPart(CustomArrowEntity arrow, String _type, String _mode, String data, String extraData) {
 		this(arrow);
 		type = TYPE_MAP.getOrDefault(_type, Type.EFFECT);
 		mode = MODE_MAP.getOrDefault(_mode, RenderMode.NONE);

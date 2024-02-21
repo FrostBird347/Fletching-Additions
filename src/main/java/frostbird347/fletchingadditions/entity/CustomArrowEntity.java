@@ -220,8 +220,13 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 
 		//Process render info if client
 		this.renderInfo = new CustomArrowEntityRenderInfo(this);
-		if (this.world.isClient) {
-			
+		NbtList renderPartsNbt = itemNbt.getList("renderParts", NbtElement.COMPOUND_TYPE).copy();
+		if (this.world.isClient && renderPartsNbt.size() > 0) {
+			this.renderInfo.renderList.clear();
+			for (int i = 0; i < renderPartsNbt.size(); i++) {
+				NbtCompound currentPartNbt = renderPartsNbt.getCompound(i);
+				this.renderInfo.renderList.add(new CustomArrowEntityRenderPart(this, currentPartNbt.getString("type"), currentPartNbt.getString("mode"), currentPartNbt.getString("data"), currentPartNbt.getString("extraData")));
+			}
 		}
 		
 		MainMod.LOGGER.info(itemNbt.asString());

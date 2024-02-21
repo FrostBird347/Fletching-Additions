@@ -1,6 +1,5 @@
 package frostbird347.fletchingadditions.entityRenderer;
 
-import frostbird347.fletchingadditions.MainMod;
 import frostbird347.fletchingadditions.entity.CustomArrowEntity;
 import frostbird347.fletchingadditions.entity.CustomArrowEntityRenderInfo;
 import frostbird347.fletchingadditions.entity.CustomArrowEntityRenderPart;

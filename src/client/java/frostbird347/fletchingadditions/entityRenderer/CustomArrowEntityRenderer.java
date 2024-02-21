@@ -85,23 +85,37 @@ public class CustomArrowEntityRenderer extends EntityRenderer<CustomArrowEntity>
 
 								if (currentPart.textureId < 160) {
 									//Variable width part
-									renderRectangle(new Vec3f(0.0001f - 4 - currentOffset + (9 - currentPart.getSize()), -2, 0), new Vec3f(5 - currentOffset + (9 - currentPart.getSize()), 2, 0), new Vec3i(0, 0, 1), currentPart, 0, positionMatrix, normalMatrix, renderBuffer, light);
+									renderRectangle(new Vec3f(-4 - currentOffset + (9 - currentPart.getSize()), -2, 0), new Vec3f(5 - currentOffset + (9 - currentPart.getSize()), 2, 0), new Vec3i(0, 0, 1), currentPart, 0, positionMatrix, normalMatrix, renderBuffer, light);
 									//Part that the fins are connected to
 									renderRectangle(new Vec3f(1 - currentOffset - currentPart.getSize(), -0.4f, 0), new Vec3f(5 - currentOffset - currentPart.getSize(), 0.4f, 0), new Vec3i(0, 0, 1), currentPart, 1, positionMatrix, normalMatrix, renderBuffer, light);
-									//Back of the tip
-									renderRectangle(new Vec3f(2 - currentOffset - currentPart.getSize(), -0.25f, -0.4f), new Vec3f(2 - currentOffset - currentPart.getSize(), 0.4f, 0.4f), new Vec3i(-1, 0, 0), currentPart, 2, positionMatrix, normalMatrix, renderBuffer, light);
-									renderRectangle(new Vec3f(2 - currentOffset - currentPart.getSize(), 0.25f, -0.4f), new Vec3f(2 - currentOffset - currentPart.getSize(), -0.4f, 0.4f), new Vec3i(1, 0, 0), currentPart, 2, positionMatrix, normalMatrix, renderBuffer, light);
 
 								} else {
-									renderRectangle(new Vec3f(0.0001f - 12 - currentOffset + (17 - currentPart.getSize()), -3.6f, 0), new Vec3f(5 - currentOffset + (17 - currentPart.getSize()), 3.6f, 0), new Vec3i(0, 0, 1), currentPart, 0, positionMatrix, normalMatrix, renderBuffer, light);
+									renderRectangle(new Vec3f(-12 - currentOffset + (17 - currentPart.getSize()), -3.6f, 0), new Vec3f(5 - currentOffset + (17 - currentPart.getSize()), 3.6f, 0), new Vec3i(0, 0, 1), currentPart, 0, positionMatrix, normalMatrix, renderBuffer, light);
 									
-									renderRectangle(new Vec3f(1f - currentOffset - currentPart.getSize(), -0.4f, 0), new Vec3f(5.002f - currentOffset - currentPart.getSize(), 0.4f, 0), new Vec3i(0, 0, 1), currentPart, 1, positionMatrix, normalMatrix, renderBuffer, light);
-									
-									renderRectangle(new Vec3f(2 - currentOffset - currentPart.getSize(), -0.25f, -0.4f), new Vec3f(2 - currentOffset - currentPart.getSize(), 0.4f, 0.4f), new Vec3i(-1, 0, 0), currentPart, 2, positionMatrix, normalMatrix, renderBuffer, light);
-									renderRectangle(new Vec3f(2 - currentOffset - currentPart.getSize(), 0.25f, -0.4f), new Vec3f(2 - currentOffset - currentPart.getSize(), -0.4f, 0.4f), new Vec3i(1, 0, 0), currentPart, 2, positionMatrix, normalMatrix, renderBuffer, light);
+									renderRectangle(new Vec3f(1f - currentOffset - currentPart.getSize(), -0.4f, 0), new Vec3f(5f - currentOffset - currentPart.getSize(), 0.4f, 0), new Vec3i(0, 0, 1), currentPart, 1, positionMatrix, normalMatrix, renderBuffer, light);
 								}
 							}
+
 							currentOffset += currentPart.getSize();
+
+							//Back of the tip
+							renderRectangle(new Vec3f(2 - currentOffset, -0.4f, -0.4f), new Vec3f(2 - currentOffset, 0.4f, 0.4f), new Vec3i(-1, 0, 0), currentPart, 2, positionMatrix, normalMatrix, renderBuffer, light);
+							renderRectangle(new Vec3f(2 - currentOffset, 0.4f, -0.4f), new Vec3f(2 - currentOffset, -0.4f, 0.4f), new Vec3i(1, 0, 0), currentPart, 2, positionMatrix, normalMatrix, renderBuffer, light);
+							break;
+						case FIN:
+						for (byte _i = 0; _i < 4; _i++) {
+							matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90.0f));
+
+							if (currentPart.textureId < 160) {
+								//Same as the back of the tip, but more than one pixel and offset to a corner
+								renderRectangle(new Vec3f(2 - currentOffset, -3.6f, -3.6f), new Vec3f(2 - currentOffset, -0.4f, 0.4f), new Vec3i(-1, 0, 0), currentPart, 0, positionMatrix, normalMatrix, renderBuffer, light);
+								renderRectangle(new Vec3f(2 - currentOffset, 3.6f, -3.6f), new Vec3f(2 - currentOffset, 0.4f, 0.4f), new Vec3i(1, 0, 0), currentPart, 0, positionMatrix, normalMatrix, renderBuffer, light);
+
+							} else {
+								renderRectangle(new Vec3f(2 - currentOffset, -6.8f, -3.6f), new Vec3f(2 - currentOffset, -0.4f, 0.4f), new Vec3i(-1, 0, 0), currentPart, 0, positionMatrix, normalMatrix, renderBuffer, light);
+								renderRectangle(new Vec3f(2 - currentOffset, 6.8f, -3.6f), new Vec3f(2 - currentOffset, 0.4f, 0.4f), new Vec3i(1, 0, 0), currentPart, 0, positionMatrix, normalMatrix, renderBuffer, light);
+							}
+						}
 							break;
 						default:
 							break;
@@ -111,40 +125,9 @@ public class CustomArrowEntityRenderer extends EntityRenderer<CustomArrowEntity>
 				case MODEL:
 					break;
 				case NONE:
-					break;
 				default:
-					MainMod.LOGGER.error("Unknown mode \"" + currentPart.mode.toString() +"\"!");
+					break;
 			}
-		}
-
-		//The dead code here will be removed soon
-		if (false) {
-		//Back of the fins
-		this.addVertexPoint(positionMatrix, normalMatrix, renderBuffer, -7, -2, -2, 0.0f, 0.15625f, -1, 0, 0, light);
-		this.addVertexPoint(positionMatrix, normalMatrix, renderBuffer, -7, -2, 2, 0.15625f, 0.15625f, -1, 0, 0, light);
-		this.addVertexPoint(positionMatrix, normalMatrix, renderBuffer, -7, 2, 2, 0.15625f, 0.3125f, -1, 0, 0, light);
-		this.addVertexPoint(positionMatrix, normalMatrix, renderBuffer, -7, 2, -2, 0.0f, 0.3125f, -1, 0, 0, light);
-		//Front of the fins
-		this.addVertexPoint(positionMatrix, normalMatrix, renderBuffer, -7, 2, -2, 0.0f, 0.15625f, 1, 0, 0, light);
-		this.addVertexPoint(positionMatrix, normalMatrix, renderBuffer, -7, 2, 2, 0.15625f, 0.15625f, 1, 0, 0, light);
-		this.addVertexPoint(positionMatrix, normalMatrix, renderBuffer, -7, -2, 2, 0.15625f, 0.3125f, 1, 0, 0, light);
-		this.addVertexPoint(positionMatrix, normalMatrix, renderBuffer, -7, -2, -2, 0.0f, 0.3125f, 1, 0, 0, light);
-
-		//Main arrow part
-		for (int u = 0; u < 4; ++u) {
-			//Rotate in a loop for all 4 sides
-			matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90.0f));
-
-			//A single rectangle for each side
-			//x, y, z: pos
-			//u, v: x, y percentage of the texture to render at this corner?
-			//	^ So something like 0,0 0,1 1,0 1,1 would render the full texture
-			//	^ While 1,1 1,0 0,1 0,0 should render the same as the one above, but with the x and y flipped?
-			this.addVertexPoint(positionMatrix, normalMatrix, renderBuffer, -8, -2, 0, 0.0f, 0.0f, 0, 1, 0, light);
-			this.addVertexPoint(positionMatrix, normalMatrix, renderBuffer, 8, -2, 0, 0.5f, 0.0f, 0, 1, 0, light);
-			this.addVertexPoint(positionMatrix, normalMatrix, renderBuffer, 8, 2, 0, 0.5f, 0.015625f, 0, 1, 0, light);
-			this.addVertexPoint(positionMatrix, normalMatrix, renderBuffer, -8, 2, 0, 0.0f, 0.015625f, 0, 1, 0, light);
-		}
 		}
 
 		//Finally render all the vertex data

@@ -111,9 +111,15 @@ public class CustomArrowEntityRenderer extends EntityRenderer<CustomArrowEntity>
 								renderRectangle(new Vec3f(2 - currentOffset, -3.6f, -3.6f), new Vec3f(2 - currentOffset, -0.4f, 0.4f), new Vec3i(-1, 0, 0), currentPart, 0, positionMatrix, normalMatrix, renderBuffer, light);
 								renderRectangle(new Vec3f(2 - currentOffset, 3.6f, -3.6f), new Vec3f(2 - currentOffset, 0.4f, 0.4f), new Vec3i(1, 0, 0), currentPart, 0, positionMatrix, normalMatrix, renderBuffer, light);
 
+								renderRectangle(new Vec3f(3 - currentOffset - currentPart.getSize(), -4.4f, 0), new Vec3f(9 - currentOffset - currentPart.getSize(), -0.4f, 0), new Vec3i(0, 0, 1), currentPart, 1, positionMatrix, normalMatrix, renderBuffer, light);
+								renderRectangle(new Vec3f(3 - currentOffset - currentPart.getSize(), 0.4f, 0), new Vec3f(9 - currentOffset - currentPart.getSize(), 4.4f, 0), new Vec3i(0, 0, 1), currentPart, 2, positionMatrix, normalMatrix, renderBuffer, light);
+								
 							} else {
 								renderRectangle(new Vec3f(2 - currentOffset, -6.8f, -3.6f), new Vec3f(2 - currentOffset, -0.4f, 0.4f), new Vec3i(-1, 0, 0), currentPart, 0, positionMatrix, normalMatrix, renderBuffer, light);
 								renderRectangle(new Vec3f(2 - currentOffset, 6.8f, -3.6f), new Vec3f(2 - currentOffset, 0.4f, 0.4f), new Vec3i(1, 0, 0), currentPart, 0, positionMatrix, normalMatrix, renderBuffer, light);
+
+								renderRectangle(new Vec3f(3 - currentOffset - currentPart.getSize(), -7.6f, 0), new Vec3f(13f - currentOffset - currentPart.getSize(), -0.4f, 0), new Vec3i(0, 0, 1), currentPart, 1, positionMatrix, normalMatrix, renderBuffer, light);
+								renderRectangle(new Vec3f(3 - currentOffset - currentPart.getSize(), 0.4f, 0), new Vec3f(13f - currentOffset - currentPart.getSize(), 7.6f, 0), new Vec3i(0, 0, 1), currentPart, 2, positionMatrix, normalMatrix, renderBuffer, light);
 							}
 						}
 							break;

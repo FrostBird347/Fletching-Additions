@@ -16,7 +16,8 @@ public class CustomArrowEntityRenderInfo {
 			dataTest = "0";
 		}  else if (rand > 0.25) {
 			dataTest = "1";
-		} 
+		}
+		//dataTest = "160";
 		renderList.add(new CustomArrowEntityRenderPart(arrow, 't', "texture", dataTest, "b"));
 		renderList.add(new CustomArrowEntityRenderPart(arrow, 's', "texture", dataTest, "b"));
 		renderList.add(new CustomArrowEntityRenderPart(arrow, 'f', "texture", dataTest, "b"));

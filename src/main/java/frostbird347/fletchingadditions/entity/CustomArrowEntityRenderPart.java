@@ -161,6 +161,16 @@ public class CustomArrowEntityRenderPart {
 						currentPixelY += 9;
 						cachedTexturePoints[1][2] = (currentPixelX / 480f);
 						cachedTexturePoints[1][3] = (currentPixelY / 112f);
+
+						//Third face (which is the second flipped vertically)
+						cachedTexturePoints[2][2] = ((currentPixelX) / 480f);
+						cachedTexturePoints[2][1] = ((currentPixelY) / 112f);
+
+						currentPixelX -= 10;
+						currentPixelY -= 9;
+
+						cachedTexturePoints[2][0] = ((currentPixelX) / 480f);
+						cachedTexturePoints[2][3] = ((currentPixelY) / 112f);
 						break;
 					default:
 						MainMod.LOGGER.error("Unknown part type \"" + type.toString() + "\" with an id of " + modelId + "!");
@@ -229,6 +239,16 @@ public class CustomArrowEntityRenderPart {
 						currentPixelY += 5;
 						cachedTexturePoints[1][2] = (currentPixelX / 480f);
 						cachedTexturePoints[1][3] = (currentPixelY / 112f);
+
+						//Third face (which is the second flipped vertically)
+						cachedTexturePoints[2][2] = ((currentPixelX) / 480f);
+						cachedTexturePoints[2][1] = ((currentPixelY) / 112f);
+
+						currentPixelX -= 6;
+						currentPixelY -= 5;
+
+						cachedTexturePoints[2][0] = ((currentPixelX) / 480f);
+						cachedTexturePoints[2][3] = ((currentPixelY) / 112f);
 						break;
 					default:
 						MainMod.LOGGER.error("Unknown part type \"" + type.toString() + "\" with an id of " + modelId + "!");

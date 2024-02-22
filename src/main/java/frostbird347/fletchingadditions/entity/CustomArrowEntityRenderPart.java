@@ -56,7 +56,11 @@ public class CustomArrowEntityRenderPart {
 		mode = MODE_MAP.getOrDefault(_mode, RenderMode.NONE);
 		switch (mode) {
 			case TEXTURE:
-				textureId = Integer.parseInt(data, 10);
+				try {
+					textureId = Integer.parseInt(data, 10);
+				} catch(Exception err) {
+					MainMod.LOGGER.error("Failed to parse texture ID \"" + data + "\": " + err.getLocalizedMessage());
+				}
 				side = SIDE_MAP.getOrDefault(_mode, TextureSide.BOTH);
 				break;
 			case MODEL:

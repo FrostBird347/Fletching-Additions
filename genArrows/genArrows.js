@@ -32,8 +32,10 @@ let graphStats = {
 }
 let fireStackCounters = [];
 let textureSlots = [[0, 0, 0]];
+let textureSlotsNames = [["error", "error", "error"]];
 for (let i = 0; i < 254; i++) {
 	textureSlots.push([1, 1, 1]);
+	textureSlotsNames.push(["", "", ""]);
 }
 
 //Root item model
@@ -100,6 +102,7 @@ function parseItem(rawItem) {
 	let _tempData = rawItem[6].split("&")[1];
 	if (!isNaN(parseFloat(_tempData)) && isFinite(_tempData)) {
 		textureSlots[parseFloat(_tempData)][({"t":0,"s":1,"f":2})[rawItem[3]]] = 2;
+		textureSlotsNames[parseFloat(_tempData)][({"t":0,"s":1,"f":2})[rawItem[3]]] = rawItem[0];
 	}
 	
 	//Even assign invalid listed items texture IDs... as long as it has a name and type
@@ -377,6 +380,7 @@ function genOutput(inputs) {
 						let newModelData = inputs[i].modelData.split("+").reduce((sum, add) => parseInt(sum) + parseInt(add), 0).toString();
 						outputNBT.renderParts = [{mode: inputs[i].modelMode, data: newModelData, type: "tip", extraData: inputs[i].modelDataExtra}, {mode: inputs[i].modelMode, data: newModelData, type: "stick", extraData: inputs[i].modelDataExtra}, {mode: inputs[i].modelMode, data: newModelData, type: "fin", extraData: inputs[i].modelDataExtra}];
 						textureSlots[newModelData] = [0, 0, 0];
+						textureSlotsNames[newModelData] = [inputs[i].id, inputs[i].id, inputs[i].id];
 						break;
 					case "partialNameIsFull":
 						overiddenPartialName = inputs[i].partName;
@@ -746,4 +750,16 @@ function realStart() {
 	}
 	fs.writeFileSync("FreeTextureSlots.csv", textureSlotsCsv);
 	
+	console.log("Saving TextureSlotNames.csv...");
+	textureSlotsCsv = "id,t,s,f\n";
+	for (let iId = 0; iId < textureSlotsNames.length; iId++) {
+		textureSlotsCsv += iId;
+		for (let iType = 0; iType < 3; iType++) {
+			textureSlotsCsv += "," + textureSlotsNames[iId][iType]
+		}
+		textureSlotsCsv += "\n"
+	}
+	fs.writeFileSync("TextureSlotNames.csv", textureSlotsCsv);
+	
+	console.log("Done!");
 }

@@ -24,8 +24,8 @@ Finally, damage mult only applies to the damage the arrow does directly, things 
 ModelType&ID&Additional Data
 Note that TextureIDs are different depending on the item type (e.g ""Blaze"" stick and effect textures are different, even though they could have the same ID)"
 minecraft:flint,_,_,t,_,_,texture&1
-minecraft:stick,_,_,s,noFire Stick,_,texture&1
-minecraft:feather,_,_,f,noFire,_,texture&1
+minecraft:stick,_,_,s,Stick,_,texture&1
+minecraft:feather,_,_,f,_,_,texture&1
 minecraft:glowstone_dust,_,Spectral,e,noWet,applyEffect&minecraft:glowing&10&1@particle&minecraft:instant_effect,none&
 minecraft:blaze_rod,Blaze Arrow,Blaze,s,noWet noCold Fire,fireChance&0.05@fireChance&0.5@damageMult&1.125@drawSpeed&1.25@gravityMult&0.75@breaksWhenWet@blockHitActions&0.5&destroy&fletching-additions:blaze_crush&0.25&drop&minecraft:blaze_powder&1&fletching-additions:blaze_crush&0.25&doNothing&fletching-additions:blaze_impact@dynamicLightingIfPossible,texture&2
 minecraft:prismarine_shard,Prismarine Arrow,Prismarine Finned,f,_,waterSpeed,texture&2

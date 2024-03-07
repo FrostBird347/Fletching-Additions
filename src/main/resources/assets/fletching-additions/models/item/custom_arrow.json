@@ -3141,6 +3141,1260 @@
 				"fletching-additions:texture_data": 6.513033619102956e-27
 			},
 			"model": "fletching-additions:item/zzzzzzzzzz_autogen_pink_dye"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6672861193924227e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_stick_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.667286908253328e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_bamboo_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6672871054685542e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_iron_bars_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.667336606490357e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_stick_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.667336803705583e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_blaze_rod_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.667337395351262e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_bamboo_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6673375925664884e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_iron_bars_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.667387093588291e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_stick_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6673872908035173e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_blaze_rod_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6673878824491962e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_bamboo_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6673880796644225e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_iron_bars_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.667437580686225e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_stick_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6674383695471304e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_bamboo_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6674385667623567e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_iron_bars_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6674880677841593e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_stick_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6674888566450645e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_bamboo_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.667489053860291e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_iron_bars_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6675385548820934e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_stick_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6675387520973197e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_blaze_rod_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6675393437429987e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_bamboo_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.667539540958225e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_iron_bars_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.66774050327383e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_stick_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6677407004890563e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_blaze_rod_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6677412921347352e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_bamboo_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6677414893499615e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_iron_bars_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6802108164635638e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_stick_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.680211605324469e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_bamboo_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6802118025396953e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_iron_bars_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.680261303561498e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_stick_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6802615007767242e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_blaze_rod_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.680262092422403e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_bamboo_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6802622896376294e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_iron_bars_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.680311790659432e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_stick_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6803119878746584e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_blaze_rod_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6803125795203373e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_bamboo_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6803127767355636e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_iron_bars_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6803622777573662e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_stick_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6803630666182714e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_bamboo_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6803632638334977e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_iron_bars_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6804127648553003e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_stick_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6804135537162056e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_bamboo_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.680413750931432e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_iron_bars_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6804632519532345e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_stick_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6804634491684608e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_blaze_rod_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6804640408141397e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_bamboo_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.680464238029366e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_iron_bars_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.680665200344971e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_stick_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6806653975601974e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_blaze_rod_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6806659892058763e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_bamboo_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6806661864211026e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_amethyst_shard_iron_bars_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.693135513534705e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_stick_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.69313630239561e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_bamboo_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6931364996108364e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_iron_bars_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.693186000632639e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_stick_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6931861978478653e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_blaze_rod_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6931867894935442e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_bamboo_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6931869867087705e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_iron_bars_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.693236487730573e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_stick_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6932366849457994e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_blaze_rod_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6932372765914783e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_bamboo_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6932374738067046e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_iron_bars_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6932869748285073e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_stick_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6932877636894125e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_bamboo_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6932879609046388e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_iron_bars_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6933374619264414e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_stick_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6933382507873466e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_bamboo_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.693338448002573e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_iron_bars_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6933879490243756e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_stick_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.693388146239602e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_blaze_rod_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6933887378852808e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_bamboo_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.693388935100507e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_iron_bars_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.693589897416112e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_stick_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6935900946313384e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_blaze_rod_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6935906862770174e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_bamboo_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.6935908834922437e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_torch_iron_bars_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.706060210605846e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_stick_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.706060999466751e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_bamboo_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7060611966819774e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_iron_bars_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.70611069770378e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_stick_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7061108949190063e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_blaze_rod_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7061114865646853e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_bamboo_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7061116837799116e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_iron_bars_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.706161184801714e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_stick_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7061613820169405e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_blaze_rod_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7061619736626194e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_bamboo_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7061621708778457e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_iron_bars_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7062116718996483e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_stick_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7062124607605535e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_bamboo_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.70621265797578e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_iron_bars_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7062621589975825e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_stick_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7062629478584877e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_bamboo_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.706263145073714e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_iron_bars_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7063126460955166e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_stick_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.706312843310743e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_blaze_rod_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.706313434956422e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_bamboo_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.706313632171648e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_iron_bars_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7065145944872532e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_stick_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7065147917024795e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_blaze_rod_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7065153833481584e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_bamboo_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7065155805633847e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_soul_torch_iron_bars_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.731909604748128e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_stick_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7319105908242595e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_iron_bars_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.731960091846062e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_stick_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7319602890612884e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_blaze_rod_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7319610779221937e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_iron_bars_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7320105789439963e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_stick_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7320107761592226e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_blaze_rod_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7320115650201278e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_iron_bars_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7320610660419304e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_stick_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.732062052118062e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_iron_bars_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7321115531398646e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_stick_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.732112539215996e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_iron_bars_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7321620402377987e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_stick_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.732162237453025e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_blaze_rod_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7321630263139302e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_iron_bars_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7323639886295353e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_stick_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7323641858447616e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_blaze_rod_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.732364974705667e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_fire_charge_iron_bars_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7836083930326922e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_stick_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7836091818935975e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_bamboo_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7836093791088238e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_iron_bars_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7836588801306264e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_stick_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7836596689915316e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_bamboo_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.783659866206758e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_iron_bars_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7837093672285605e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_stick_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7837101560894657e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_bamboo_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.783710353304692e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_iron_bars_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7837598543264947e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_stick_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7837606431874e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_bamboo_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7837608404026262e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_iron_bars_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7838103414244288e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_stick_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.783811130285334e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_bamboo_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7838113275005603e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_iron_bars_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.783860828522363e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_stick_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.783861617383268e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_bamboo_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7838618145984945e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_iron_bars_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7840627769140995e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_stick_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.7840635657750048e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_bamboo_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.784063762990231e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_firework_star_iron_bars_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8482318783883975e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_knife_stick_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8482326672493027e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_knife_bamboo_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.848232864464529e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_knife_iron_bars_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8482823654863317e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_knife_stick_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.848283154347237e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_knife_bamboo_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8482833515624632e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_knife_iron_bars_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8483328525842658e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_knife_stick_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.848333641445171e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_knife_bamboo_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8483338386603973e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_knife_iron_bars_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8483833396822e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_knife_stick_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.848384128543105e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_knife_bamboo_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8483843257583315e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_knife_iron_bars_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.848433826780134e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_knife_stick_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8484346156410393e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_knife_bamboo_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8484348128562656e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_knife_iron_bars_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8484843138780682e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_knife_stick_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8484851027389735e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_knife_bamboo_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8484852999541998e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_knife_iron_bars_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.848686262269805e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_knife_stick_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.84868705113071e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_knife_bamboo_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8486872483459363e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_flint_knife_iron_bars_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.874082258606811e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_grindstone_iron_bars_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8741327457047453e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_grindstone_iron_bars_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8741832328026794e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_grindstone_iron_bars_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8742337199006136e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_grindstone_iron_bars_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8742842069985477e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_grindstone_iron_bars_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.874334694096482e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_grindstone_iron_bars_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8745366424882185e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_grindstone_iron_bars_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8870059696018207e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_hay_block_stick_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.887006758462726e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_hay_block_bamboo_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8870069556779522e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_hay_block_iron_bars_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.887056456699755e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_hay_block_stick_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.88705724556066e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_hay_block_bamboo_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8870574427758864e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_hay_block_iron_bars_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.887106943797689e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_hay_block_stick_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8871077326585942e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_hay_block_bamboo_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8871079298738205e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_hay_block_iron_bars_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.887157430895623e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_hay_block_stick_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8871582197565283e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_hay_block_bamboo_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8871584169717546e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_hay_block_iron_bars_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8872079179935573e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_hay_block_stick_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8872087068544625e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_hay_block_bamboo_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8872089040696888e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_hay_block_iron_bars_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8872584050914914e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_hay_block_stick_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8872591939523966e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_hay_block_bamboo_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.887259391167623e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_hay_block_iron_bars_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.887460353483228e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_hay_block_stick_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8874611423441332e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_hay_block_bamboo_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8874613395593595e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_hay_block_iron_bars_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8999306666729617e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_stick_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.899931455533867e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_bamboo_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8999316527490933e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_iron_bars_firework_rocket_whisper_flour_norocket"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.899981153770896e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_stick_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.899981942631801e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_bamboo_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.8999821398470274e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_iron_bars_feather_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.90003164086883e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_stick_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.9000324297297353e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_bamboo_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.9000326269449616e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_iron_bars_prismarine_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.900082127966764e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_stick_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.9000829168276694e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_bamboo_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.9000831140428957e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_iron_bars_firework_rocket_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.9001326150646983e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_stick_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.9001334039256035e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_bamboo_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.90013360114083e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_iron_bars_dried_kelp_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.9001831021626325e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_stick_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.9001838910235377e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_bamboo_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.900184088238764e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_iron_bars_echo_shard_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.900385050554369e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_stick_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.9003858394152743e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_bamboo_sculk_sensor_whisper_flour"
+		},
+		{
+			"predicate": {
+				"fletching-additions:texture_data": 1.9003860366305006e-24
+			},
+			"model": "fletching-additions:item/zzzzzzzzzz_autogen_carrot_iron_bars_sculk_sensor_whisper_flour"
 		}
 	]
 }

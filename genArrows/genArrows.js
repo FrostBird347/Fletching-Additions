@@ -226,6 +226,7 @@ function parseItem(rawItem) {
 			case "echoLink":
 			case "isSensor":
 			case "arrowDrift":
+			case "whisperToNearbyPlayers":
 				item.gameFlags.push(currentStat[0]);
 				break;
 			//Also put this out as a gen flag

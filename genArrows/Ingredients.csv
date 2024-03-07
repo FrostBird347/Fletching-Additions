@@ -66,7 +66,7 @@ farmersdelight:flint_knife,Very Sharp Arrow,Knife Tipped,t,noHidesInfo noFire,ou
 minecraft:pufferfish,,,t,,,texture&164
 minecraft:sugar_cane,,,s,noFire,,texture&4
 minecraft:grindstone,Grindstone Arrow,Grindstone Attached to a,t,reqSturdyCore noHidesInfo,outputCountMult&0,model&minecraft:grindstone
-minecraft:[DYE]_carpet,Harmless [DYE] Arrow,Soft,t,noFire reqStick noWet noHidesInfo,"skipThisComment&requires something sticky (or a regular stick) to prevent this from exploding the combination count, also noWet because wet carpet would be quite noisy@damageMult&0@silent@flySpeed&0.75",texture&24+[DYE_INDEX]
+minecraft:hay_block,Harmless Arrow,Soft,t,noFire,damageMult&0@silent,texture&24
 _,_,_,e,_,_,none&
 minecraft:sculk_sensor,Sculk Arrow,Sculk Finned,f,_,isSensor,texture&162
 minecraft:carrot,Carrot Tipped Arrow,Carrot Tipped,t,noFire,damageMult&0.25,texture&165
@@ -75,3 +75,4 @@ minecraft:quartz,,,,,,
 minecraft:emerald,,,,,,
 minecraft:chorus_fruit,,,,,,
 create:rose_quartz,,,,,,
+neepmeat:whisper_flour,,,e,,,none&

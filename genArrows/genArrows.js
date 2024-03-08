@@ -252,6 +252,11 @@ function parseItem(rawItem) {
 		}
 	}
 	
+	let itemTexturePath = "../src/main/resources/assets/fletching-additions/textures/item/" + item.id.replace("minecraft:", "").split(":").join("_") + "_arrow_part.png";
+	if (!fs.existsSync(itemTexturePath) && item.id != "_") {
+		console.log("\titem tex:	\t", item.id + " (warning)");
+	}
+	
 	item.valid = true;
 	//console.log(item);
 	return item;

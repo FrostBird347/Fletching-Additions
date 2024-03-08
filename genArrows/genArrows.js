@@ -384,7 +384,7 @@ function genOutput(inputs) {
 					case "replaceTextures":
 						renderOverride = i;
 						let newModelData = inputs[i].modelData.split("+").reduce((sum, add) => parseInt(sum) + parseInt(add), 0).toString();
-						outputNBT.renderParts = [{mode: inputs[i].modelMode, data: newModelData, type: "tip", extraData: inputs[i].modelDataExtra}, {mode: inputs[i].modelMode, data: newModelData, type: "stick", extraData: inputs[i].modelDataExtra}, {mode: inputs[i].modelMode, data: newModelData, type: "fin", extraData: inputs[i].modelDataExtra}];
+						outputNBT.renderParts = [{mode: inputs[i].modelMode, data: newModelData, type: "t", extraData: inputs[i].modelDataExtra}, {mode: inputs[i].modelMode, data: newModelData, type: "s", extraData: inputs[i].modelDataExtra}, {mode: inputs[i].modelMode, data: newModelData, type: "f", extraData: inputs[i].modelDataExtra}];
 						textureSlots[newModelData] = [0, 0, 0];
 						textureSlotsNames[newModelData] = [inputs[i].id, inputs[i].id, inputs[i].id];
 						break;

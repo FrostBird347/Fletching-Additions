@@ -61,7 +61,7 @@ public class CustomArrowEntityRenderPart {
 				} catch(Exception err) {
 					MainMod.LOGGER.error("Failed to parse texture ID \"" + data + "\": " + err.getLocalizedMessage());
 				}
-				side = SIDE_MAP.getOrDefault(_mode, TextureSide.BOTH);
+				side = SIDE_MAP.getOrDefault(extraData, TextureSide.BOTH);
 				break;
 			case MODEL:
 				modelId = data;
@@ -85,7 +85,7 @@ public class CustomArrowEntityRenderPart {
 		}
 	}
 
-	public float getCoord(int index, boolean getY, int rectIndex) {
+	public float getCoord(int index, boolean getY, int rectIndex, boolean flipYAxis) {
 		if (IS_SERVER_SIDE) {
 			MainMod.LOGGER.error("getCoord was called on the server!");
 			MainMod.LOGGER.error("This should never happen!");
@@ -262,7 +262,12 @@ public class CustomArrowEntityRenderPart {
 		}
 
 		if (getY) {
-			return cachedTexturePoints[rectIndex][POINT_LOOKUP_Y[index]];
+			if (side == TextureSide.BOTH || !flipYAxis) {
+				return cachedTexturePoints[rectIndex][POINT_LOOKUP_Y[index]];
+			} else {
+				//Flip the y axis
+				return cachedTexturePoints[rectIndex][POINT_LOOKUP_Y[(index + 2) % 4]];
+			}
 		}
 		return cachedTexturePoints[rectIndex][POINT_LOOKUP_X[index]];
 	}

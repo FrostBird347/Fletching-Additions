@@ -486,6 +486,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 	@Override
 	protected float getDragInWater() {
 		if (waterSpeed) return 0.9f;
+		if (hasFirework) return 1f;
 		return super.getDragInWater();
 	}
 
@@ -581,14 +582,23 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 		//Replace inheritFireworkNBT with the noFins gameflag (will only apply once the arrow is picked up)
 		//Also remove the inheritFireworkNBT data, to allow arrows which only had differing fireworks to be stacked together
 		int flagIndex = gameFlags.indexOf(NbtString.of("inheritFireworkNBT"));
-		if (flagIndex <= 0) {
+		if (flagIndex >= 0) {
 			gameFlags.set(flagIndex, NbtString.of("_noFins"));
 		}
 		itemNbt.remove("inheritFireworkNBT");
 
-		//Update texture
+		//Update item texture
 		itemNbt.putFloat("itemTextureData", itemNbt.getFloat("afterRocketItemTextureData"));
 		itemNbt.remove("afterRocketItemTextureData");
+
+		//Update entity texture
+		NbtList displayParts = itemNbt.getList("renderParts", NbtElement.COMPOUND_TYPE);
+		for (int i = displayParts.size() - 1; i >= 0; i--) {
+			if (displayParts.getCompound(i).getString("type").equals("f")) {
+				displayParts.remove(i);
+			}
+		}
+		
 		
 		//Refresh gravity
 		gravityMult = 1;
@@ -597,7 +607,6 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 		}
 
 		hasFirework = false;
-		this.world.sendEntityStatus(this, (byte)1);
 		//Just to be extra sure, manually set this as well
 		this.dataTracker.set(SHOW_FIREWORK_SPARKS, false);
 	}
@@ -710,7 +719,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 			serverSourcePos = new Vec3d(this.getX(), this.getY(), this.getZ());
 		}
 		
-		this.world.sendEntityStatus(this, (byte)1);
+		refreshClientNbtFromServer();
 	}
 
 	@Override
@@ -731,6 +740,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 		}
 	}
 
+	//Appears to only be run client side, but I added the client checks just to be safe
 	@Override
 	public void handleStatus(byte status) {
 		//Firework rocket/star impact explosion
@@ -743,6 +753,9 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 			}
 			MainMod.LOGGER.info(explosions.asString());
 
+			if (hasFirework) {
+				removeFinsFromClient();
+			}
 			explodeFirework(explosions);
 			hasFirework = false;
 		}
@@ -751,6 +764,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 			syncItemNbt();
 			explodeFirework(this.itemNbt.getCompound("inheritFireworkNBT").getCompound("Fireworks").getList("Explosions", NbtElement.COMPOUND_TYPE).copy());
 			hasFirework = false;
+			removeFinsFromClient();
 		}
 
 		//Refresh client itemNbt
@@ -758,16 +772,34 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 			if (this.world.isClient) {
 				//Nbt will be updated next tick
 				clientHasNbt = false;
-			} else {
-				if (itemNbt != null) {
-					this.dataTracker.set(ITEM_NBT, itemNbt.copy());
-				} else {
-					this.dataTracker.set(ITEM_NBT, new NbtCompound());
-				}
 			}
 		}
 
 		super.handleStatus(status);
+	}
+
+	//Messy fix for itemNbt taking too long to be sent to the client
+	private void removeFinsFromClient() {
+		if (this.world.isClient) {
+			for (int i = renderInfo.renderList.size() - 1; i >= 0; i--) {
+				if (renderInfo.renderList.get(i).type == CustomArrowEntityRenderPart.Type.FIN) {
+					renderInfo.renderList.remove(i);
+				}
+			}
+		}
+	}
+
+	//TODO: Add a delay before sending the status to prevent the client from reloading nbt too early
+	public void refreshClientNbtFromServer() {
+		if (!this.world.isClient) {
+			if (itemNbt != null) {
+				this.dataTracker.set(ITEM_NBT, itemNbt.copy());
+			} else {
+				this.dataTracker.set(ITEM_NBT, new NbtCompound());
+			}
+
+			this.world.sendEntityStatus(this, (byte)1);
+		}
 	}
 
 	protected void initDataTracker() {

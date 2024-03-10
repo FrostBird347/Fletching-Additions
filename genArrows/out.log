@@ -31,11 +31,11 @@ Parsing...
 	unknown type:	 create:rose_quartz
 Combining...
 Stats: {
-  totalCount: 2795,
+  totalCount: 2570,
   mostFireChances: 6,
   longestName: 'Grindstone Attached to a Prismarine Finned Blaze Infused Arrow with an Iron Core',
-  flySpeedStats: [ Float { value: 0.42857142855 }, Float { value: 2.25 } ],
-  gravityMultStats: [ Float { value: 0.75 }, Float { value: 2.1875 } ],
+  flySpeedStats: [ Float { value: 0.42857142855 }, Float { value: 1.125 } ],
+  gravityMultStats: [ Float { value: 0.5625 }, Float { value: 1.75 } ],
   drawSpeedStats: [ Float { value: 0.25 }, Float { value: 1.25 } ],
   drawMinMultStats: [ Float { value: 2 }, Float { value: 2 } ],
   damageMultStats: [ Float { value: 0.08203125 }, Float { value: 3.5 } ],

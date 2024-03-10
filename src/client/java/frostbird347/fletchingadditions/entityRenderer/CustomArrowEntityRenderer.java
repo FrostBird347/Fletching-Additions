@@ -1,28 +1,45 @@
 package frostbird347.fletchingadditions.entityRenderer;
 
+import java.util.Iterator;
+import java.util.List;
 import frostbird347.fletchingadditions.entity.CustomArrowEntity;
 import frostbird347.fletchingadditions.entity.CustomArrowEntityRenderInfo;
 import frostbird347.fletchingadditions.entity.CustomArrowEntityRenderPart;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.client.render.entity.model.EntityModelLoader;
+import net.minecraft.client.render.entity.model.TridentEntityModel;
+import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.render.model.BakedModelManager;
+import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Matrix3f;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.random.Random;
 
 //Heavily modified vanilla arrows that have interchangable components
 public class CustomArrowEntityRenderer extends EntityRenderer<CustomArrowEntity> {
 	public static final Identifier TEXTURE = new Identifier("fletching-additions:textures/entity/projectiles/custom_arrow.png");
+	private final ItemRenderer itemRenderer;
+	private final BakedModelManager modelManager;
 
 	public CustomArrowEntityRenderer(EntityRendererFactory.Context context) {
 		super(context);
+		this.itemRenderer = context.getItemRenderer();
+		this.modelManager = itemRenderer.getModels().getModelManager();
 	}
 
 	@Override
@@ -150,6 +167,24 @@ public class CustomArrowEntityRenderer extends EntityRenderer<CustomArrowEntity>
 					break;
 				//TODO: Add model support
 				case MODEL:
+					//Don't rotate the model
+					matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-45f));
+
+					BakedModel partModel = currentPart.getModel(modelManager);
+					Random random = Random.create();
+					Direction[] directions = Direction.values();
+					for (int iDir = 0; iDir < directions.length; iDir++) {
+						random.setSeed(42L);
+						List<BakedQuad> quads = partModel.getQuads((BlockState)null, directions[iDir], random);
+
+						Iterator<BakedQuad> quadIterator = quads.iterator();
+						while (quadIterator.hasNext()) {
+							renderBuffer.quad(topMatrixEntry, quadIterator.next(), 1f, 1f, 1f, light, OverlayTexture.DEFAULT_UV);
+						}
+					}
+
+					//Rotate the arrow back
+					matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(45f));
 					break;
 				case NONE:
 				default:

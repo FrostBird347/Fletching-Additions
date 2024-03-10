@@ -2,9 +2,17 @@ package frostbird347.fletchingadditions.entity;
 
 import java.util.Map;
 import frostbird347.fletchingadditions.MainMod;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.render.model.BakedModelManager;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.util.ModelIdentifier;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 public class CustomArrowEntityRenderPart {
 	public enum Type {
@@ -23,6 +31,10 @@ public class CustomArrowEntityRenderPart {
 		FLAT_HORIZONTAL,
 		FLAT_VERTICAL
 	}
+	public enum ModelType {
+		ITEM,
+		BLOCK
+	}
 	private static final Map<String, Type> TYPE_MAP = Map.of("t", Type.TIP, "s", Type.STICK, "f", Type.FIN, "e", Type.EFFECT);
 	private static final Map<String, RenderMode> MODE_MAP = Map.of("texture", RenderMode.TEXTURE, "model", RenderMode.MODEL, "none", RenderMode.NONE);
 	private static final Map<String, TextureSide> SIDE_MAP = Map.of("b", TextureSide.BOTH, "h", TextureSide.FLAT_HORIZONTAL, "v", TextureSide.FLAT_VERTICAL);
@@ -33,8 +45,8 @@ public class CustomArrowEntityRenderPart {
 	public RenderMode mode;
 	public TextureSide side;
 	private byte size;
-	private int lastId;
-
+	private int lastTextureId;
+	private String lastModelId;
 	/*
 	Index:	0,1	2,1	2,3	0,3
 	Path:
@@ -46,8 +58,7 @@ public class CustomArrowEntityRenderPart {
 	private float[][] cachedTexturePoints = {{-1f, -1f, -1f, -1f}, {-1f, -1f, -1f, -1f}, {-1f, -1f, -1f, -1f}};
 	private final byte[] POINT_LOOKUP_X = {0, 2, 2, 0};
 	private final byte[] POINT_LOOKUP_Y = {1, 1, 3, 3};
-	//TODO: Add model support
-	private ModelIdentifier cachedModel = null;
+	private ModelIdentifier realCachedModelId = null;
 	private final boolean IS_SERVER_SIDE;
 
 	public CustomArrowEntityRenderPart(CustomArrowEntity arrow, String _type, String _mode, String data, String extraData) {
@@ -74,15 +85,11 @@ public class CustomArrowEntityRenderPart {
 	public CustomArrowEntityRenderPart(CustomArrowEntity arrow) {
 		size = -1;
 		textureId = 0;
-		lastId = -1;
+		lastTextureId = -1;
 		modelId = "";
-		cachedModel = null;
+		lastModelId = "_";
+		realCachedModelId = null;
 		IS_SERVER_SIDE = !arrow.world.isClient;
-
-		//Only load the missing model after
-		if (!IS_SERVER_SIDE) {
-			cachedModel = ModelLoader.MISSING_ID;
-		}
 	}
 
 	public float getCoord(int index, boolean getY, int rectIndex, boolean flipYAxis) {
@@ -92,8 +99,8 @@ public class CustomArrowEntityRenderPart {
 			return -1;
 		}
 
-		if (lastId != textureId) {
-			lastId = textureId;
+		if (lastTextureId != textureId) {
+			lastTextureId = textureId;
 			size = -1;
 
 			int currentPixelX = (textureId * 24) % 480;
@@ -326,5 +333,22 @@ public class CustomArrowEntityRenderPart {
 			}
 
 		return size;
+	}
+
+	public BakedModel getModel(BakedModelManager modelManager) {
+		//Ensure this isn't run server side
+		if (IS_SERVER_SIDE) {
+			return null;
+		}
+		
+		if (modelId != lastModelId) {
+			lastModelId = modelId;
+			realCachedModelId = new ModelIdentifier(modelId);
+		}
+		if (this.realCachedModelId == null) {
+			return modelManager.getMissingModel();
+		}
+
+		return modelManager.getModel(realCachedModelId);
 	}
 }

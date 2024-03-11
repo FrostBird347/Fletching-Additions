@@ -34,7 +34,7 @@ minecraft:amethyst_shard,Amethyst Arrow,Amethyst Tipped,t,_,damageMult&1.5@impac
 minecraft:blaze_powder,Blaze Infused Arrow,Blaze Infused,e,_,fireChance&0.05@fireChance&0.75,none&
 minecraft:firework_rocket,Rocket Powered Arrow,Rocket Powered,f,noHidesInfo,skipThisComment&gravityMult only applies after the firework duration. otherwise its 0@drawSpeed&0.25@inheritFireworkNBT@gravityMult&0.75@drawMinMult&2,"item&minecraft:firework_rocket&{""side"":""h""}"
 minecraft:dried_kelp,Dried Kelp Arrow,Dried Kelp Finned,f,_,flySpeed&0.75@damageMult&0.75,texture&4
-minecraft:lightning_rod,,,s,SturdyCore,,item&minecraft:lightning_rod
+minecraft:lightning_rod,,,s,SturdyCore,,"item&minecraft:fletching-additions:zzzzzzzzzz_4d4f44454c5f504c414345484f4c444552&{""CustomModelData"":1}"
 minecraft:bamboo,Bamboo Arrow,Bamboo,s,_,gravityMult&0.875@flySpeed&1.125@damageMult&0.875&drawSpeed&1.125,texture&3
 minecraft:iron_bars,Iron Arrow,Iron,s,SturdyCore,gravityMult&1.75@flySpeed&0.5714285714@damageMult&1.75&drawSpeed&0.5714285714,item&minecraft:iron_bars
 minecraft:torch,Flaming Arrow,Flaming,t,noHidesInfo,fireChance&0.25,texture&3&v

@@ -5,8 +5,7 @@
 	"mixins": [
 		"MainMixin",
 		"FletchingTableBlockMixin",
-		"BeforeRecipeLoad",
-		"AfterLangLoad"
+		"BeforeRecipeLoad"
 	],
 	"injectors": {
 		"defaultRequire": 1

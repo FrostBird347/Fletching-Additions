@@ -1,6 +1,8 @@
-package frostbird347.fletchingadditions.entity;
+package frostbird347.fletchingadditions.entity.entityRendering;
 
 import java.util.ArrayList;
+
+import frostbird347.fletchingadditions.entity.CustomArrowEntity;
 import net.minecraft.nbt.NbtCompound;
 
 public class CustomArrowEntityRenderInfo {

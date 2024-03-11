@@ -1,6 +1,6 @@
-package frostbird347.fletchingadditions.entityRenderer;
+package frostbird347.fletchingadditions.entity.entityRendering;
 
-import frostbird347.fletchingadditions.entity.CustomArrowEntityRenderPart.RenderSide;
+import frostbird347.fletchingadditions.entity.entityRendering.CustomArrowEntityRenderPart.RenderSide;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;

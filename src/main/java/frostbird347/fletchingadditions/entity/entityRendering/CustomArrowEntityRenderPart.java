@@ -1,8 +1,8 @@
-package frostbird347.fletchingadditions.entity;
+package frostbird347.fletchingadditions.entity.entityRendering;
 
 import java.util.Map;
 import frostbird347.fletchingadditions.MainMod;
-import frostbird347.fletchingadditions.entityRenderer.ItemModelRenderInfo;
+import frostbird347.fletchingadditions.entity.CustomArrowEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;

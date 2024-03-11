@@ -3,7 +3,8 @@
 	"package": "frostbird347.fletchingadditions.mixin.client",
 	"compatibilityLevel": "JAVA_17",
 	"client": [
-		"MainClientMixin"
+		"MainClientMixin",
+		"AfterLangLoad"
 	],
 	"injectors": {
 		"defaultRequire": 1

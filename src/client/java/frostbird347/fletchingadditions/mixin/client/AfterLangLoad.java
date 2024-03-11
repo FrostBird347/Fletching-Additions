@@ -1,4 +1,4 @@
-package frostbird347.fletchingadditions.mixin;
+package frostbird347.fletchingadditions.mixin.client;
 
 import net.minecraft.client.resource.language.LanguageManager;
 import org.spongepowered.asm.mixin.Mixin;

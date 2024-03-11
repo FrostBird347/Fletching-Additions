@@ -2,7 +2,8 @@ package frostbird347.fletchingadditions.entityRenderer;
 
 import java.util.ArrayList;
 import frostbird347.fletchingadditions.entity.CustomArrowEntity;
-import frostbird347.fletchingadditions.entity.CustomArrowEntityRenderPart;
+import frostbird347.fletchingadditions.entity.entityRendering.CustomArrowEntityRenderPart;
+import frostbird347.fletchingadditions.entity.entityRendering.ItemModelRenderInfo;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;

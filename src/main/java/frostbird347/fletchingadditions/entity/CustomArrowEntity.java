@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import org.jetbrains.annotations.Nullable;
 import frostbird347.fletchingadditions.MainMod;
+import frostbird347.fletchingadditions.entity.entityRendering.CustomArrowEntityRenderInfo;
+import frostbird347.fletchingadditions.entity.entityRendering.CustomArrowEntityRenderPart;
 import frostbird347.fletchingadditions.item.ItemManager;
 import frostbird347.fletchingadditions.modCompat.ModCompatManager;
 import net.minecraft.entity.Entity;

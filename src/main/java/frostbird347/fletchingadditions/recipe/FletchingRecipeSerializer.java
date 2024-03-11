@@ -24,7 +24,7 @@ public class FletchingRecipeSerializer implements RecipeSerializer<FletchingReci
 	private FletchingRecipeSerializer() {}
 
 	public static final Identifier ID = new Identifier("fletching-additions:fletching_recipe");
-	public static ArrayList<String> PREVIOUS_ERRORS = new ArrayList<String>();
+	public static final ArrayList<String> PREVIOUS_ERRORS = new ArrayList<String>();
 
 	//Turns json into Recipe
 	@Override

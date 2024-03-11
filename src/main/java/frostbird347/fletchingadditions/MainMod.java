@@ -13,6 +13,8 @@ import frostbird347.fletchingadditions.stats.StatsManager;
 
 public class MainMod implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("fletching-additions");
+	//Value will eventually overflow, thus for language reload detection you should only check if it has changed
+	public static byte langReloads = 0;
 
 	@Override
 	public void onInitialize() {

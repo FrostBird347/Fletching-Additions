@@ -56,6 +56,7 @@ public class CustomArrowEntityRenderPart {
 	private final byte[] POINT_LOOKUP_Y = {1, 1, 3, 3};
 	private ItemStack cachedItemStack = null;
 	private ItemModelRenderInfo cachedRenderInfo = null;
+	private byte langReloadCache = MainMod.langReloads;
 	private final boolean IS_SERVER_SIDE;
 
 	public CustomArrowEntityRenderPart(CustomArrowEntity arrow, String _type, String _mode, NbtCompound data) {
@@ -331,7 +332,7 @@ public class CustomArrowEntityRenderPart {
 			return null;
 		}
 		
-		if (itemId != lastItemId) {
+		if (!itemId.equals(lastItemId)) {
 			lastItemId = itemId;
 			cachedRenderInfo = null;
 			Item basicItem = Registry.ITEM.get(new Identifier(itemId));
@@ -404,6 +405,14 @@ public class CustomArrowEntityRenderPart {
 			//if (err)
 			MainMod.LOGGER.error(err.toString());
 			return defaultValue;
+		}
+	}
+
+	public void checkForLangReload() {
+		if (langReloadCache != MainMod.langReloads) {
+			langReloadCache = MainMod.langReloads;
+			size = -1;
+			cachedRenderInfo = null;
 		}
 	}
 	

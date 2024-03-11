@@ -65,6 +65,7 @@ public class CustomArrowEntityRenderer extends EntityRenderer<CustomArrowEntity>
 		ArrayList<ItemModelRenderInfo> itemsToRender = new ArrayList<ItemModelRenderInfo>();
 		for (byte i = 0; i < arrow.renderInfo.renderList.size(); i++) {
 			CustomArrowEntityRenderPart currentPart = arrow.renderInfo.renderList.get(i);
+			currentPart.checkForLangReload();
 
 			switch (currentPart.mode) {
 				case TEXTURE:

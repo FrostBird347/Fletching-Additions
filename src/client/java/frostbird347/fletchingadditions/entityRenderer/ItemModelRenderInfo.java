@@ -1,6 +1,6 @@
 package frostbird347.fletchingadditions.entityRenderer;
 
-import frostbird347.fletchingadditions.entity.CustomArrowEntityRenderPart.TextureSide;
+import frostbird347.fletchingadditions.entity.CustomArrowEntityRenderPart.RenderSide;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
@@ -11,10 +11,10 @@ public class ItemModelRenderInfo  {
 	public Vec3d translate;
 	public float scale;
 	public Vec3f rotation;
-	public TextureSide renderSide;
+	public RenderSide renderSide;
 	public double partOffset;
 
-	public ItemModelRenderInfo(ItemStack item, Vec3d translate, float scale, Vec3f rotation, TextureSide renderSide, float partOffset) {
+	public ItemModelRenderInfo(ItemStack item, Vec3d translate, float scale, Vec3f rotation, RenderSide renderSide, float partOffset) {
 		this.item = item;
 		this.translate = translate;
 		this.scale = scale;

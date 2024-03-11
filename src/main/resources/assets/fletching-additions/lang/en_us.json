@@ -1,8 +1,8 @@
 {
-  "entity.fletching-additions.custom_arrow.render_stick_size.texture.160": "9",
-  "entity.fletching-additions.custom_arrow.render_stick_size.model.fletching-additions.zzzzzzzzzz_4d4f44454c5f504c414345484f4c444552.1": "13.25",
-  "entity.fletching-additions.custom_arrow.render_stick_resize.model.fletching-additions.zzzzzzzzzz_4d4f44454c5f504c414345484f4c444552.1": "1.5",
-  "entity.fletching-additions.custom_arrow.render_stick_translate_x.model.fletching-additions.zzzzzzzzzz_4d4f44454c5f504c414345484f4c444552.1": "-4.5",
-  "entity.fletching-additions.custom_arrow.render_stick_rotate_x.model.fletching-additions.zzzzzzzzzz_4d4f44454c5f504c414345484f4c444552.1": "45",
-  "entity.fletching-additions.custom_arrow.render_stick_render_side.model.fletching-additions.zzzzzzzzzz_4d4f44454c5f504c414345484f4c444552.1": "h"
+  "entity.fletching-additions.custom_arrow.texture.offset.stick.160": "9",
+  "entity.fletching-additions.custom_arrow.model.offset.fletching-additions.entity_part_models.1": "13.25",
+  "entity.fletching-additions.custom_arrow.model.resize.fletching-additions.entity_part_models.1": "1.5",
+  "entity.fletching-additions.custom_arrow.model.translate_x.fletching-additions.entity_part_models.1": "-4.5",
+  "entity.fletching-additions.custom_arrow.model.rotate_x.fletching-additions.entity_part_models.1": "45",
+  "entity.fletching-additions.custom_arrow.model.render_side.fletching-additions.entity_part_models.1": "h"
 }

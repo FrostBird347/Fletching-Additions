@@ -71,7 +71,7 @@ public class CustomArrowEntityRenderer extends EntityRenderer<CustomArrowEntity>
 				case TEXTURE:
 
 					//Make sure flat horizontal/vertical parts are actually horizontal/vertical
-					if (currentPart.side != CustomArrowEntityRenderPart.TextureSide.BOTH) {
+					if (currentPart.side != CustomArrowEntityRenderPart.RenderSide.BOTH) {
 						matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-45f));
 					}
 
@@ -82,7 +82,7 @@ public class CustomArrowEntityRenderer extends EntityRenderer<CustomArrowEntity>
 								matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90.0f));
 
 								//Check if the side should be rendered
-								if (currentPart.side == CustomArrowEntityRenderPart.TextureSide.BOTH || (currentPart.side == CustomArrowEntityRenderPart.TextureSide.FLAT_VERTICAL && _i % 2 == 1) || (currentPart.side == CustomArrowEntityRenderPart.TextureSide.FLAT_HORIZONTAL && _i % 2 == 0)) {
+								if (currentPart.side == CustomArrowEntityRenderPart.RenderSide.BOTH || (currentPart.side == CustomArrowEntityRenderPart.RenderSide.FLAT_VERTICAL && _i % 2 == 1) || (currentPart.side == CustomArrowEntityRenderPart.RenderSide.FLAT_HORIZONTAL && _i % 2 == 0)) {
 									
 									//I literally just spawned a spectral and custom arrow at the same spot and then manually changed values until the tip matched up with the arrow (z-fighting was surprisingly helpful)
 									if (currentPart.textureId < 160) {
@@ -99,7 +99,7 @@ public class CustomArrowEntityRenderer extends EntityRenderer<CustomArrowEntity>
 							for (byte _i = 0; _i < 4; _i++) {
 								matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90.0f));
 
-								if (currentPart.side == CustomArrowEntityRenderPart.TextureSide.BOTH || (currentPart.side == CustomArrowEntityRenderPart.TextureSide.FLAT_VERTICAL && _i % 2 == 1) || (currentPart.side == CustomArrowEntityRenderPart.TextureSide.FLAT_HORIZONTAL && _i % 2 == 0)) {
+								if (currentPart.side == CustomArrowEntityRenderPart.RenderSide.BOTH || (currentPart.side == CustomArrowEntityRenderPart.RenderSide.FLAT_VERTICAL && _i % 2 == 1) || (currentPart.side == CustomArrowEntityRenderPart.RenderSide.FLAT_HORIZONTAL && _i % 2 == 0)) {
 
 									if (currentPart.textureId < 160) {
 										//Variable width part
@@ -125,7 +125,7 @@ public class CustomArrowEntityRenderer extends EntityRenderer<CustomArrowEntity>
 							for (byte _i = 0; _i < 4; _i++) {
 								matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90.0f));	
 								
-								if (currentPart.side == CustomArrowEntityRenderPart.TextureSide.BOTH || (currentPart.side == CustomArrowEntityRenderPart.TextureSide.FLAT_VERTICAL && _i % 2 == 1) || (currentPart.side == CustomArrowEntityRenderPart.TextureSide.FLAT_HORIZONTAL && _i % 2 == 0)) {
+								if (currentPart.side == CustomArrowEntityRenderPart.RenderSide.BOTH || (currentPart.side == CustomArrowEntityRenderPart.RenderSide.FLAT_VERTICAL && _i % 2 == 1) || (currentPart.side == CustomArrowEntityRenderPart.RenderSide.FLAT_HORIZONTAL && _i % 2 == 0)) {
 
 									if (currentPart.textureId < 160) {
 										//Same as the back of the tip, but more than one pixel and offset to a corner
@@ -150,7 +150,7 @@ public class CustomArrowEntityRenderer extends EntityRenderer<CustomArrowEntity>
 					}
 
 					//Make sure flat horizontal/vertical parts are actually horizontal/vertical
-					if (currentPart.side != CustomArrowEntityRenderPart.TextureSide.BOTH) {
+					if (currentPart.side != CustomArrowEntityRenderPart.RenderSide.BOTH) {
 						matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(45f));
 					}
 					break;

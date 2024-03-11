@@ -17,7 +17,7 @@ public class ItemManager {
 
 	public static void registerItems() {
 		Registry.register(Registry.ITEM, new Identifier("fletching-additions", "custom_arrow"), (Item)CUSTOM_ARROW);
-		Registry.register(Registry.ITEM, new Identifier("fletching-additions", "zzzzzzzzzz_4d4f44454c5f504c414345484f4c444552"), (Item)MODEL_PLACEHOLDER);
+		Registry.register(Registry.ITEM, new Identifier("fletching-additions", "entity_part_models"), (Item)MODEL_PLACEHOLDER);
 
 		DispenserBlock.registerBehavior(CUSTOM_ARROW, new ProjectileDispenserBehavior() {
 			@Override

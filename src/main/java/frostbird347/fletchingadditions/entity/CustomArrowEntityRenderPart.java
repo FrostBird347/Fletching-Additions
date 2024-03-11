@@ -25,21 +25,21 @@ public class CustomArrowEntityRenderPart {
 		ITEM,
 		NONE
 	}
-	public enum TextureSide {
+	public enum RenderSide {
 		BOTH,
 		FLAT_HORIZONTAL,
 		FLAT_VERTICAL
 	}
 	private static final Map<String, Type> TYPE_MAP = Map.of("t", Type.TIP, "s", Type.STICK, "f", Type.FIN, "e", Type.EFFECT);
 	private static final Map<String, RenderMode> MODE_MAP = Map.of("texture", RenderMode.TEXTURE, "item", RenderMode.ITEM, "none", RenderMode.NONE);
-	private static final Map<String, TextureSide> SIDE_MAP = Map.of("b", TextureSide.BOTH, "h", TextureSide.FLAT_HORIZONTAL, "v", TextureSide.FLAT_VERTICAL);
+	private static final Map<String, RenderSide> SIDE_MAP = Map.of("b", RenderSide.BOTH, "h", RenderSide.FLAT_HORIZONTAL, "v", RenderSide.FLAT_VERTICAL);
 
 	public int textureId;
 	public String itemId;
 	public NbtCompound itemNbt;
 	public Type type;
 	public RenderMode mode;
-	public TextureSide side;
+	public RenderSide side;
 	private float size;
 	private int lastTextureId;
 	private String lastItemId;
@@ -71,7 +71,7 @@ public class CustomArrowEntityRenderPart {
 					MainMod.LOGGER.error("Failed to parse texture ID \"" + data.getString("id") + "\": " + err.getLocalizedMessage());
 					textureId = 0;
 				}
-				side = SIDE_MAP.getOrDefault(data.getString("side"), TextureSide.BOTH);
+				side = SIDE_MAP.getOrDefault(data.getString("side"), RenderSide.BOTH);
 				break;
 			case ITEM:
 				itemId = data.getString("id");
@@ -269,7 +269,7 @@ public class CustomArrowEntityRenderPart {
 		}
 
 		if (getY) {
-			if (side == TextureSide.BOTH || !flipYAxis) {
+			if (side == RenderSide.BOTH || !flipYAxis) {
 				return cachedTexturePoints[rectIndex][POINT_LOOKUP_Y[index]];
 			} else {
 				//Flip the y axis
@@ -307,7 +307,7 @@ public class CustomArrowEntityRenderPart {
 					}
 				}
 
-				size = getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_size.texture." + textureId, Float.valueOf(size)).floatValue();
+				size = getLangData("entity.fletching-additions.custom_arrow.texture.offset." + type.toString().toLowerCase() + "." + textureId, Float.valueOf(size)).floatValue();
 				break;
 			case ITEM:
 				NbtCompound itemNbt = this.getItem().getNbt();
@@ -315,7 +315,7 @@ public class CustomArrowEntityRenderPart {
 				if (itemNbt != null) {
 					itemModelId = "." + Integer.valueOf(itemNbt.getInt("CustomModelData")).toString().replaceAll("-", "_");
 				}
-				size = getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_size.model." + itemId.replaceAll(":", ".") + itemModelId, Float.valueOf(16)).floatValue();
+				size = getLangData("entity.fletching-additions.custom_arrow.model.offset." + itemId.replaceAll(":", ".") + itemModelId, Float.valueOf(16)).floatValue();
 				break;
 
 			case NONE:
@@ -360,17 +360,17 @@ public class CustomArrowEntityRenderPart {
 				itemModelId = "." + Integer.valueOf(itemNbt.getInt("CustomModelData")).toString().replaceAll("-", "_");
 			}
 			Vec3d translate = new Vec3d(
-				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_translate_x.model." + itemId.replaceAll(":", ".") + itemModelId, 0.0).doubleValue(),
-				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_translate_y.model." + itemId.replaceAll(":", ".") + itemModelId, 0.0).doubleValue(),
-				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_translate_z.model." + itemId.replaceAll(":", ".") + itemModelId, 0.0).doubleValue()
+				getLangData("entity.fletching-additions.custom_arrow.model.translate_x." + itemId.replaceAll(":", ".") + itemModelId, 0.0).doubleValue(),
+				getLangData("entity.fletching-additions.custom_arrow.model.translate_y." + itemId.replaceAll(":", ".") + itemModelId, 0.0).doubleValue(),
+				getLangData("entity.fletching-additions.custom_arrow.model.translate_z." + itemId.replaceAll(":", ".") + itemModelId, 0.0).doubleValue()
 			);
-			float scale = getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_resize.model." + itemId.replaceAll(":", ".") + itemModelId, 1f).floatValue();
+			float scale = getLangData("entity.fletching-additions.custom_arrow.model.resize." + itemId.replaceAll(":", ".") + itemModelId, 1f).floatValue();
 			Vec3f rotate = new Vec3f(
-				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_rotate_x.model." + itemId.replaceAll(":", ".") + itemModelId, 0f).floatValue(),
-				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_rotate_y.model." + itemId.replaceAll(":", ".") + itemModelId, 0f).floatValue(),
-				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_rotate_z.model." + itemId.replaceAll(":", ".") + itemModelId, 0f).floatValue()
+				getLangData("entity.fletching-additions.custom_arrow.model.rotate_x." + itemId.replaceAll(":", ".") + itemModelId, 0f).floatValue(),
+				getLangData("entity.fletching-additions.custom_arrow.model.rotate_y." + itemId.replaceAll(":", ".") + itemModelId, 0f).floatValue(),
+				getLangData("entity.fletching-additions.custom_arrow.model.rotate_z." + itemId.replaceAll(":", ".") + itemModelId, 0f).floatValue()
 			);
-			TextureSide renderSide = getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_render_side.model." + itemId.replaceAll(":", ".") + itemModelId, TextureSide.FLAT_HORIZONTAL);
+			RenderSide renderSide = getLangData("entity.fletching-additions.custom_arrow.model.side" + itemId.replaceAll(":", ".") + itemModelId, RenderSide.FLAT_HORIZONTAL);
 
 			cachedRenderInfo = new ItemModelRenderInfo(thisItem, translate, scale, rotate, renderSide, offset);
 		}
@@ -395,8 +395,8 @@ public class CustomArrowEntityRenderPart {
 			if (defaultValue instanceof Double) {
 				return (T)Double.valueOf(Double.parseDouble(rawValue));
 			}
-			if (defaultValue instanceof TextureSide) {
-				return (T)SIDE_MAP.getOrDefault(rawValue, (TextureSide)defaultValue);
+			if (defaultValue instanceof RenderSide) {
+				return (T)SIDE_MAP.getOrDefault(rawValue, (RenderSide)defaultValue);
 			}
 			
 			MainMod.LOGGER.error("Unsupported type for key " + key);

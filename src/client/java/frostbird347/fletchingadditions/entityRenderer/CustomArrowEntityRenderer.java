@@ -1,11 +1,8 @@
 package frostbird347.fletchingadditions.entityRenderer;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import frostbird347.fletchingadditions.entity.CustomArrowEntity;
 import frostbird347.fletchingadditions.entity.CustomArrowEntityRenderPart;
-import frostbird347.fletchingadditions.entity.CustomArrowEntityRenderPart.TextureSide;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
@@ -65,7 +62,7 @@ public class CustomArrowEntityRenderer extends EntityRenderer<CustomArrowEntity>
 		Matrix3f normalMatrix = topMatrixEntry.getNormalMatrix();
 
 		float currentOffset = 0;
-		ArrayList<ModelRenderInfo> itemsToRender = new ArrayList<ModelRenderInfo>();
+		ArrayList<ItemModelRenderInfo> itemsToRender = new ArrayList<ItemModelRenderInfo>();
 		for (byte i = 0; i < arrow.renderInfo.renderList.size(); i++) {
 			CustomArrowEntityRenderPart currentPart = arrow.renderInfo.renderList.get(i);
 
@@ -156,7 +153,7 @@ public class CustomArrowEntityRenderer extends EntityRenderer<CustomArrowEntity>
 						matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(45f));
 					}
 					break;
-				//Items can't be rendered here, so we store the info needed to render them later;
+				//Items can't be rendered yet, so we store the info needed to render them later;
 				case ITEM:
 					itemsToRender.add(currentPart.getModelInfo(currentOffset));
 					currentOffset += currentPart.getSize();
@@ -167,11 +164,9 @@ public class CustomArrowEntityRenderer extends EntityRenderer<CustomArrowEntity>
 			}
 		}
 
-		//Finally render all the vertex data
-
-		//...After we render the items of course
+		//Render the items at the end so we don't crash the game
 		for (int i = 0; i < itemsToRender.size(); i++) {
-			ModelRenderInfo currentItem = itemsToRender.get(i);
+			ItemModelRenderInfo currentItem = itemsToRender.get(i);
 			switch (currentItem.renderSide) {
 				case BOTH:
 					matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90f));
@@ -194,11 +189,12 @@ public class CustomArrowEntityRenderer extends EntityRenderer<CustomArrowEntity>
 			}
 		}
 
+		//Finally render all the vertex data
 		matrices.pop();
 		super.render(arrow, yaw, tickDelta, matrices, vertexConsumers, light);
 	}
 
-	private void renderItem(ModelRenderInfo currentItem, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+	private void renderItem(ItemModelRenderInfo currentItem, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
 		//Move model to the correct position
 		matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(currentItem.rotation.getX()));
 		matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(currentItem.rotation.getY()));

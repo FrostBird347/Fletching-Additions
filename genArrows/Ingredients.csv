@@ -32,7 +32,7 @@ minecraft:prismarine_shard,Prismarine Arrow,Prismarine Finned,f,_,waterSpeed,tex
 minecraft:bone,Bone Arrow,Bone,s,_,,texture&5
 minecraft:amethyst_shard,Amethyst Arrow,Amethyst Tipped,t,_,damageMult&1.5@impactSoundIncreasePitchNoAngle@blockHitActions&1&doNothing&fletching-additions:crystal_impact@farSound,texture&2
 minecraft:blaze_powder,Blaze Infused Arrow,Blaze Infused,e,_,fireChance&0.05@fireChance&0.75,none&
-minecraft:firework_rocket,Rocket Powered Arrow,Rocket Powered,f,noHidesInfo,skipThisComment&gravityMult only applies after the firework duration. otherwise its 0@drawSpeed&0.25@inheritFireworkNBT@gravityMult&0.75@drawMinMult&2,"item&minecraft:firework_rocket&{""test"":true}"
+minecraft:firework_rocket,Rocket Powered Arrow,Rocket Powered,f,noHidesInfo,skipThisComment&gravityMult only applies after the firework duration. otherwise its 0@drawSpeed&0.25@inheritFireworkNBT@gravityMult&0.75@drawMinMult&2,"item&minecraft:firework_rocket&{""side"":""h""}"
 minecraft:dried_kelp,Dried Kelp Arrow,Dried Kelp Finned,f,_,flySpeed&0.75@damageMult&0.75,texture&4
 minecraft:lightning_rod,,,s,SturdyCore,,item&minecraft:lightning_rod
 minecraft:bamboo,Bamboo Arrow,Bamboo,s,_,gravityMult&0.875@flySpeed&1.125@damageMult&0.875&drawSpeed&1.125,texture&3
@@ -65,7 +65,7 @@ create:brass_hand,,,t,noHidesInfo,outputCountMult&0.75,texture&162
 farmersdelight:flint_knife,Very Sharp Arrow,Knife Tipped,t,noHidesInfo,outputCountMult&0.5@damageMult&2@blockHitActions&0.75&destroy&fletching-additions:knife_break&0.25&doNothing&fletching-additions:knife_impact,texture&163&v
 minecraft:pufferfish,,,t,,,texture&164
 minecraft:sugar_cane,,,s,_,,texture&4
-minecraft:grindstone,Grindstone Arrow,Grindstone Attached to a,t,reqSturdyCore noHidesInfo,outputCountMult&0,item&minecraft:grindstone
+minecraft:grindstone,Grindstone Arrow,Grindstone Attached to a,t,reqSturdyCore noHidesInfo,outputCountMult&0,"item&minecraft:grindstone&{""side"":""v""}"
 minecraft:hay_block,Harmless Arrow,Soft,t,_,damageMult&0@silent,texture&24
 _,_,_,e,_,_,none&
 minecraft:sculk_sensor,Sculk Arrow,Sculk Finned,f,_,isSensor,texture&162

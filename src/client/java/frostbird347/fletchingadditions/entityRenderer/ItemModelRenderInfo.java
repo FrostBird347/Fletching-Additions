@@ -6,7 +6,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 
 //Used by CustomArrowEntityRenderer to position and render all the item models after everything else has been rendered (otherwise the game will crash)
-public class ModelRenderInfo  {
+public class ItemModelRenderInfo  {
 	public ItemStack item;
 	public Vec3d translate;
 	public float scale;
@@ -14,7 +14,7 @@ public class ModelRenderInfo  {
 	public TextureSide renderSide;
 	public double partOffset;
 
-	public ModelRenderInfo(ItemStack item, Vec3d translate, float scale, Vec3f rotation, TextureSide renderSide, float partOffset) {
+	public ItemModelRenderInfo(ItemStack item, Vec3d translate, float scale, Vec3f rotation, TextureSide renderSide, float partOffset) {
 		this.item = item;
 		this.translate = translate;
 		this.scale = scale;

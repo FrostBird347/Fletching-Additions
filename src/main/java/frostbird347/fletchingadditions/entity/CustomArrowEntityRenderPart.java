@@ -2,7 +2,7 @@ package frostbird347.fletchingadditions.entity;
 
 import java.util.Map;
 import frostbird347.fletchingadditions.MainMod;
-import frostbird347.fletchingadditions.entityRenderer.ModelRenderInfo;
+import frostbird347.fletchingadditions.entityRenderer.ItemModelRenderInfo;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -55,7 +55,7 @@ public class CustomArrowEntityRenderPart {
 	private final byte[] POINT_LOOKUP_X = {0, 2, 2, 0};
 	private final byte[] POINT_LOOKUP_Y = {1, 1, 3, 3};
 	private ItemStack cachedItemStack = null;
-	private ModelRenderInfo cachedRenderInfo = null;
+	private ItemModelRenderInfo cachedRenderInfo = null;
 	private final boolean IS_SERVER_SIDE;
 
 	public CustomArrowEntityRenderPart(CustomArrowEntity arrow, String _type, String _mode, NbtCompound data) {
@@ -306,10 +306,15 @@ public class CustomArrowEntityRenderPart {
 					}
 				}
 
-					size = getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_size.texture." + textureId, Float.valueOf(size)).floatValue();
+				size = getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_size.texture." + textureId, Float.valueOf(size)).floatValue();
 				break;
 			case ITEM:
-				size = getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_size.model." + itemId.replaceAll(":", "."), Float.valueOf(16)).floatValue();
+				NbtCompound itemNbt = this.getItem().getNbt();
+				String itemModelId = ".0";
+				if (itemNbt != null) {
+					itemModelId = "." + Integer.valueOf(itemNbt.getInt("CustomModelData")).toString().replaceAll("-", "_");
+				}
+				size = getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_size.model." + itemId.replaceAll(":", ".") + itemModelId, Float.valueOf(16)).floatValue();
 				break;
 
 			case NONE:
@@ -345,29 +350,35 @@ public class CustomArrowEntityRenderPart {
 		return cachedItemStack;
 	}
 
-	public ModelRenderInfo getModelInfo(float offset) {
+	public ItemModelRenderInfo getModelInfo(float offset) {
 		if (cachedRenderInfo == null) {
 			ItemStack thisItem = this.getItem();
+			NbtCompound itemNbt = thisItem.getNbt();
+			String itemModelId = ".0";
+			if (itemNbt != null) {
+				itemModelId = "." + Integer.valueOf(itemNbt.getInt("CustomModelData")).toString().replaceAll("-", "_");
+			}
 			Vec3d translate = new Vec3d(
-				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_translate_x.model." + itemId.replaceAll(":", "."), 0.0).doubleValue(),
-				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_translate_y.model." + itemId.replaceAll(":", "."), 0.0).doubleValue(),
-				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_translate_z.model." + itemId.replaceAll(":", "."), 0.0).doubleValue()
+				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_translate_x.model." + itemId.replaceAll(":", ".") + itemModelId, 0.0).doubleValue(),
+				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_translate_y.model." + itemId.replaceAll(":", ".") + itemModelId, 0.0).doubleValue(),
+				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_translate_z.model." + itemId.replaceAll(":", ".") + itemModelId, 0.0).doubleValue()
 			);
-			float scale = getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_resize.model." + itemId.replaceAll(":", "."), 1f).floatValue();
+			float scale = getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_resize.model." + itemId.replaceAll(":", ".") + itemModelId, 1f).floatValue();
 			Vec3f rotate = new Vec3f(
-				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_rotate_x.model." + itemId.replaceAll(":", "."), 0f).floatValue(),
-				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_rotate_y.model." + itemId.replaceAll(":", "."), 0f).floatValue(),
-				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_rotate_z.model." + itemId.replaceAll(":", "."), 0f).floatValue()
+				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_rotate_x.model." + itemId.replaceAll(":", ".") + itemModelId, 0f).floatValue(),
+				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_rotate_y.model." + itemId.replaceAll(":", ".") + itemModelId, 0f).floatValue(),
+				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_rotate_z.model." + itemId.replaceAll(":", ".") + itemModelId, 0f).floatValue()
 			);
-			TextureSide renderSide = getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_render_side.model." + itemId.replaceAll(":", "."), TextureSide.FLAT_HORIZONTAL);
+			TextureSide renderSide = getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_render_side.model." + itemId.replaceAll(":", ".") + itemModelId, TextureSide.FLAT_HORIZONTAL);
 
-			cachedRenderInfo = new ModelRenderInfo(thisItem, translate, scale, rotate, renderSide, offset);
+			cachedRenderInfo = new ItemModelRenderInfo(thisItem, translate, scale, rotate, renderSide, offset);
 		}
 
 		return cachedRenderInfo;
 	}
 
 	private <T> T getLangData(String key, T defaultValue) {
+		MainMod.LOGGER.info(key);
 		try {
 			String rawValue = Text.translatable(key).getString();
 			if (rawValue.equals(key)) {

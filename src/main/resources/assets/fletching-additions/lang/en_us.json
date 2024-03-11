@@ -1,3 +1,6 @@
 {
-  "entity.fletching-additions.custom_arrow.render_stick_size.texture.160": "9"
+  "entity.fletching-additions.custom_arrow.render_stick_size.texture.160": "9",
+  "entity.fletching-additions.custom_arrow.render_stick_resize.model.minecraft.lightning_rod": "1.5",
+  "entity.fletching-additions.custom_arrow.render_stick_translate_x.model.minecraft.lightning_rod": "-1",
+  "entity.fletching-additions.custom_arrow.render_stick_size.model.minecraft.lightning_rod": "3"
 }

@@ -1,45 +1,35 @@
 package frostbird347.fletchingadditions.entityRenderer;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
+
 import frostbird347.fletchingadditions.entity.CustomArrowEntity;
-import frostbird347.fletchingadditions.entity.CustomArrowEntityRenderInfo;
 import frostbird347.fletchingadditions.entity.CustomArrowEntityRenderPart;
-import net.minecraft.block.BlockState;
+import frostbird347.fletchingadditions.entity.CustomArrowEntityRenderPart.TextureSide;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.client.render.entity.model.EntityModelLoader;
-import net.minecraft.client.render.entity.model.TridentEntityModel;
 import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.BakedModelManager;
-import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Matrix3f;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.math.Vec3i;
-import net.minecraft.util.math.random.Random;
 
 //Heavily modified vanilla arrows that have interchangable components
 public class CustomArrowEntityRenderer extends EntityRenderer<CustomArrowEntity> {
 	public static final Identifier TEXTURE = new Identifier("fletching-additions:textures/entity/projectiles/custom_arrow.png");
+	public static final float SCALE_MULT = 0.05625f;
 	private final ItemRenderer itemRenderer;
-	private final BakedModelManager modelManager;
 
 	public CustomArrowEntityRenderer(EntityRendererFactory.Context context) {
 		super(context);
 		this.itemRenderer = context.getItemRenderer();
-		this.modelManager = itemRenderer.getModels().getModelManager();
 	}
 
 	@Override
@@ -65,7 +55,7 @@ public class CustomArrowEntityRenderer extends EntityRenderer<CustomArrowEntity>
 		//Change it's scale down to something more reasonable
 		//and finally move it so the tip will only just be embedded within the ground
 		matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(45f));
-		matrices.scale(0.05625f, 0.05625f, 0.05625f);
+		matrices.scale(SCALE_MULT, SCALE_MULT, SCALE_MULT);
 		matrices.translate(0.0, 0.0, 0.0);
 
 		//Setup some stuff I don't fully understand
@@ -75,6 +65,7 @@ public class CustomArrowEntityRenderer extends EntityRenderer<CustomArrowEntity>
 		Matrix3f normalMatrix = topMatrixEntry.getNormalMatrix();
 
 		float currentOffset = 0;
+		ArrayList<ModelRenderInfo> itemsToRender = new ArrayList<ModelRenderInfo>();
 		for (byte i = 0; i < arrow.renderInfo.renderList.size(); i++) {
 			CustomArrowEntityRenderPart currentPart = arrow.renderInfo.renderList.get(i);
 
@@ -165,26 +156,10 @@ public class CustomArrowEntityRenderer extends EntityRenderer<CustomArrowEntity>
 						matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(45f));
 					}
 					break;
-				//TODO: Add model support
-				case MODEL:
-					//Don't rotate the model
-					matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-45f));
-
-					BakedModel partModel = currentPart.getModel(modelManager);
-					Random random = Random.create();
-					Direction[] directions = Direction.values();
-					for (int iDir = 0; iDir < directions.length; iDir++) {
-						random.setSeed(42L);
-						List<BakedQuad> quads = partModel.getQuads((BlockState)null, directions[iDir], random);
-
-						Iterator<BakedQuad> quadIterator = quads.iterator();
-						while (quadIterator.hasNext()) {
-							renderBuffer.quad(topMatrixEntry, quadIterator.next(), 1f, 1f, 1f, light, OverlayTexture.DEFAULT_UV);
-						}
-					}
-
-					//Rotate the arrow back
-					matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(45f));
+				//Items can't be rendered here, so we store the info needed to render them later;
+				case ITEM:
+					itemsToRender.add(currentPart.getModelInfo(currentOffset));
+					currentOffset += currentPart.getSize();
 					break;
 				case NONE:
 				default:
@@ -193,8 +168,63 @@ public class CustomArrowEntityRenderer extends EntityRenderer<CustomArrowEntity>
 		}
 
 		//Finally render all the vertex data
+
+		//...After we render the items of course
+		for (int i = 0; i < itemsToRender.size(); i++) {
+			ModelRenderInfo currentItem = itemsToRender.get(i);
+			switch (currentItem.renderSide) {
+				case BOTH:
+					matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90f));
+					renderItem(currentItem, matrices, vertexConsumers, light);
+					matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90f));
+					renderItem(currentItem, matrices, vertexConsumers, light);
+					break;
+				case FLAT_HORIZONTAL:
+					matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-45f));
+					matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90f));
+					renderItem(currentItem, matrices, vertexConsumers, light);
+					matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90f));
+					matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(45f));
+					break;
+				case FLAT_VERTICAL:
+					matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-45f));
+					renderItem(currentItem, matrices, vertexConsumers, light);
+					matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(45f));
+					break;
+			}
+		}
+
 		matrices.pop();
 		super.render(arrow, yaw, tickDelta, matrices, vertexConsumers, light);
+	}
+
+	private void renderItem(ModelRenderInfo currentItem, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+		//Move model to the correct position
+		matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(currentItem.rotation.getX()));
+		matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(currentItem.rotation.getY()));
+		matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(currentItem.rotation.getZ()));
+		matrices.translate(currentItem.translate.getX(), currentItem.translate.getY(), currentItem.translate.getZ());
+		matrices.scale(currentItem.scale, currentItem.scale, currentItem.scale);
+
+		matrices.translate(-currentItem.partOffset, 0, 0);
+		matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(-90f));
+		matrices.scale(1f/SCALE_MULT, 1f/SCALE_MULT, 1f/SCALE_MULT);
+		matrices.translate(0.0, -0.006, 0.0);
+
+		//Finally render the item
+		itemRenderer.renderItem(currentItem.item, net.minecraft.client.render.model.json.ModelTransformation.Mode.GROUND, light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, 0);
+		
+		//Move the model back
+		matrices.translate(0.0, 0.006, 0.0);
+		matrices.scale(SCALE_MULT, SCALE_MULT, SCALE_MULT);
+		matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(90f));
+		matrices.translate(currentItem.partOffset, 0, 0);
+
+		matrices.scale(1f/currentItem.scale, 1f/currentItem.scale, 1f/currentItem.scale);
+		matrices.translate(-currentItem.translate.getX(), -currentItem.translate.getY(), -currentItem.translate.getZ());
+		matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-currentItem.rotation.getX()));
+		matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-currentItem.rotation.getY()));
+		matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(-currentItem.rotation.getZ()));
 	}
 
 	//This abomination works somehow

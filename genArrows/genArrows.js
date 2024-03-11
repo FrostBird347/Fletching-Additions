@@ -338,10 +338,14 @@ function genOutput(inputs) {
 		
 		//Add entity render data
 		if (inputs[i].modelMode != "none" && renderOverride == undefined) {
-			let newModelInfo = {mode: inputs[i].modelMode, data: inputs[i].modelData, type: ["t", "s", "f", "e"][i]};
+			let newModelInfo = {mode: inputs[i].modelMode, data: {id: inputs[i].modelData}, type: ["t", "s", "f", "e"][i]};
 			
 			//Don't need to worry if it's undefined, since undefined values will be lost when converted to nbt
-			newModelInfo.extraData = inputs[i].modelDataExtra;
+			if (inputs[i].modelMode == "texture") {
+				newModelInfo.data.side = inputs[i].modelDataExtra;
+			} else if (inputs[i].modelDataExtra != undefined) {
+				newModelInfo.data.nbt = JSON.parse(inputs[i].modelDataExtra);
+			}
 
 			if (inputs[i].modelData.split("+").length != 1) {
 				inputs[i].modelData = inputs[i].modelData.split("+").reduce((sum, add) => parseInt(sum) + parseInt(add), 0).toString();
@@ -384,7 +388,7 @@ function genOutput(inputs) {
 					case "replaceTextures":
 						renderOverride = i;
 						let newModelData = inputs[i].modelData.split("+").reduce((sum, add) => parseInt(sum) + parseInt(add), 0).toString();
-						outputNBT.renderParts = [{mode: inputs[i].modelMode, data: newModelData, type: "t", extraData: inputs[i].modelDataExtra}, {mode: inputs[i].modelMode, data: newModelData, type: "s", extraData: inputs[i].modelDataExtra}, {mode: inputs[i].modelMode, data: newModelData, type: "f", extraData: inputs[i].modelDataExtra}];
+						outputNBT.renderParts = [{mode: inputs[i].modelMode, data: {id: newModelData, side: inputs[i].modelDataExtra}, type: "t"}, {mode: inputs[i].modelMode, data: {"id": newModelData, "side": inputs[i].modelDataExtra}, type: "s"}, {mode: inputs[i].modelMode, data: {id: newModelData, side: inputs[i].modelDataExtra}, type: "f"}];
 						textureSlots[newModelData] = [0, 0, 0];
 						textureSlotsNames[newModelData] = [inputs[i].id, inputs[i].id, inputs[i].id];
 						break;

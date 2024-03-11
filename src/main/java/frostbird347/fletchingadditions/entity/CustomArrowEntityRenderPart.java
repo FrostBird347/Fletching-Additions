@@ -2,17 +2,16 @@ package frostbird347.fletchingadditions.entity;
 
 import java.util.Map;
 import frostbird347.fletchingadditions.MainMod;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.BakedModelManager;
-import net.minecraft.client.render.model.ModelLoader;
-import net.minecraft.client.util.ModelIdentifier;
+import frostbird347.fletchingadditions.entityRenderer.ModelRenderInfo;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.registry.Registry;
 
 public class CustomArrowEntityRenderPart {
 	public enum Type {
@@ -23,7 +22,7 @@ public class CustomArrowEntityRenderPart {
 	}
 	public enum RenderMode {
 		TEXTURE,
-		MODEL,
+		ITEM,
 		NONE
 	}
 	public enum TextureSide {
@@ -31,22 +30,19 @@ public class CustomArrowEntityRenderPart {
 		FLAT_HORIZONTAL,
 		FLAT_VERTICAL
 	}
-	public enum ModelType {
-		ITEM,
-		BLOCK
-	}
 	private static final Map<String, Type> TYPE_MAP = Map.of("t", Type.TIP, "s", Type.STICK, "f", Type.FIN, "e", Type.EFFECT);
-	private static final Map<String, RenderMode> MODE_MAP = Map.of("texture", RenderMode.TEXTURE, "model", RenderMode.MODEL, "none", RenderMode.NONE);
+	private static final Map<String, RenderMode> MODE_MAP = Map.of("texture", RenderMode.TEXTURE, "item", RenderMode.ITEM, "none", RenderMode.NONE);
 	private static final Map<String, TextureSide> SIDE_MAP = Map.of("b", TextureSide.BOTH, "h", TextureSide.FLAT_HORIZONTAL, "v", TextureSide.FLAT_VERTICAL);
 
 	public int textureId;
-	public String modelId;
+	public String itemId;
+	public NbtCompound itemNbt;
 	public Type type;
 	public RenderMode mode;
 	public TextureSide side;
-	private byte size;
+	private float size;
 	private int lastTextureId;
-	private String lastModelId;
+	private String lastItemId;
 	/*
 	Index:	0,1	2,1	2,3	0,3
 	Path:
@@ -58,24 +54,27 @@ public class CustomArrowEntityRenderPart {
 	private float[][] cachedTexturePoints = {{-1f, -1f, -1f, -1f}, {-1f, -1f, -1f, -1f}, {-1f, -1f, -1f, -1f}};
 	private final byte[] POINT_LOOKUP_X = {0, 2, 2, 0};
 	private final byte[] POINT_LOOKUP_Y = {1, 1, 3, 3};
-	private ModelIdentifier realCachedModelId = null;
+	private ItemStack cachedItemStack = null;
+	private ModelRenderInfo cachedRenderInfo = null;
 	private final boolean IS_SERVER_SIDE;
 
-	public CustomArrowEntityRenderPart(CustomArrowEntity arrow, String _type, String _mode, String data, String extraData) {
+	public CustomArrowEntityRenderPart(CustomArrowEntity arrow, String _type, String _mode, NbtCompound data) {
 		this(arrow);
 		type = TYPE_MAP.getOrDefault(_type, Type.EFFECT);
 		mode = MODE_MAP.getOrDefault(_mode, RenderMode.NONE);
 		switch (mode) {
 			case TEXTURE:
 				try {
-					textureId = Integer.parseInt(data, 10);
+					textureId = Integer.parseInt(data.get("id").asString(), 10);
 				} catch(Exception err) {
-					MainMod.LOGGER.error("Failed to parse texture ID \"" + data + "\": " + err.getLocalizedMessage());
+					MainMod.LOGGER.error("Failed to parse texture ID \"" + data.getString("id") + "\": " + err.getLocalizedMessage());
+					textureId = 0;
 				}
-				side = SIDE_MAP.getOrDefault(extraData, TextureSide.BOTH);
+				side = SIDE_MAP.getOrDefault(data.getString("side"), TextureSide.BOTH);
 				break;
-			case MODEL:
-				modelId = data;
+			case ITEM:
+				itemId = data.getString("id");
+				itemNbt = data.getCompound("nbt");
 				break;
 			default:
 				break;
@@ -86,9 +85,9 @@ public class CustomArrowEntityRenderPart {
 		size = -1;
 		textureId = 0;
 		lastTextureId = -1;
-		modelId = "";
-		lastModelId = "_";
-		realCachedModelId = null;
+		itemId = "";
+		lastItemId = "_";
+		cachedItemStack = null;
 		IS_SERVER_SIDE = !arrow.world.isClient;
 	}
 
@@ -184,7 +183,7 @@ public class CustomArrowEntityRenderPart {
 						cachedTexturePoints[2][3] = ((currentPixelY) / 112f);
 						break;
 					default:
-						MainMod.LOGGER.error("Unknown part type \"" + type.toString() + "\" with an id of " + modelId + "!");
+						MainMod.LOGGER.error("Unknown part type \"" + type.toString() + "\" with an id of " + textureId + "!");
 						break;
 				}
 			} else {
@@ -262,7 +261,7 @@ public class CustomArrowEntityRenderPart {
 						cachedTexturePoints[2][3] = ((currentPixelY) / 112f);
 						break;
 					default:
-						MainMod.LOGGER.error("Unknown part type \"" + type.toString() + "\" with an id of " + modelId + "!");
+						MainMod.LOGGER.error("Unknown part type \"" + type.toString() + "\" with an id of " + textureId + "!");
 						break;
 				}
 			}
@@ -279,7 +278,7 @@ public class CustomArrowEntityRenderPart {
 		return cachedTexturePoints[rectIndex][POINT_LOOKUP_X[index]];
 	}
 
-	public byte getSize() {
+	public float getSize() {
 		if (size != -1) {
 			return size;
 		}
@@ -293,62 +292,108 @@ public class CustomArrowEntityRenderPart {
 
 		switch (mode) {
 			case TEXTURE:
-				try {
-					size = Byte.parseByte(Text.translatable("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_size.texture." + textureId).getString(), 10);
-				
-				} catch(Exception err) {
-					MainMod.LOGGER.debug(err.toString());
-
-					if (textureId < 160) {
-						if (type == Type.STICK) {
-							size = 9;
-						} else {
-							size = 4;
-						}
+				if (textureId < 160) {
+					if (type == Type.STICK) {
+						size = 9;
 					} else {
-						if (type == Type.STICK) {
-							size = 17;
-						} else {
+						size = 4;
+					}
+				} else {
+					if (type == Type.STICK) {
+						size = 17;
+					} else {
 							size = 8;
-						}
 					}
 				}
+
+					size = getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_size.texture." + textureId, Float.valueOf(size)).floatValue();
+				break;
+			case ITEM:
+				size = getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_size.model." + itemId.replaceAll(":", "."), Float.valueOf(16)).floatValue();
 				break;
 
-				case MODEL:
-					try {
-						size = Byte.parseByte(Text.translatable("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_size.model." + modelId.replaceAll(":", ".")).getString(), 10);
-						
-					} catch(Exception err) {
-						MainMod.LOGGER.debug(err.toString());
-
-						size = 16;
-					}
-					break;
-
-				case NONE:
-				default:
-					size = 0;
-					break;
-			}
-
+			case NONE:
+			default:
+				size = 0;
+				break;
+		}
 		return size;
 	}
 
-	public BakedModel getModel(BakedModelManager modelManager) {
+	public ItemStack getItem() {
 		//Ensure this isn't run server side
 		if (IS_SERVER_SIDE) {
 			return null;
 		}
 		
-		if (modelId != lastModelId) {
-			lastModelId = modelId;
-			realCachedModelId = new ModelIdentifier(modelId);
-		}
-		if (this.realCachedModelId == null) {
-			return modelManager.getMissingModel();
+		if (itemId != lastItemId) {
+			lastItemId = itemId;
+			cachedRenderInfo = null;
+			Item basicItem = Registry.ITEM.get(new Identifier(itemId));
+			if (basicItem == null) {
+				cachedItemStack = Items.BARRIER.getDefaultStack();
+			} else {
+				cachedItemStack = basicItem.getDefaultStack();
+
+				if (itemNbt == null) {
+					itemNbt = new NbtCompound();
+				}
+				cachedItemStack.setNbt(itemNbt);
+			}
 		}
 
-		return modelManager.getModel(realCachedModelId);
+		return cachedItemStack;
 	}
+
+	public ModelRenderInfo getModelInfo(float offset) {
+		if (cachedRenderInfo == null) {
+			ItemStack thisItem = this.getItem();
+			Vec3d translate = new Vec3d(
+				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_translate_x.model." + itemId.replaceAll(":", "."), 0.0).doubleValue(),
+				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_translate_y.model." + itemId.replaceAll(":", "."), 0.0).doubleValue(),
+				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_translate_z.model." + itemId.replaceAll(":", "."), 0.0).doubleValue()
+			);
+			float scale = getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_resize.model." + itemId.replaceAll(":", "."), 1f).floatValue();
+			Vec3f rotate = new Vec3f(
+				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_rotate_x.model." + itemId.replaceAll(":", "."), 0f).floatValue(),
+				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_rotate_y.model." + itemId.replaceAll(":", "."), 0f).floatValue(),
+				getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_rotate_z.model." + itemId.replaceAll(":", "."), 0f).floatValue()
+			);
+			TextureSide renderSide = getLangData("entity.fletching-additions.custom_arrow.render_" + type.toString().toLowerCase() + "_render_side.model." + itemId.replaceAll(":", "."), TextureSide.FLAT_HORIZONTAL);
+
+			cachedRenderInfo = new ModelRenderInfo(thisItem, translate, scale, rotate, renderSide, offset);
+		}
+
+		return cachedRenderInfo;
+	}
+
+	private <T> T getLangData(String key, T defaultValue) {
+		try {
+			String rawValue = Text.translatable(key).getString();
+			if (rawValue.equals(key)) {
+				return defaultValue;
+			}
+
+			if (defaultValue instanceof Byte) {
+				return (T)Byte.valueOf(Byte.parseByte(rawValue, 10));
+			}
+			if (defaultValue instanceof Float) {
+				return (T)Float.valueOf(Float.parseFloat(rawValue));
+			}
+			if (defaultValue instanceof Double) {
+				return (T)Double.valueOf(Double.parseDouble(rawValue));
+			}
+			if (defaultValue instanceof TextureSide) {
+				return (T)SIDE_MAP.getOrDefault(rawValue, (TextureSide)defaultValue);
+			}
+			
+			MainMod.LOGGER.error("Unsupported type for key " + key);
+			return defaultValue;
+		} catch(Exception err) {
+			//if (err)
+			MainMod.LOGGER.error(err.toString());
+			return defaultValue;
+		}
+	}
+	
 }

@@ -1,11 +1,14 @@
 package frostbird347.fletchingadditions.recipe;
 
+import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import frostbird347.fletchingadditions.MainMod;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.network.PacketByteBuf;
@@ -21,6 +24,7 @@ public class FletchingRecipeSerializer implements RecipeSerializer<FletchingReci
 	private FletchingRecipeSerializer() {}
 
 	public static final Identifier ID = new Identifier("fletching-additions:fletching_recipe");
+	public static ArrayList<String> PREVIOUS_ERRORS = new ArrayList<String>();
 
 	//Turns json into Recipe
 	@Override
@@ -54,12 +58,35 @@ public class FletchingRecipeSerializer implements RecipeSerializer<FletchingReci
 			}
 		}
 
-		Ingredient inputTip = Ingredient.fromJson(recipeJson.inputTip);
-		Ingredient inputStick = Ingredient.fromJson(recipeJson.inputStick);
-		Ingredient inputFins = Ingredient.fromJson(recipeJson.inputFins);
+		//Try to parse the items, but don't throw a massive error if the item doesn't exist
+		Ingredient inputTip = Ingredient.EMPTY;
+		Ingredient inputStick = Ingredient.EMPTY;
+		Ingredient inputFins = Ingredient.EMPTY;
 		Ingredient inputEffect = Ingredient.EMPTY;
-		if (recipeJson.inputEffect != null) {
-			inputEffect = Ingredient.fromJson(recipeJson.inputEffect);
+		try {
+			inputTip = Ingredient.fromJson(recipeJson.inputTip);
+			inputStick = Ingredient.fromJson(recipeJson.inputStick);
+			inputFins = Ingredient.fromJson(recipeJson.inputFins);
+			if (recipeJson.inputEffect != null) {
+				inputEffect = Ingredient.fromJson(recipeJson.inputEffect);
+			}
+		} catch(Exception err) {
+			String errMessage = err.getMessage();
+
+			//Check if the error is actually from an unknown item
+			if (errMessage.startsWith("Unknown item '")) {
+				//Only show the error message once (if we don't do this it will be printed each time it appears in a combin)
+				if (!PREVIOUS_ERRORS.contains(errMessage)) {
+					MainMod.LOGGER.error(errMessage.replaceFirst("Unknown item", "Unknown arrow part") + ", skipping!");
+					PREVIOUS_ERRORS.add(errMessage);
+				}
+
+				//Return an empty recipe
+				return new FletchingRecipe(id, Items.AIR.getDefaultStack(), Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.EMPTY);
+			//If something else is wrong, throw the error
+			} else {
+				throw(err);
+			}
 		}
 		
 		Item outputItem = Registry.ITEM.getOrEmpty(new Identifier(recipeJson.outputItem)).orElseThrow(() -> new JsonSyntaxException("No such item " + recipeJson.outputItem + " for the output!"));;

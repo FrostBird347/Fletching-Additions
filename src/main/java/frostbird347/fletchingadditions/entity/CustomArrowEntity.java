@@ -78,6 +78,8 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 	private boolean echoLink = false;
 	private boolean isSensor = false;
 	private boolean hasFirework = false;
+	private boolean noFins = false;
+	private Vec3d driftDir = new Vec3d((Math.random() * 2.0) - 1.0, (Math.random() * 2.0) - 1.0, (Math.random() * 2.0) - 1.0).normalize();
 	private ArrayList<ParticleEffect> particles = new ArrayList<ParticleEffect>();
 	public CustomArrowEntityRenderInfo renderInfo = new CustomArrowEntityRenderInfo(this);
 	
@@ -92,6 +94,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 	int echoDist = 1;
 	private final EntityGameEventHandler<VibrationListener> vibrationListenerEventHandler = new EntityGameEventHandler<VibrationListener>(new VibrationListener(new EntityPositionSource(this, 0f), 128, this, (VibrationListener.Vibration)null, 0f, 0));
 	Vec3i lastBlockHitDir = new Vec3i(0, 0, 0);
+	Vec3d driftDist = new Vec3d(0, 0, 0);
 	//echoLink returning/returned, 
 	boolean[] tempGlobalFlags = new boolean[] {false};
 
@@ -153,6 +156,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 		dynamicLightingIfPossible = false;
 		echoLink = false;
 		hasFirework = false;
+		noFins = false;
 		particles = new ArrayList<ParticleEffect>();
 		gameFlags = new NbtList();
 		if (!this.world.isClient) this.dataTracker.set(SHOW_FIREWORK_SPARKS, false);
@@ -186,6 +190,7 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 		if (gameFlags.indexOf(NbtString.of("echoLink")) >= 0) echoLink = true;
 		if (gameFlags.indexOf(NbtString.of("isSensor")) >= 0) isSensor = true;
 		if (gameFlags.indexOf(NbtString.of("inheritFireworkNBT")) >= 0) hasFirework = true;
+		if (gameFlags.indexOf(NbtString.of("noFins")) >= 0) noFins = true;
 		if (!this.world.isClient) this.dataTracker.set(SHOW_FIREWORK_SPARKS, hasFirework);
 
 		//Modify damage
@@ -250,6 +255,12 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 				} else {
 					this.dataTracker.set(CLIENT_SOURCE_POS, new BlockPos(serverSourcePos));
 				}
+			}
+
+			//TODO: Replace with better drift system, probably when I seperate this class into a million modules
+			if (noFins && !this.reallyOnGround()) {
+				float driftMult = 0.01f * Math.max((((float)this.getVelocity().horizontalLength() * -5f) + 5.25f), 1f);
+				this.setVelocity(this.getVelocity().rotateX((float)driftDir.x * driftMult).rotateY((float)driftDir.y * driftMult).rotateZ((float)driftDir.z * driftMult));
 			}
 
 			//Firework flight

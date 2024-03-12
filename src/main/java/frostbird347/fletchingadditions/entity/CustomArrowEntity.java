@@ -274,7 +274,8 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 					this.world.getServer().getWorld(this.world.getRegistryKey()).playSoundFromEntity(null, this, SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, this.getSoundCategory(), 3f, 1f, RandomSeed.getSeed());;
 
 				//When it's going to explode
-				} else if (flightTime == 0) {
+				//Also have another check for when it's less than -1, just incase a negative flight time was used
+				} else if (flightTime == 0 || flightTime < -1) {
 					NbtList explosions = this.itemNbt.getCompound("inheritFireworkNBT").getCompound("Fireworks").getList("Explosions", NbtElement.COMPOUND_TYPE).copy();
 					this.world.sendEntityStatus(this, (byte)18);
 					explodeFirework(explosions);

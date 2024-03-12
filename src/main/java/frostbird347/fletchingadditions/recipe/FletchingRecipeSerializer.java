@@ -77,7 +77,7 @@ public class FletchingRecipeSerializer implements RecipeSerializer<FletchingReci
 			if (errMessage.startsWith("Unknown item '")) {
 				//Only show the error message once (if we don't do this it will be printed each time it appears in a combin)
 				if (!PREVIOUS_ERRORS.contains(errMessage)) {
-					MainMod.LOGGER.error(errMessage.replaceFirst("Unknown item", "Unknown arrow part") + ", skipping!");
+					MainMod.LOGGER.warn(errMessage.replaceFirst("Unknown item", "Unknown arrow part") + ", replacing recipies with a blank one to prevent error spam");
 					PREVIOUS_ERRORS.add(errMessage);
 				}
 

@@ -36,6 +36,14 @@ public class CustomArrowItem extends ArrowItem {
 		return customArrowEntity;
 	}
 
+	public PersistentProjectileEntity createArrow(World world, ItemStack stack, Position position, boolean isDispenser) {
+		CustomArrowEntity customArrowEntity = (CustomArrowEntity)createArrow(world, stack, position);
+		if (isDispenser) {
+			customArrowEntity.markAsDispenserArrow();
+		}
+		return customArrowEntity;
+	}
+
 	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
 		String paddingText = "  ";
 		int paddingAmount = 0;

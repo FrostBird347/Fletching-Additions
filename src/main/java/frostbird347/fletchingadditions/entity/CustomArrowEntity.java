@@ -95,8 +95,8 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 	private final EntityGameEventHandler<VibrationListener> vibrationListenerEventHandler = new EntityGameEventHandler<VibrationListener>(new VibrationListener(new EntityPositionSource(this, 0f), 128, this, (VibrationListener.Vibration)null, 0f, 0));
 	Vec3i lastBlockHitDir = new Vec3i(0, 0, 0);
 	Vec3d driftDist = new Vec3d(0, 0, 0);
-	//echoLink returning/returned, 
-	boolean[] tempGlobalFlags = new boolean[] {false};
+	//echoLink returning/returned, multiply velocity by draw speed on the next tick (for dispensers)
+	private boolean[] tempGlobalFlags = new boolean[] {false, false};
 
 	public CustomArrowEntity(EntityType<? extends CustomArrowEntity> entityType, World world) {
 		super((EntityType<? extends PersistentProjectileEntity>)entityType, world);
@@ -145,6 +145,11 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 				this.setVelocity(this.getVelocity().add(0, gravity, 0).multiply(1f / flySpeedMult).subtract(0, gravity * gravityMult, 0));
 				isRealVel = true;
 		}
+	}
+
+	//Should only be run while spawning the arrow for the first time
+	public void markAsDispenserArrow() {
+		this.tempGlobalFlags[1] = true;
 	}
 
 	public void initFromNbt(NbtCompound nbt) {
@@ -245,6 +250,17 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 		
 		syncItemNbt();
 		if (!this.world.isClient) {
+			//Lower the velocity if the arrow has been shot from a dispenser and it has a long draw time
+			//Also increase it if there is a shorter draw time I guess
+			//As this is just multiplying the velocity it doesn't matter if it's set to the "real" velocity or not
+			if (tempGlobalFlags[1] && this.itemNbt != null && !this.itemNbt.isEmpty() && !this.getVelocity().equals(Vec3d.ZERO)) {
+				tempGlobalFlags[1] = false;
+				
+				if (this.itemNbt.contains("drawSpeed", NbtCompound.FLOAT_TYPE)) {
+					this.setVelocity(this.getVelocity().multiply(this.itemNbt.getFloat("drawSpeed")));
+				}
+			}
+
 			//Only tell the client the sender's position after it has touched the ground
 			if (!this.inGround && echoLink) {
 				//Otherwise set the current position because it looks better to have the first particles stay inside the arrow than to have one or a few go flying in the wrong direction

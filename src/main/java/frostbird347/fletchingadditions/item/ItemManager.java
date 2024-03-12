@@ -22,7 +22,7 @@ public class ItemManager {
 		DispenserBlock.registerBehavior(CUSTOM_ARROW, new ProjectileDispenserBehavior() {
 			@Override
 			protected ProjectileEntity createProjectile(World world, Position position, ItemStack stack) {
-				return CUSTOM_ARROW.createArrow(world, stack, position);
+				return CUSTOM_ARROW.createArrow(world, stack, position, true);
 			}
 		});
 	}

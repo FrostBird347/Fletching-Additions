@@ -7,6 +7,7 @@ import frostbird347.fletchingadditions.entity.CustomArrowEntity;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity.PickupPermission;
 import net.minecraft.item.ArrowItem;
 import net.minecraft.item.FireworkStarItem;
 import net.minecraft.item.Item;
@@ -40,6 +41,7 @@ public class CustomArrowItem extends ArrowItem {
 		CustomArrowEntity customArrowEntity = (CustomArrowEntity)createArrow(world, stack, position);
 		if (isDispenser) {
 			customArrowEntity.markAsDispenserArrow();
+			customArrowEntity.pickupType = PickupPermission.ALLOWED;
 		}
 		return customArrowEntity;
 	}

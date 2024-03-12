@@ -370,7 +370,7 @@ public class CustomArrowEntityRenderPart {
 				getLangData("entity.fletching-additions.custom_arrow.model.rotate_y." + itemId.replaceAll(":", ".") + itemModelId, 0f).floatValue(),
 				getLangData("entity.fletching-additions.custom_arrow.model.rotate_z." + itemId.replaceAll(":", ".") + itemModelId, 0f).floatValue()
 			);
-			RenderSide renderSide = getLangData("entity.fletching-additions.custom_arrow.model.side" + itemId.replaceAll(":", ".") + itemModelId, RenderSide.FLAT_HORIZONTAL);
+			RenderSide renderSide = getLangData("entity.fletching-additions.custom_arrow.model.side." + itemId.replaceAll(":", ".") + itemModelId, RenderSide.FLAT_HORIZONTAL);
 
 			cachedRenderInfo = new ItemModelRenderInfo(thisItem, translate, scale, rotate, renderSide, offset);
 		}

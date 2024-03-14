@@ -104,6 +104,12 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 
 	public CustomArrowEntity(World world, LivingEntity owner) {
 		super(EntityManager.CUSTOM_ARROW, owner, world);
+		
+		//Don't allow survival players to pickup arrows fired by creative players
+		if (owner.isPlayer() && ((PlayerEntity)owner).isCreative()) {
+			this.pickupType = PickupPermission.CREATIVE_ONLY;
+		}
+		
 	}
 
 	public CustomArrowEntity(World world, double x, double y, double z) {

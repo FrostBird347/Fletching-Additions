@@ -5,8 +5,8 @@
 	"mixins": [
 		"MainMixin",
 		"FletchingTableBlockMixin",
-		"BeforeRecipeLoad",
-		"CrossbowStuff"
+		"RecipeManagerMixin",
+		"CrossbowItemMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -15,7 +15,7 @@ import frostbird347.fletchingadditions.entity.CustomArrowEntity;
 import frostbird347.fletchingadditions.item.ItemManager;
 
 @Mixin(CrossbowItem.class)
-public class CrossbowStuff {
+public class CrossbowItemMixin {
 
 	//Treat crossbows like dispensers, because they can also be fired instantly
 	@Inject(at = @At("RETURN"), method = "createArrow", locals = LocalCapture.CAPTURE_FAILSOFT)

@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import frostbird347.fletchingadditions.recipe.FletchingRecipeSerializer;
 
 @Mixin(RecipeManager.class)
-public class BeforeRecipeLoad {
+public class RecipeManagerMixin {
 
 	//Clear the FletchingRecipeSerializer's cached errors
 	@Inject(at = @At("HEAD"), method = "apply")

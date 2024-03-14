@@ -263,7 +263,12 @@ public class CustomArrowEntity extends PersistentProjectileEntity implements Vib
 				tempGlobalFlags[1] = false;
 				
 				if (this.itemNbt.contains("drawSpeed", NbtCompound.FLOAT_TYPE)) {
-					this.setVelocity(this.getVelocity().multiply(this.itemNbt.getFloat("drawSpeed")));
+					float drawSpeed = this.itemNbt.getFloat("drawSpeed");
+					if (drawSpeed < 1) {
+						this.setVelocity(this.getVelocity().multiply(Math.min(((drawSpeed - 1) * 0.9) + 1, 2)));
+					} else {
+						this.setVelocity(this.getVelocity().multiply(Math.min(((drawSpeed - 1) * 0.25) + 1, 2)));
+					}
 				}
 			}
 

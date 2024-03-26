@@ -5,7 +5,7 @@ Parsing...
 	stats missing:   	 minecraft:bone
 	fullName missing:	 minecraft:lightning_rod
 	partName missing:	 minecraft:pointed_dripstone
-	fullName missing:	 ???
+	renderMode missing:	 minecraft:ender_pearl
 	fullName missing:	 minecraft:packed_ice
 	fullName missing:	 minecraft:blue_ice
 	fullName missing:	 minecraft:end_rod

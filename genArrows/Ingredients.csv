@@ -41,7 +41,7 @@ minecraft:torch,Flaming Arrow,Flaming,t,noHidesInfo,fireChance&0.25,texture&3&v
 minecraft:soul_torch,Soul Flame Arrow,Soul Flame,t,noHidesInfo,fireChance&0.20@isSoulFire,texture&4&v
 minecraft:pointed_dripstone,Dripstone Arrow,,t,,,texture&161
 minecraft:fire_charge,Fire Charged Arrow,Fire Charged,t,_,fireChance&1@fireChance&0.25,texture&5
-???,,,t,,,
+minecraft:ender_pearl,Warp Arrow,Pearl Tipped,t,_,,
 minecraft:packed_ice,,,t,Cold,,texture&6
 minecraft:blue_ice,,,t,Cold,,texture&7
 minecraft:end_rod,,,s,SturdyCore,,item&minecraft:end_rod

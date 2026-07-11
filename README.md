@@ -16,10 +16,10 @@ https://github.com/FrostBird347/Fletching-Additions/assets/39435218/2f28a793-0bb
 <hr>
 
 
-### What's different between the code on this repo and the last published version?
+### What's different between the code on this repo and the last [published version](https://modrinth.com/mod/fletching-additions)?
  You can mix and match materials to craft custom arrow types. Refer to additional the screenshots below for clarification.
 
-### Note for Developers
+### Note for developers
  I initially planned to just get a working prototype out, and to only start tearing my hair out trying to clean up the code once I had all the custom arrow behaviour planned out. <sub>As you can probably guess, that was a bad idea.</sub><br>
 I also tackled this project by trying to utilize existing systems as much as possible instead of rewriting large sections of the game. This is why there is a shell script that reads a spreadsheet to generate thousands of recipes and item models.
 

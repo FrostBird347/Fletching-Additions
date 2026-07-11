@@ -25,9 +25,11 @@ I also tackled this project by trying to utilize existing systems as much as pos
 
 ### Additional experimental code screenshots below:
 
-<img alt="combinations" src="https://github.com/user-attachments/assets/3a717942-e526-4a34-accb-824484677ad0"/>
+<img alt="combinations.png" src="https://github.com/user-attachments/assets/3a717942-e526-4a34-accb-824484677ad0"/>
 
 https://github.com/user-attachments/assets/f05547e3-83fd-4e68-a68e-e0b8c7e282ed
+
+<img alt="combinations3.png" src="https://github.com/user-attachments/assets/b9d44ca1-d667-406c-adb4-8cc4ae970abb"/>
 
 https://github.com/user-attachments/assets/04a95b76-10f1-48e3-8e80-293f47edac4b
 

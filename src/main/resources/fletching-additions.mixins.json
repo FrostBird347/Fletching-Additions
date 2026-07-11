@@ -6,7 +6,8 @@
 		"MainMixin",
 		"FletchingTableBlockMixin",
 		"RecipeManagerMixin",
-		"CrossbowItemMixin"
+		"CrossbowItemMixin",
+		"BowItemMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
